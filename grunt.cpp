@@ -118,6 +118,7 @@ void Grunt::vectorTrack()
 void Grunt::ai(float time, Entity &t)
 { 
 	targetEntity = t;
+	vectorTrack();
 	//deltaTrack();	
 	//evade();
 	//evade();

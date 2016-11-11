@@ -59,15 +59,15 @@ void CollisionTypes::initialize(HWND hwnd)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
 	if (!grunts.initialize(this, 0, 0, 0,&gruntTM))
 		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
-	grunts.setPosition(VECTOR2(100, 100));
+	grunts.setPosition(VECTOR2(400, 100));
 	grunts.setCollision(entityNS::BOX);
 	grunts.setEdge(COLLISION_BOX_PUCK);
 	grunts.setX(grunts.getPositionX());
 	grunts.setY(grunts.getPositionY());
-	grunts.setScale(.5);
+	grunts.setScale(1);
 
 	//patternsteps
-	patternStepIndex = 0;
+	/*patternStepIndex = 0;
 	for (int i = 0; i<maxPatternSteps; i++) {
 		patternSteps[i].initialize(&grunts);
 		patternSteps[i].setActive();
@@ -79,7 +79,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	patternSteps[2].setAction(TRACK);
 	patternSteps[2].setTimeForStep(4);
 	patternSteps[3].setAction(BRTL);
-	patternSteps[3].setTimeForStep(2);
+	patternSteps[3].setTimeForStep(2);*/
 
     return;
 }
@@ -174,11 +174,11 @@ void CollisionTypes::update()
 void CollisionTypes::ai()
 {
 	grunts.ai(frameTime, player);
-	if (patternStepIndex == maxPatternSteps)
+	/*if (patternStepIndex == maxPatternSteps)
 		return;
 	if (patternSteps[patternStepIndex].isFinished())
 		patternStepIndex++;
-	patternSteps[patternStepIndex].update(frameTime);
+	patternSteps[patternStepIndex].update(frameTime);*/
 }
 
 //=============================================================================

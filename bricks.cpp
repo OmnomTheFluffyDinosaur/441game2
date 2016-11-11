@@ -14,7 +14,7 @@ Brick::Brick() : Entity()
     velocity.x = 0;                             // velocity X
     velocity.y = 0;                             // velocity Y
     startFrame = 0;              // first frame of ship animation
-    endFrame     = 0;              // last frame of ship animation
+    endFrame = 0;              // last frame of ship animation
     currentFrame = startFrame;
     radius = brickNS::WIDTH/2.0;                 // collision radius
     collision = false;
