@@ -71,7 +71,7 @@ void CollisionTypes::initialize(HWND hwnd)
 		gameStates = gamePlay;
 		timeInState = 0;
 	}
-	if (gameStates==gamePlay && input->isKeyDown(VK_SPACE))
+	if (gameStates==gamePlay && input->isKeyDown(VK_F1))
 	{
 		gameStates = end;
 		timeInState = 0;
@@ -107,7 +107,6 @@ void CollisionTypes::update()
 	case gamePlay:
 		
 	}*/
-<<<<<<< HEAD
 	if(input->isKeyDown(VK_LEFT))
 		player.left();
 	if(input->isKeyDown(VK_RIGHT))
@@ -118,7 +117,6 @@ void CollisionTypes::update()
 		player.down();
 	player.update(frameTime);
 	laser.update(frameTime,player,audio);
-=======
 
 
 	switch (gameStates)
@@ -140,7 +138,6 @@ void CollisionTypes::update()
 		player.update(frameTime);
 		break;
 	}
->>>>>>> 3fa1396111f4d71d879f861d9a6edb5756cf03b8
 }
 
 //=============================================================================
@@ -170,9 +167,12 @@ void CollisionTypes::render()
 		break;
 	case gamePlay:
 		player.draw();
+		laser.draw();
+		break;
 		//draw stuff
 	case end:
 		gameOver.draw();
+		break;
 	}
 	/*switch (gameStates)
 	{
@@ -185,12 +185,6 @@ void CollisionTypes::render()
 	case end:
 		//nothing
 	}*/
-<<<<<<< HEAD
-	player.draw();
-	laser.draw();
-=======
-
->>>>>>> 3fa1396111f4d71d879f861d9a6edb5756cf03b8
     graphics->spriteEnd();                  // end drawing sprites
 }
 
