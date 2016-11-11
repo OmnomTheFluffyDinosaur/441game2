@@ -66,6 +66,12 @@
     <ClCompile Include="laser.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
+    <ClCompile Include="grunt.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="patternStep.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -118,6 +124,12 @@
     </ClInclude>
     <ClInclude Include="laser.h">
       <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="grunt.h">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="patternStep.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

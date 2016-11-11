@@ -98,6 +98,12 @@ private:
         center = VECTOR2(getCenterX(),getCenterY());
         return &center;
     }
+	
+	virtual const VECTOR2 getCenterPoint()   
+    {
+        center = VECTOR2(getCenterX(),getCenterY());
+        return center;
+    }
 
     // Return collision center
     virtual const VECTOR2* getCollisionCenter()

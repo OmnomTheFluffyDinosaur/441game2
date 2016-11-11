@@ -93,8 +93,9 @@ const float   COLLISION_RADIUS = 29;
 
 // graphic images
 const char PUCK_IMAGE[] = "pictures\\PS4_new.png";  // game textures
-const char PLAYER_IMAGE[] = "pictures\\paddle.png";      // menu texture
+const char PLAYER_IMAGE[] = "pictures\\biplane.png";      // menu texture
 const char LASER_IMAGE[] = "pictures\\laser.png";
+const char GRUNT_IMAGE[] = "pictures\\grunt.png";
 
 // key mappings
 // In this game simple constants are used for key mappings. If variables were used
@@ -124,5 +125,7 @@ enum GameStates {intro, readyToPlay, gamePlay, end};
 const char SPLASHSCREEN_IMAGE[] = "pictures\\MyGame.png"; 
 const char GAMEOVER_IMAGE[] = "pictures\\MyGameOver.jpg"; 
 const char TEX_IMAGE[] = "pictures\\texture1.bmp";
+
+enum PATTERN_STEP_ACTION {NONE, UP, DOWN, LEFT, RIGHT, TRACK, EVADE, BRTL};
 
 #endif

@@ -37,14 +37,14 @@ void CollisionTypes::initialize(HWND hwnd)
 	menu->initialize(graphics, input); //, menuText);
 
 	if (!playerTM.initialize(graphics,PLAYER_IMAGE))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing paddle texture"));
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
 	if (!player.initialize(this, playerTM.getWidth(), playerTM.getHeight(), 0,&playerTM))
-		throw(GameError(gameErrorNS::WARNING, "Paddle not initialized"));
+		throw(GameError(gameErrorNS::WARNING, "Player not initialized"));
 	player.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-2*player.getHeight()));
     player.setCollisionType(entityNS::BOX);
     player.setEdge(COLLISION_BOX_PLAYER);
     player.setCollisionRadius(COLLISION_RADIUS);
-	player.setScale(.5);
+	player.setScale(1.0);
 
 	if (!laserTM.initialize(graphics,LASER_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background"));
@@ -54,6 +54,32 @@ void CollisionTypes::initialize(HWND hwnd)
 	laser.setX(10);
 	laser.setY(10);
 	laser.setVisible(false);
+
+	if (!gruntTM.initialize(graphics,GRUNT_IMAGE))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+	if (!grunts.initialize(this, 0, 0, 0,&gruntTM))
+		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+	grunts.setPosition(VECTOR2(100, 100));
+	grunts.setCollision(entityNS::BOX);
+	grunts.setEdge(COLLISION_BOX_PUCK);
+	grunts.setX(grunts.getPositionX());
+	grunts.setY(grunts.getPositionY());
+	grunts.setScale(.5);
+
+	//patternsteps
+	patternStepIndex = 0;
+	for (int i = 0; i<maxPatternSteps; i++) {
+		patternSteps[i].initialize(&grunts);
+		patternSteps[i].setActive();
+	}
+	patternSteps[0].setAction(RIGHT);
+	patternSteps[0].setTimeForStep(3);
+	patternSteps[1].setAction(DOWN);
+	patternSteps[1].setTimeForStep(2);
+	patternSteps[2].setAction(TRACK);
+	patternSteps[2].setTimeForStep(4);
+	patternSteps[3].setAction(BRTL);
+	patternSteps[3].setTimeForStep(2);
 
     return;
 }
@@ -107,7 +133,7 @@ void CollisionTypes::update()
 	case gamePlay:
 		
 	}*/
-	if(input->isKeyDown(VK_LEFT))
+	/*if(input->isKeyDown(VK_LEFT))
 		player.left();
 	if(input->isKeyDown(VK_RIGHT))
 		player.right();
@@ -116,7 +142,7 @@ void CollisionTypes::update()
 	if(input->isKeyDown(VK_DOWN))
 		player.down();
 	player.update(frameTime);
-	laser.update(frameTime,player,audio);
+	laser.update(frameTime,player,audio);*/
 
 
 	switch (gameStates)
@@ -136,6 +162,8 @@ void CollisionTypes::update()
 		if(input->isKeyDown(VK_DOWN))
 			player.down();
 		player.update(frameTime);
+		laser.update(frameTime, player, audio);
+		grunts.update(frameTime);
 		break;
 	}
 }
@@ -144,7 +172,14 @@ void CollisionTypes::update()
 // Artificial Intelligence
 //=============================================================================
 void CollisionTypes::ai()
-{}
+{
+	grunts.ai(frameTime, player);
+	if (patternStepIndex == maxPatternSteps)
+		return;
+	if (patternSteps[patternStepIndex].isFinished())
+		patternStepIndex++;
+	patternSteps[patternStepIndex].update(frameTime);
+}
 
 //=============================================================================
 // Handle collisions
@@ -168,6 +203,7 @@ void CollisionTypes::render()
 	case gamePlay:
 		player.draw();
 		laser.draw();
+		grunts.draw();
 		break;
 		//draw stuff
 	case end:

@@ -27,8 +27,8 @@ void Laser::update(float frameTime, Player p, Audio* audio){
 	if(input->wasKeyPressed(VK_SPACE) && canShoot){
 		setVisible(true);
 		canShoot = false;
-		spriteData.x = p.getX();
-		spriteData.y = p.getY();
+		spriteData.x = p.getX() +40;
+		spriteData.y = p.getY() +10;
 		velocity.x = 800;
 	}
 	spriteData.x += velocity.x*frameTime;

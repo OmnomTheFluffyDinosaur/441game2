@@ -90,6 +90,7 @@
     <ClCompile Include="audio.cpp" />
     <ClCompile Include="bricks.cpp" />
     <ClCompile Include="collisionTypes.cpp" />
+    <ClCompile Include="grunt.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="graphics.cpp" />
@@ -97,6 +98,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="laser.cpp" />
     <ClCompile Include="mainMenu.cpp" />
+    <ClCompile Include="patternStep.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="puck.cpp" />
     <ClCompile Include="textDX.cpp" />
@@ -108,6 +110,7 @@
     <ClInclude Include="bricks.h" />
     <ClInclude Include="collisionTypes.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="grunt.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gameError.h" />
@@ -117,6 +120,7 @@
     <ClInclude Include="laser.h" />
     <ClInclude Include="mainMenu.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="patternStep.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="puck.h" />
     <ClInclude Include="textDX.h" />

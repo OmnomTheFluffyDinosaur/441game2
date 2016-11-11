@@ -19,6 +19,10 @@ class CollisionTypes;
 #include "menu.h"
 #include "mainMenu.h"
 #include "laser.h"
+#include "grunt.h"
+#include "patternStep.h"
+
+#define maxPatternSteps 4
 
 //=============================================================================
 // This class is the core of the game
@@ -27,12 +31,13 @@ class CollisionTypes : public Game
 {
 private:
     // game items
-    TextureManager playerTM, puckTM, laserTM;   // game texture
-    Image   playerTexture, puckTexture, laserTexture;
+    TextureManager playerTM, puckTM, laserTM, gruntTM;   // game texture
+    Image   playerTexture, puckTexture, laserTexture, gruntTexture;
     VECTOR2 collisionVector;    // collision vector
 	Player player;
 	Puck puck;
 	Laser laser;
+	Grunt grunts;
 	int score;
 	bool collision;
 	Brick bricks[5];
@@ -46,6 +51,8 @@ private:
 	void gameStateUpdate();
 	Image tex;
 	mainMenu *menu;
+	PatternStep patternSteps[maxPatternSteps];
+	int patternStepIndex;
 
 public:
     // Constructor
