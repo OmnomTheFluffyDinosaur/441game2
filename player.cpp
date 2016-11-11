@@ -56,6 +56,10 @@ void Player::update(float frameTime)
     // wrap around screen
     if (spriteData.x > GAME_WIDTH)                  // if off screen right
         spriteData.x = GAME_WIDTH-playerNS::WIDTH; 
-    else if (spriteData.x < -playerNS::WIDTH)         // else if off screen left
-        spriteData.x = 0;;                  // position off screen right
+    else if (spriteData.x < 0)         // else if off screen left
+        spriteData.x = 0;
+	if (spriteData.y+playerNS::HEIGHT > GAME_HEIGHT)                  // if off screen bottom
+        spriteData.y = GAME_HEIGHT-playerNS::HEIGHT; 
+    else if (spriteData.y < 0)         // else if off screen top
+        spriteData.y = 0;
 }
