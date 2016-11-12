@@ -24,6 +24,7 @@ Grunt::Grunt() : Entity()
 	active = true;
 	speed = 50;
 	sightDistance = 10;
+	isDead = false;
 }
 
 bool Grunt::initialize(Game *gamePtr, int width, int height, int ncols,
@@ -67,6 +68,9 @@ void Grunt::update(float frameTime)
 	if (getPositionY() < 0)
 	{
 		setPosition(D3DXVECTOR2(getPositionX(),GAME_WIDTH-Image::getHeight()*Image::getScale()));
+	}
+	if (isDead) {
+		setInvisible();
 	}
 
 	velocity = D3DXVECTOR2(0,0);
@@ -123,4 +127,36 @@ void Grunt::ai(float time, Entity &t)
 	//evade();
 	//evade();
 	return;
+}
+
+bool Grunt::collidesWith(Entity p) {
+	//grunt box
+	float gruntL = spriteData.x;
+	float gruntR = spriteData.x+gruntNS::WIDTH*spriteData.scale;
+	float gruntT = spriteData.x;
+	float gruntB = spriteData.x+gruntNS::HEIGHT*spriteData.scale;
+
+	//player box
+	float pL = p.getX();
+	float pR = p.getX()+p.getWidth()*spriteData.scale;
+	float pT = p.getX();
+	float pB = p.getX()+p.getHeight()*spriteData.scale;
+
+	return (gruntL < pR && gruntR < pL && gruntT < pB && gruntB < pT);
+}
+
+bool Grunt::isHitBy(Entity p) {
+	//grunt box
+	float gruntL = spriteData.x;
+	float gruntR = spriteData.x+gruntNS::WIDTH*spriteData.scale;
+	float gruntT = spriteData.x;
+	float gruntB = spriteData.x+gruntNS::HEIGHT*spriteData.scale;
+
+	//player box
+	float pL = p.getX();
+	float pR = p.getX()+p.getWidth()*spriteData.scale;
+	float pT = p.getX();
+	float pB = p.getX()+p.getHeight()*spriteData.scale;
+
+	return (gruntL < pR && gruntR < pL && gruntT < pB && gruntB < pT);
 }
