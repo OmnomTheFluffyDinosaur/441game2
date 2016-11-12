@@ -32,6 +32,9 @@ private:
 	float speed;
 	Entity targetEntity;
 	int sightDistance;
+	bool direction;
+	bool isDead;
+	bool isHit;
 
 public:
     // constructor
@@ -72,9 +75,16 @@ public:
 
 	void ai(float time, Entity &t);
 
+	bool collidesWith(Entity p);
+
+	bool isHitBy(Entity p);
+
 	void vectorTrack();
 	void deltaTrack();
 	void evade();
+	void setCollides(bool c){isHit = c;}
+	void setDead(bool c){isDead = c;}
+	bool getDead(){return isDead;}
 };
 #endif
 

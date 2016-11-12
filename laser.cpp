@@ -20,18 +20,14 @@ Laser::Laser() : Entity()
 	direction = true;
 	isDead = false;
 	cR = 0;
-	canShoot = true;
 }
 
 void Laser::update(float frameTime, Player p, Audio* audio){
-	if(input->wasKeyPressed(VK_SPACE) && canShoot){
+	if(input->wasKeyPressed(VK_SPACE)){
 		setVisible(true);
-		canShoot = false;
 		spriteData.x = p.getX() +40;
 		spriteData.y = p.getY() +10;
 		velocity.x = 800;
 	}
 	spriteData.x += velocity.x*frameTime;
-	if(spriteData.x > GAME_WIDTH || spriteData.x < 0)
-		canShoot = true;
 }

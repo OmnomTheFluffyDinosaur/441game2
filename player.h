@@ -14,9 +14,7 @@ namespace playerNS
     const int HEIGHT = 32;                  // image height
     const int X = GAME_WIDTH/2 - WIDTH/2;   // location on screen
     const int Y = GAME_HEIGHT/2 - HEIGHT/2;
-    const float SPEED = 100;             
-	
-   
+    const float SPEED = 120;
 }
 
 // inherits from Entity class
@@ -26,7 +24,7 @@ private:
   
     bool collision;                 
     bool target;                    
-
+	int health;
 public:
     // constructor
     Player();
@@ -72,7 +70,8 @@ public:
     {
         velocity.y = playerNS::SPEED;
     }
-
+	int getHealth() { return health; }
+	void setHealth(int h) { health = h; }
 };
 #endif
 

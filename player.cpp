@@ -24,7 +24,6 @@ Player::Player() : Entity()
 	edge.top = playerNS::HEIGHT/2;
 	edge.right = -playerNS::WIDTH/2;
 	edge.left = playerNS::WIDTH/2;
-	health = 100;
 }
 
 //=============================================================================

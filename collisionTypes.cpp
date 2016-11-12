@@ -19,7 +19,7 @@ CollisionTypes::CollisionTypes()
 //=============================================================================
 CollisionTypes::~CollisionTypes()
 {
-    releaseAll();           // call onLostDevice() for every graphics item
+	releaseAll();           // call onLostDevice() for every graphics item
 }
 
 //=============================================================================
@@ -28,7 +28,7 @@ CollisionTypes::~CollisionTypes()
 //=============================================================================
 void CollisionTypes::initialize(HWND hwnd)
 {
-    Game::initialize(hwnd); // throws GameError
+	Game::initialize(hwnd); // throws GameError
 
 	timeInState = 0;
 	gameStates = intro;
@@ -37,26 +37,27 @@ void CollisionTypes::initialize(HWND hwnd)
 	menu->initialize(graphics, input); //, menuText);
 
 	if (!playerTM.initialize(graphics,PLAYER_IMAGE))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
 	if (!player.initialize(this, playerTM.getWidth(), playerTM.getHeight(), 0,&playerTM))
 		throw(GameError(gameErrorNS::WARNING, "Player not initialized"));
 	player.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-2*player.getHeight()));
-    player.setCollisionType(entityNS::BOX);
-    player.setEdge(COLLISION_BOX_PLAYER);
-    player.setCollisionRadius(COLLISION_RADIUS);
+	player.setCollisionType(entityNS::BOX);
+	player.setEdge(COLLISION_BOX_PLAYER);
+	player.setCollisionRadius(COLLISION_RADIUS);
 	player.setScale(1.0);
+	player.setHealth(100);
 
 	if (!laserTM.initialize(graphics,LASER_IMAGE))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background"));
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background"));
 	if (!laser.initialize(this,laserNS::WIDTH, laserNS::HEIGHT, laserNS::TEXTURE_COLS, &laserTM))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background"));
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background"));
 	laser.setScale(1.25);
 	laser.setX(10);
 	laser.setY(10);
 	laser.setVisible(false);
 
 	if (!gruntTM.initialize(graphics,GRUNT_IMAGE))
-        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
 	if (!grunts.initialize(this, 0, 0, 0,&gruntTM))
 		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
 	grunts.setPosition(VECTOR2(400, 100));
@@ -69,8 +70,8 @@ void CollisionTypes::initialize(HWND hwnd)
 	//patternsteps
 	/*patternStepIndex = 0;
 	for (int i = 0; i<maxPatternSteps; i++) {
-		patternSteps[i].initialize(&grunts);
-		patternSteps[i].setActive();
+	patternSteps[i].initialize(&grunts);
+	patternSteps[i].setActive();
 	}
 	patternSteps[0].setAction(RIGHT);
 	patternSteps[0].setTimeForStep(3);
@@ -81,14 +82,14 @@ void CollisionTypes::initialize(HWND hwnd)
 	patternSteps[3].setAction(BRTL);
 	patternSteps[3].setTimeForStep(2);*/
 
-    return;
+	return;
 }
 
 //=============================================================================
 // Update all game items
 //=============================================================================
 
- void CollisionTypes::gameStateUpdate()
+void CollisionTypes::gameStateUpdate()
 {
 
 	timeInState += frameTime;
@@ -109,18 +110,21 @@ void CollisionTypes::initialize(HWND hwnd)
 	//gameStates = gamePlay;
 	/*if (input->isKeyDown(VK_F1))
 	{
-		gameStates = readyToPlay;
+	gameStates = readyToPlay;
 	}
 	if (input->isKeyDown(VK_F2)) {
-		gameStates = gamePlay;
+	gameStates = gamePlay;
 	}
 	if (input->isKeyDown(VK_F3))
 	{
-		gameStates= end;
+	gameStates= end;
 	}*/
 }
 void CollisionTypes::update()
 {
+	if (input->isKeyDown(VK_ESCAPE)) {
+		exitGame();
+	}
 	gameStateUpdate();
 	menu->update();
 	/*
@@ -129,18 +133,18 @@ void CollisionTypes::update()
 	case intro:
 
 	case readyToPlay:
-		
+
 	case gamePlay:
-		
+
 	}*/
 	/*if(input->isKeyDown(VK_LEFT))
-		player.left();
+	player.left();
 	if(input->isKeyDown(VK_RIGHT))
-		player.right();
+	player.right();
 	if(input->isKeyDown(VK_UP))
-		player.up();
+	player.up();
 	if(input->isKeyDown(VK_DOWN))
-		player.down();
+	player.down();
 	player.update(frameTime);
 	laser.update(frameTime,player,audio);*/
 
@@ -149,7 +153,7 @@ void CollisionTypes::update()
 	{
 	case intro:
 		//nothing yet
-	//case readyToPlay:
+		//case readyToPlay:
 		//nothing yet
 		break;
 	case gamePlay:
@@ -175,9 +179,9 @@ void CollisionTypes::ai()
 {
 	grunts.ai(frameTime, player);
 	/*if (patternStepIndex == maxPatternSteps)
-		return;
+	return;
 	if (patternSteps[patternStepIndex].isFinished())
-		patternStepIndex++;
+	patternStepIndex++;
 	patternSteps[patternStepIndex].update(frameTime);*/
 }
 
@@ -186,7 +190,18 @@ void CollisionTypes::ai()
 //=============================================================================
 void CollisionTypes::collisions()
 {
-    
+	if(grunts.collidesWith(player) && !grunts.getDead()){
+		grunts.setCollides(true);
+		player.setHealth(player.getHealth()-20);
+		player.setX(240);
+		player.setY(100);
+	}
+	else
+		grunts.setCollides(false);
+
+	if(grunts.isHitBy(laser) && !grunts.getDead()){
+		grunts.setDead(true);
+	}
 }
 
 //=============================================================================
@@ -213,15 +228,15 @@ void CollisionTypes::render()
 	/*switch (gameStates)
 	{
 	case intro:
-		//nothing
+	//nothing
 	case readyToPlay:
-		//nothing
+	//nothing
 	case gamePlay:
-		player.draw();
+	player.draw();
 	case end:
-		//nothing
+	//nothing
 	}*/
-    graphics->spriteEnd();                  // end drawing sprites
+	graphics->spriteEnd();                  // end drawing sprites
 }
 
 //=============================================================================
@@ -230,10 +245,10 @@ void CollisionTypes::render()
 //=============================================================================
 void CollisionTypes::releaseAll()
 {
-	
+
 	playerTM.onLostDevice();
-    Game::releaseAll();
-    return;
+	Game::releaseAll();
+	return;
 }
 
 //=============================================================================
@@ -242,8 +257,8 @@ void CollisionTypes::releaseAll()
 //=============================================================================
 void CollisionTypes::resetAll()
 {
-	
+
 	playerTM.onResetDevice();
-    Game::resetAll();
-    return;
+	Game::resetAll();
+	return;
 }
