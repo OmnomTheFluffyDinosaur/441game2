@@ -122,6 +122,9 @@ void CollisionTypes::gameStateUpdate()
 }
 void CollisionTypes::update()
 {
+	if (input->isKeyDown(VK_ESCAPE)) {
+		exitGame();
+	}
 	gameStateUpdate();
 	menu->update();
 	/*

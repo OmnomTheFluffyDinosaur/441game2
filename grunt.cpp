@@ -133,30 +133,30 @@ bool Grunt::collidesWith(Entity p) {
 	//grunt box
 	float gruntL = spriteData.x;
 	float gruntR = spriteData.x+gruntNS::WIDTH*spriteData.scale;
-	float gruntT = spriteData.x;
-	float gruntB = spriteData.x+gruntNS::HEIGHT*spriteData.scale;
+	float gruntT = spriteData.y;
+	float gruntB = spriteData.y+gruntNS::HEIGHT*spriteData.scale;
 
 	//player box
 	float pL = p.getX();
 	float pR = p.getX()+p.getWidth()*spriteData.scale;
-	float pT = p.getX();
-	float pB = p.getX()+p.getHeight()*spriteData.scale;
+	float pT = p.getY();
+	float pB = p.getY()+p.getHeight()*spriteData.scale;
 
-	return (gruntL < pR && gruntR < pL && gruntT < pB && gruntB < pT);
+	return (gruntL < pR && gruntR > pL && gruntT < pB && gruntB > pT);
 }
 
 bool Grunt::isHitBy(Entity p) {
 	//grunt box
 	float gruntL = spriteData.x;
 	float gruntR = spriteData.x+gruntNS::WIDTH*spriteData.scale;
-	float gruntT = spriteData.x;
-	float gruntB = spriteData.x+gruntNS::HEIGHT*spriteData.scale;
+	float gruntT = spriteData.y;
+	float gruntB = spriteData.y+gruntNS::HEIGHT*spriteData.scale;
 
 	//player box
 	float pL = p.getX();
 	float pR = p.getX()+p.getWidth()*spriteData.scale;
-	float pT = p.getX();
-	float pB = p.getX()+p.getHeight()*spriteData.scale;
+	float pT = p.getY();
+	float pB = p.getY()+p.getHeight()*spriteData.scale;
 
-	return (gruntL < pR && gruntR < pL && gruntT < pB && gruntB < pT);
+	return (gruntL < pR && gruntR > pL && gruntT < pB && gruntB > pT);
 }
