@@ -20,14 +20,19 @@ Laser::Laser() : Entity()
 	direction = true;
 	isDead = false;
 	cR = 0;
+	reloadTimer = 0;
 }
 
 void Laser::update(float frameTime, Player p, Audio* audio){
-	if(input->wasKeyPressed(VK_SPACE)){
-		setVisible(true);
-		spriteData.x = p.getX() +40;
-		spriteData.y = p.getY() +10;
-		velocity.x = 800;
+	reloadTimer -= frameTime;
+	if (reloadTimer <= 0) {
+		if(input->wasKeyPressed(VK_SPACE)){
+			setVisible(true);
+			spriteData.x = p.getX() +40;
+			spriteData.y = p.getY() +10;
+			velocity.x = 1200;
+			reloadTimer = 0.4f;
+		}
 	}
 	spriteData.x += velocity.x*frameTime;
 }
