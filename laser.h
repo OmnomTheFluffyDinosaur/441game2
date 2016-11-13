@@ -32,5 +32,6 @@ private:
 	bool direction;
 	bool isDead;
 	int cR;
+	float reloadTimer;
 };
 #endif
