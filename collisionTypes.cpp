@@ -292,11 +292,13 @@ void CollisionTypes::collisions()
 		else
 			zep.setCollides(false);
 
-		if(zep.isHitBy(laser) && !zep.getDead()){
+		if(zep.isHitBy(laser) && !zep.getDead() && !laser.getDead()){
 			zep.setHealth(zep.getHealth() - 10);
+			laser.setDead(true);
+			laser.setVisible(false);
 			if(zep.getHealth() == 0)
 				zep.setDead(true);
-			laser.setActive(false);
+			//NEED to destroy laser upon hitting 
 		}
 }
 

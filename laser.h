@@ -28,6 +28,8 @@ public:
     Laser();
 	void update(float frameTime, Player p, Audio *audio);
 	bool canShoot;
+	void setDead(bool c){isDead = c;}
+	bool getDead(){return isDead;}
 private:
 	bool direction;
 	bool isDead;

@@ -27,6 +27,7 @@ void Laser::update(float frameTime, Player p, Audio* audio){
 	reloadTimer -= frameTime;
 	if (reloadTimer <= 0) {
 		if(input->wasKeyPressed(VK_SPACE)){
+			setDead(false);
 			setVisible(true);
 			spriteData.x = p.getX() +40;
 			spriteData.y = p.getY() +10;
