@@ -79,6 +79,8 @@ public:
 
 	bool isHitBy(Entity p);
 
+	//void spawn();
+
 	void vectorTrack();
 	void deltaTrack();
 	void evade();

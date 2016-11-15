@@ -37,7 +37,7 @@ private:
 	Player player;
 	Puck puck;
 	Laser laser;
-	Grunt grunts;
+	Grunt grunts[5];
 	int score;
 	bool collision;
 	Brick bricks[5];
@@ -48,9 +48,12 @@ private:
 	Image gameOver;
 	TextureManager gameOverTM;
 	float timeInState;
+	float timeSinceSpawn;
+	int lastGrunt;
 	void gameStateUpdate();
 	Image tex;
 	mainMenu *menu;
+	TextDX  *waveFont;     
 	PatternStep patternSteps[maxPatternSteps];
 	int patternStepIndex;
 

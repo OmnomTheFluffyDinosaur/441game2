@@ -5,7 +5,7 @@
 // Press '1', '2' or '3' to select collision type for ship.
 
 #include "collisionTypes.h"
-
+#include <time.h>
 //=============================================================================
 // Constructor
 //=============================================================================
@@ -19,6 +19,7 @@ CollisionTypes::CollisionTypes()
 //=============================================================================
 CollisionTypes::~CollisionTypes()
 {
+	SAFE_DELETE(waveFont);
 	releaseAll();           // call onLostDevice() for every graphics item
 }
 
@@ -31,10 +32,16 @@ void CollisionTypes::initialize(HWND hwnd)
 	Game::initialize(hwnd); // throws GameError
 
 	timeInState = 0;
+	timeSinceSpawn = 0;
+	lastGrunt = 0;
 	gameStates = intro;
 
 	menu = new mainMenu();
 	menu->initialize(graphics, input); //, menuText);
+
+	waveFont = new TextDX();
+	if(waveFont->initialize(graphics, 15, true, false, "Arial") == false)
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
 
 	if (!playerTM.initialize(graphics,PLAYER_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
@@ -56,16 +63,19 @@ void CollisionTypes::initialize(HWND hwnd)
 	laser.setY(10);
 	laser.setVisible(false);
 
-	if (!gruntTM.initialize(graphics,GRUNT_IMAGE))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
-	if (!grunts.initialize(this, 0, 0, 0,&gruntTM))
-		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
-	grunts.setPosition(VECTOR2(400, 100));
-	grunts.setCollision(entityNS::BOX);
-	grunts.setEdge(COLLISION_BOX_PUCK);
-	grunts.setX(grunts.getPositionX());
-	grunts.setY(grunts.getPositionY());
-	grunts.setScale(1);
+	for(int i = 0; i < NUMGRUNTS; i++) {
+		if (!gruntTM.initialize(graphics,GRUNT_IMAGE))
+			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+		if (!grunts[i].initialize(this, 0, 0, 0,&gruntTM))
+			throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+		grunts[i].setPosition(VECTOR2(400, 100 + i*40));
+		grunts[i].setCollision(entityNS::BOX);
+		grunts[i].setEdge(COLLISION_BOX_PUCK);
+		grunts[i].setX(grunts[i].getPositionX());
+		grunts[i].setY(grunts[i].getPositionY());
+		grunts[i].setScale(1);
+		grunts[i].setDead(true);
+	}
 
 	//patternsteps
 	/*patternStepIndex = 0;
@@ -95,10 +105,15 @@ void CollisionTypes::gameStateUpdate()
 	timeInState += frameTime;
 	if (gameStates==intro && menu->getSelectedItem() == 0)//timeInState > 2.5)
 	{
-		gameStates = gamePlay;
+		gameStates = wave1;
 		timeInState = 0;
 	}
-	if (gameStates==gamePlay && input->isKeyDown(VK_F1))
+	if (gameStates== wave1 && timeInState > 60)
+	{
+		gameStates = wave2;
+		timeInState = 0;
+	}
+		if (gameStates== wave2 && timeInState > 60)
 	{
 		gameStates = end;
 		timeInState = 0;
@@ -151,12 +166,28 @@ void CollisionTypes::update()
 
 	switch (gameStates)
 	{
+	srand(time(0));
 	case intro:
 		//nothing yet
 		//case readyToPlay:
 		//nothing yet
 		break;
-	case gamePlay:
+	case wave1:
+		timeSinceSpawn += frameTime;
+		if(timeSinceSpawn > 3)
+		{
+			lastGrunt++;
+			if(grunts[lastGrunt].getDead())
+			{
+				grunts[lastGrunt].setPosition(VECTOR2(GAME_WIDTH-6, rand()%(GAME_HEIGHT-gruntNS::HEIGHT)));
+			//	grunts[++lastGrunt].setX(GAME_WIDTH-gruntNS::WIDTH);
+			//	grunts[lastGrunt].setY(40);
+				grunts[lastGrunt].setDead(false);
+			}
+			timeSinceSpawn = 0;
+			if(lastGrunt == NUMGRUNTS)
+				lastGrunt = 0;
+		}
 		if(input->isKeyDown(VK_LEFT))
 			player.left();
 		if(input->isKeyDown(VK_RIGHT))
@@ -167,7 +198,25 @@ void CollisionTypes::update()
 			player.down();
 		player.update(frameTime);
 		laser.update(frameTime, player, audio);
-		grunts.update(frameTime);
+		for(int i = 0; i < NUMGRUNTS; i++) {
+			grunts[i].update(frameTime);
+		}
+		break;
+
+	case wave2:
+		if(input->isKeyDown(VK_LEFT))
+			player.left();
+		if(input->isKeyDown(VK_RIGHT))
+			player.right();
+		if(input->isKeyDown(VK_UP))
+			player.up();
+		if(input->isKeyDown(VK_DOWN))
+			player.down();
+		player.update(frameTime);
+		laser.update(frameTime, player, audio);
+		for(int i = 0; i < NUMGRUNTS; i++) {
+			grunts[i].update(frameTime);
+		}
 		break;
 	}
 }
@@ -177,7 +226,8 @@ void CollisionTypes::update()
 //=============================================================================
 void CollisionTypes::ai()
 {
-	grunts.ai(frameTime, player);
+	for(int i = 0; i < NUMGRUNTS; i++)
+		grunts[i].ai(frameTime, player);
 	/*if (patternStepIndex == maxPatternSteps)
 	return;
 	if (patternSteps[patternStepIndex].isFinished())
@@ -190,17 +240,19 @@ void CollisionTypes::ai()
 //=============================================================================
 void CollisionTypes::collisions()
 {
-	if(grunts.collidesWith(player) && !grunts.getDead()){
-		grunts.setCollides(true);
-		player.setHealth(player.getHealth()-20);
-		player.setX(240);
-		player.setY(100);
-	}
-	else
-		grunts.setCollides(false);
+	for(int i = 0; i < NUMGRUNTS; i++) {
+		if(grunts[i].collidesWith(player) && !grunts[i].getDead()){
+			grunts[i].setCollides(true);
+			player.setHealth(player.getHealth()-20);
+			player.setX(240);
+			player.setY(100);
+		}
+		else
+			grunts[i].setCollides(false);
 
-	if(grunts.isHitBy(laser) && !grunts.getDead()){
-		grunts.setDead(true);
+		if(grunts[i].isHitBy(laser) && !grunts[i].getDead()){
+			grunts[i].setDead(true);
+		}
 	}
 }
 
@@ -215,10 +267,21 @@ void CollisionTypes::render()
 	case intro:
 		menu->displayMenu();
 		break;
-	case gamePlay:
+	case wave1:
+		if(timeInState < 3)
+			waveFont->print("Wave 1",310,100);
 		player.draw();
 		laser.draw();
-		grunts.draw();
+		for(int i = 0; i < NUMGRUNTS; i++)
+			grunts[i].draw();
+		break;
+	case wave2:
+		if(timeInState < 3)
+			waveFont->print("Wave 2",310,100);
+		player.draw();
+		laser.draw();
+		for(int i = 0; i < NUMGRUNTS; i++)
+			grunts[i].draw();
 		break;
 		//draw stuff
 	case end:

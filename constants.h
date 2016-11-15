@@ -121,11 +121,13 @@ const char BEEP3[] = "beep3";
 const char BEEP4[] = "beep4";
 const char HIT[]   = "hit";
 
-enum GameStates {intro, readyToPlay, gamePlay, end};
+enum GameStates {intro, readyToPlay, wave1, wave2, end};
 const char SPLASHSCREEN_IMAGE[] = "pictures\\MyGame.png"; 
 const char GAMEOVER_IMAGE[] = "pictures\\MyGameOver.jpg"; 
 const char TEX_IMAGE[] = "pictures\\texture1.bmp";
 
 enum PATTERN_STEP_ACTION {NONE, UP, DOWN, LEFT, RIGHT, TRACK, EVADE, BRTL};
+
+const int NUMGRUNTS = 5;
 
 #endif

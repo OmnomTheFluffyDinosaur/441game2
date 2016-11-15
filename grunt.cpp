@@ -53,24 +53,29 @@ void Grunt::setVisible()
 void Grunt::update(float frameTime)
 {
 	VECTOR2 foo = velocity*frameTime*speed;
-	if (getPositionX() + Image::getWidth()*Image::getScale() > GAME_WIDTH)
-	{
-		setPosition(D3DXVECTOR2(0,getPositionY()));
-	}
-	if (getPositionX() < 0)
-	{
-		setPosition(D3DXVECTOR2(GAME_WIDTH-Image::getWidth()*Image::getScale(),getPositionY()));
-	}
-	if (getPositionY() + Image::getHeight()*Image::getScale() > GAME_HEIGHT)
-	{
-		setPosition(D3DXVECTOR2(getPositionX(),0));
-	}
-	if (getPositionY() < 0)
-	{
-		setPosition(D3DXVECTOR2(getPositionX(),GAME_WIDTH-Image::getHeight()*Image::getScale()));
+	if(!isDead) {
+	/*	if (getPositionX() + Image::getWidth()*Image::getScale() > GAME_WIDTH)
+		{
+			setPosition(D3DXVECTOR2(0,getPositionY()));
+		}*/
+		if (getPositionX() < 0)
+		{
+			setPosition(D3DXVECTOR2(GAME_WIDTH-Image::getWidth()*Image::getScale(),getPositionY()));
+		}
+		if (getPositionY() + Image::getHeight()*Image::getScale() > GAME_HEIGHT)
+		{
+			setPosition(D3DXVECTOR2(getPositionX(),0));
+		}
+		if (getPositionY() < 0)
+		{
+			setPosition(D3DXVECTOR2(getPositionX(),GAME_WIDTH-Image::getHeight()*Image::getScale()));
+		}
 	}
 	if (isDead) {
 		setInvisible();
+	}
+	else {
+		setVisible();
 	}
 
 	velocity = D3DXVECTOR2(0,0);
@@ -112,6 +117,8 @@ void Grunt::deltaTrack()
 	VECTOR2* foo = D3DXVec2Normalize(&vel, &vel);
 	setVelocity(vel);
 }
+
+
 void Grunt::vectorTrack()
 {
 	VECTOR2 vel = getCenterPoint() - targetEntity.getCenterPoint();
