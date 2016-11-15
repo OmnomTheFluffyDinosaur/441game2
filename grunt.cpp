@@ -123,6 +123,7 @@ void Grunt::vectorTrack()
 {
 	VECTOR2 vel = getCenterPoint() - targetEntity.getCenterPoint();
 	VECTOR2* foo = D3DXVec2Normalize(&vel, &vel);
+	vel.x = 3;
 	setVelocity(-vel);
 }
 

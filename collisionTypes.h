@@ -37,7 +37,7 @@ private:
 	Player player;
 	Puck puck;
 	Laser laser;
-	Grunt grunts[5];
+	Grunt grunts[NUMGRUNTS];
 	int score;
 	bool collision;
 	Brick bricks[5];

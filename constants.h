@@ -128,6 +128,6 @@ const char TEX_IMAGE[] = "pictures\\texture1.bmp";
 
 enum PATTERN_STEP_ACTION {NONE, UP, DOWN, LEFT, RIGHT, TRACK, EVADE, BRTL};
 
-const int NUMGRUNTS = 5;
+const int NUMGRUNTS = 12;
 
 #endif
