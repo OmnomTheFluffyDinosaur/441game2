@@ -1,16 +1,16 @@
 
 #define WIN32_LEAN_AND_MEAN
-#ifndef GRUNT_H                 // Prevent multiple definitions if this 
-#define GRUNT_H   
-class Grunt;
+#ifndef ZEPPELIN_H                 // Prevent multiple definitions if this 
+#define ZEPPELIN_H   
+class Zeppelin;
 
 #include "entity.h"
 #include "constants.h"
 #include "graphics.h"
 
-namespace gruntNS
+namespace zepNS
 {
-    const int WIDTH = 64;                   // image width
+    const int WIDTH = 64;                   // image width   EDIT
     const int HEIGHT = 32;                  // image height
     const int X = GAME_WIDTH/2 - WIDTH/2;   // location on screen
     const int Y = GAME_HEIGHT/2 - HEIGHT/2;
@@ -20,7 +20,7 @@ namespace gruntNS
 }
 
 // inherits from Entity class
-class Grunt : public Entity
+class Zeppelin : public Entity
 {
 private:
    // puckNS::DIRECTION direction;    
@@ -38,7 +38,7 @@ private:
 
 public:
     // constructor
-    Grunt();
+    Zeppelin();
 
     // inherited member functions
     virtual bool initialize(Game *gamePtr, int width, int height, int ncols,

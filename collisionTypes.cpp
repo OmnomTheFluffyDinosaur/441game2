@@ -6,6 +6,9 @@
 
 #include "collisionTypes.h"
 #include <time.h>
+
+bool bossSpawn = 0;
+
 //=============================================================================
 // Constructor
 //=============================================================================
@@ -77,6 +80,19 @@ void CollisionTypes::initialize(HWND hwnd)
 		grunts[i].setDead(true);
 	}
 
+
+		if (!zepTM.initialize(graphics,ZEP_IMAGE))
+			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+		if (!zep.initialize(this, 0, 0, 0,&zepTM))
+			throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+		zep.setPosition(VECTOR2(400, 100));
+		zep.setCollision(entityNS::BOX);
+		zep.setEdge(COLLISION_BOX_PUCK);
+		zep.setX(zep.getPositionX());
+		zep.setY(zep.getPositionY());
+		zep.setScale(.3);
+		zep.setDead(true);
+
 	//patternsteps
 	/*patternStepIndex = 0;
 	for (int i = 0; i<maxPatternSteps; i++) {
@@ -108,7 +124,7 @@ void CollisionTypes::gameStateUpdate()
 		gameStates = wave1;
 		timeInState = 0;
 	}
-	if (gameStates== wave1 && timeInState > 60)
+	if (gameStates== wave1 && timeInState > 10)
 	{
 		gameStates = wave2;
 		timeInState = 0;
@@ -163,27 +179,21 @@ void CollisionTypes::update()
 	player.update(frameTime);
 	laser.update(frameTime,player,audio);*/
 
-
+	timeSinceSpawn += frameTime;
 	switch (gameStates)
 	{
-	srand(time(0));
+
 	case intro:
 		//nothing yet
 		//case readyToPlay:
 		//nothing yet
 		break;
 	case wave1:
-		timeSinceSpawn += frameTime;
+		//spawn grunts
 		if(timeSinceSpawn > 3)
 		{
 			lastGrunt++;
-			if(grunts[lastGrunt].getDead())
-			{
-				grunts[lastGrunt].setPosition(VECTOR2(GAME_WIDTH-6, rand()%(GAME_HEIGHT-gruntNS::HEIGHT)));
-			//	grunts[++lastGrunt].setX(GAME_WIDTH-gruntNS::WIDTH);
-			//	grunts[lastGrunt].setY(40);
-				grunts[lastGrunt].setDead(false);
-			}
+			grunts[lastGrunt].spawn();			
 			timeSinceSpawn = 0;
 			if(lastGrunt == NUMGRUNTS)
 				lastGrunt = 0;
@@ -201,9 +211,25 @@ void CollisionTypes::update()
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
+		zep.update(frameTime);
 		break;
 
 	case wave2:
+		//spawn grunts
+		if(timeSinceSpawn > 3)
+		{
+			lastGrunt++;
+			grunts[lastGrunt].spawn();			
+			timeSinceSpawn = 0;
+			if(lastGrunt == NUMGRUNTS)
+				lastGrunt = 0;
+		}
+		if(timeInState > 10)
+		{
+			if (!bossSpawn)
+				zep.spawn();
+			bossSpawn = true;
+		}
 		if(input->isKeyDown(VK_LEFT))
 			player.left();
 		if(input->isKeyDown(VK_RIGHT))
@@ -217,6 +243,7 @@ void CollisionTypes::update()
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
+		zep.update(frameTime);
 		break;
 	}
 }
@@ -228,6 +255,7 @@ void CollisionTypes::ai()
 {
 	for(int i = 0; i < NUMGRUNTS; i++)
 		grunts[i].ai(frameTime, player);
+	zep.ai(frameTime, player);
 	/*if (patternStepIndex == maxPatternSteps)
 	return;
 	if (patternSteps[patternStepIndex].isFinished())
@@ -282,6 +310,7 @@ void CollisionTypes::render()
 		laser.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
+		zep.draw();
 		break;
 		//draw stuff
 	case end:

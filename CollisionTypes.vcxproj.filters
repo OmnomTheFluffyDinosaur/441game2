@@ -72,6 +72,9 @@
     <ClCompile Include="patternStep.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="zeppelin.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="patternStep.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="zeppelin.h">
+      <Filter>Header Files\entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

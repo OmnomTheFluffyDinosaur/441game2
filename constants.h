@@ -96,6 +96,7 @@ const char PUCK_IMAGE[] = "pictures\\PS4_new.png";  // game textures
 const char PLAYER_IMAGE[] = "pictures\\biplane.png";      // menu texture
 const char LASER_IMAGE[] = "pictures\\laser.png";
 const char GRUNT_IMAGE[] = "pictures\\grunt.png";
+const char ZEP_IMAGE[] = "pictures\\Zeppelin.png";
 
 // key mappings
 // In this game simple constants are used for key mappings. If variables were used
