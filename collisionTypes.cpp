@@ -224,7 +224,7 @@ void CollisionTypes::update()
 			if(lastGrunt == NUMGRUNTS)
 				lastGrunt = 0;
 		}
-		if(timeInState > 10)
+		if(timeInState > 5)
 		{
 			if (!bossSpawn)
 				zep.spawn();
@@ -282,6 +282,22 @@ void CollisionTypes::collisions()
 			grunts[i].setDead(true);
 		}
 	}
+
+	if(zep.collidesWith(player) && !zep.getDead()){
+			zep.setCollides(true);
+			player.setHealth(player.getHealth()-20);
+			player.setX(240);
+			player.setY(100);
+		}
+		else
+			zep.setCollides(false);
+
+		if(zep.isHitBy(laser) && !zep.getDead()){
+			zep.setHealth(zep.getHealth() - 10);
+			if(zep.getHealth() == 0)
+				zep.setDead(true);
+			laser.setActive(false);
+		}
 }
 
 //=============================================================================

@@ -25,6 +25,7 @@ Zeppelin::Zeppelin() : Entity()
 	speed = 20;
 	sightDistance = 10;
 	isDead = false;
+	health = 100;
 }
 
 bool Zeppelin::initialize(Game *gamePtr, int width, int height, int ncols,

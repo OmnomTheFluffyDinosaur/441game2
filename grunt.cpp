@@ -1,5 +1,6 @@
 #include "grunt.h"
 #include <time.h>
+#include <cstdlib>
 //=============================================================================
 // default constructor
 //=============================================================================
@@ -25,6 +26,8 @@ Grunt::Grunt() : Entity()
 	speed = 50;
 	sightDistance = 10;
 	isDead = false;
+	srand(time(NULL));
+
 }
 
 bool Grunt::initialize(Game *gamePtr, int width, int height, int ncols,
@@ -170,7 +173,6 @@ bool Grunt::isHitBy(Entity p) {
 }
 
 void Grunt::spawn() {
-	srand(time(0));
 	if(getDead())
 	{
 		setPosition(VECTOR2(GAME_WIDTH-1, rand()%(GAME_HEIGHT-gruntNS::HEIGHT)));
