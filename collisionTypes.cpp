@@ -80,7 +80,7 @@ void CollisionTypes::initialize(HWND hwnd)
 		grunts[i].setDead(true);
 		grunts[i].setInvisible();
 		grunts[i].setCurrentFrame(GRUNT_IDLE_START);
-		grunts[i].setFrameDelay(.01);
+		grunts[i].setFrameDelay(.008);
 	}
 
 

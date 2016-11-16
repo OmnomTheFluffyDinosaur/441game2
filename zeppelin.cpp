@@ -20,9 +20,9 @@ Zeppelin::Zeppelin() : Entity()
     collisionType =entityNS::BOX;// entityNS::CIRCLE;
     target = false;
 	edge.bottom = -zepNS::HEIGHT/2;
-	spriteData.scale = 1;
+	spriteData.scale = 2;
 	active = true;
-	speed = 20;
+	speed = 10;
 	sightDistance = 10;
 	isDead = false;
 	health = 100;
@@ -59,9 +59,9 @@ void Zeppelin::update(float frameTime)
 		{
 			setPosition(D3DXVECTOR2(0,getPositionY()));
 		}*/
-		if (getPositionX() < 0)
+		if (getPositionX() + zepNS::WIDTH < 0)
 		{
-			setPosition(D3DXVECTOR2(GAME_WIDTH-Image::getWidth()*Image::getScale(),getPositionY()));
+			setPosition(D3DXVECTOR2(GAME_WIDTH,getPositionY()));
 		}
 		if (getPositionY() + Image::getHeight()*Image::getScale() > GAME_HEIGHT)
 		{
@@ -140,10 +140,10 @@ void Zeppelin::ai(float time, Entity &t)
 
 bool Zeppelin::collidesWith(Entity p) {
 	//zeppelin box
-	float zeppelinL = spriteData.x;
-	float zeppelinR = spriteData.x+zepNS::WIDTH*spriteData.scale;
-	float zeppelinT = spriteData.y;
-	float zeppelinB = spriteData.y+zepNS::HEIGHT*spriteData.scale;
+	float zeppelinL = spriteData.x +32;
+	float zeppelinR = spriteData.x+zepNS::WIDTH*spriteData.scale -32;
+	float zeppelinT = spriteData.y +16;
+	float zeppelinB = spriteData.y+zepNS::HEIGHT*spriteData.scale -16;
 
 	//player box
 	float pL = p.getX();
@@ -156,10 +156,10 @@ bool Zeppelin::collidesWith(Entity p) {
 
 bool Zeppelin::isHitBy(Entity p) {
 	//zeppelin box
-	float zeppelinL = spriteData.x;
-	float zeppelinR = spriteData.x+zepNS::WIDTH*spriteData.scale;
-	float zeppelinT = spriteData.y;
-	float zeppelinB = spriteData.y+zepNS::HEIGHT*spriteData.scale;
+	float zeppelinL = spriteData.x + 16;
+	float zeppelinR = spriteData.x+zepNS::WIDTH*spriteData.scale-16;
+	float zeppelinT = spriteData.y +8;
+	float zeppelinB = spriteData.y+zepNS::HEIGHT*spriteData.scale-16;
 
 	//player box
 	float pL = p.getX();
