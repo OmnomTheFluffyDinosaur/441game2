@@ -172,9 +172,20 @@ void CollisionTypes::gameStateUpdate()
 		gameStates = end;
 		timeInState = 0;
 	}
+	if ((gameStates == wave1 || gameStates == wave2) && player.getHealth() == 0)
+	{
+		gameStates = gameEnd;
+		timeInState = 0;
+	}
 	if (gameStates==end && timeInState > 4)
 	{
 		PostQuitMessage(0);
+		timeInState = 0;
+	}
+	if  ((gameStates == end || gameStates == gameEnd) && timeInState > 5)
+	{
+		gameStates = intro;
+		timeInState = 0;
 	}
 	//gameStates = gamePlay;
 	/*if (input->isKeyDown(VK_F1))
@@ -329,8 +340,11 @@ void CollisionTypes::collisions()
 		if(grunts[i].collidesWith(player) && !grunts[i].getDead()){
 			grunts[i].setCollides(true);
 			player.setHealth(player.getHealth()-20);
-			player.setX(240);
-			player.setY(100);
+			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
+			grunts[i].setDead(true);
+			audio->playCue(BOOM9);
+			//player.setX(240);
+			//player.setY(100);
 		}
 		else
 			grunts[i].setCollides(false);
@@ -402,6 +416,10 @@ void CollisionTypes::render()
 		break;
 		//draw stuff
 	case end:
+		//gameOver.draw();
+		break;
+	
+	case gameEnd:
 		gameOver.draw();
 		break;
 	}
