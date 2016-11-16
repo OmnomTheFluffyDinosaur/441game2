@@ -78,22 +78,26 @@ void CollisionTypes::initialize(HWND hwnd)
 		grunts[i].setY(grunts[i].getPositionY());
 		grunts[i].setScale(1);
 		grunts[i].setDead(true);
+		grunts[i].setInvisible();
 		grunts[i].setCurrentFrame(GRUNT_IDLE_START);
 		grunts[i].setFrameDelay(.01);
 	}
 
 
-		if (!zepTM.initialize(graphics,ZEP_IMAGE))
-			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
-		if (!zep.initialize(this, 0, 0, 0,&zepTM))
-			throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
-		zep.setPosition(VECTOR2(400, 100));
-		zep.setCollision(entityNS::BOX);
-		zep.setEdge(COLLISION_BOX_PUCK);
-		zep.setX(zep.getPositionX());
-		zep.setY(zep.getPositionY());
-		zep.setScale(.3);
-		zep.setDead(true);
+	if (!zepTM.initialize(graphics,ZEP_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+	if (!zep.initialize(this, ZEP_WIDTH, ZEP_HEIGHT, ZEP_COLS,&zepTM))
+		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+	zep.setPosition(VECTOR2(400, 100));
+	zep.setCollision(entityNS::BOX);
+	zep.setEdge(COLLISION_BOX_PUCK);
+	zep.setX(zep.getPositionX());
+	zep.setY(zep.getPositionY());
+	zep.setScale(2);
+	zep.setDead(true);
+	zep.setInvisible();
+	zep.setCurrentFrame(ZEP_IDLE_START);
+	zep.setFrameDelay(.01);
 
 	//patternsteps
 	/*patternStepIndex = 0;
@@ -197,6 +201,7 @@ void CollisionTypes::update()
 			lastGrunt++;
 			grunts[lastGrunt].spawn();	
 			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
+			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
 			timeSinceSpawn = 0;
 			if(lastGrunt == NUMGRUNTS)
 				lastGrunt = 0;
@@ -214,7 +219,7 @@ void CollisionTypes::update()
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
-		zep.update(frameTime);
+		//zep.update(frameTime);
 		break;
 
 	case wave2:
@@ -224,14 +229,17 @@ void CollisionTypes::update()
 			lastGrunt++;
 			grunts[lastGrunt].spawn();	
 			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
+			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
 			timeSinceSpawn = 0;
 			if(lastGrunt == NUMGRUNTS)
 				lastGrunt = 0;
 		}
-		if(timeInState > 5)
+		if(timeInState > 5 && !bossSpawn)
 		{
-			if (!bossSpawn)
-				zep.spawn();
+			//if (!bossSpawn) {
+		//		zep.spawn();
+		//		zep.setFrames(ZEP_IDLE_START, ZEP_IDLE_END);
+		//	}
 			bossSpawn = true;
 		}
 		if(input->isKeyDown(VK_LEFT))
@@ -284,11 +292,11 @@ void CollisionTypes::collisions()
 
 		if(grunts[i].isHitBy(laser) && !grunts[i].getDead()){
 			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
-			
+			grunts[i].setDead(true);
 			//grunts[i].setDead(true);
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
-			grunts[i].setDead(true);
+			grunts[i].setInvisible();
 	}
 
 	if(zep.collidesWith(player) && !zep.getDead()){
@@ -300,14 +308,17 @@ void CollisionTypes::collisions()
 		else
 			zep.setCollides(false);
 
-		if(zep.isHitBy(laser) && !zep.getDead() && !laser.getDead()){
+		if(zep.isHitBy(laser) && !zep.getDead() && !laser.getDead()) {
 			zep.setHealth(zep.getHealth() - 10);
 			laser.setDead(true);
 			laser.setVisible(false);
-			if(zep.getHealth() == 0)
+			if(zep.getHealth() <= 0) {
 				zep.setDead(true);
-			//NEED to destroy laser upon hitting 
+				zep.setFrames(ZEP_EXPLODE_START, ZEP_EXPLODE_END);
+			}
 		}
+		if(zep.getCurrentFrame() == ZEP_EXPLODE_END)
+			zep.setInvisible();
 }
 
 //=============================================================================
@@ -336,7 +347,8 @@ void CollisionTypes::render()
 		laser.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
-		zep.draw();
+		if(zep.getVisible())
+			zep.draw();
 		break;
 		//draw stuff
 	case end:

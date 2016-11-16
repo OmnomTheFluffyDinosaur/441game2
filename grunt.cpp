@@ -74,12 +74,12 @@ void Grunt::update(float frameTime)
 			setPosition(D3DXVECTOR2(getPositionX(),GAME_WIDTH-Image::getHeight()*Image::getScale()));
 		}
 	}
-	if (isDead) {
-		setInvisible();
-	}
-	else {
-		setVisible();
-	}
+//	if (isDead) {
+//		setInvisible();
+//	}
+//	else {
+//		setVisible();
+//	}
 
 	velocity = D3DXVECTOR2(0,0);
 	incPosition(foo);
@@ -179,5 +179,6 @@ void Grunt::spawn() {
 	//	grunts[++lastGrunt].setX(GAME_WIDTH-gruntNS::WIDTH);
 	//	grunts[lastGrunt].setY(40);
 		setDead(false);
+		setVisible();
 	}
 }

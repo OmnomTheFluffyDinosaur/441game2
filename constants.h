@@ -106,6 +106,14 @@ const int  GRUNT_IDLE_END = 0;
 const int  GRUNT_EXPLODE_START = 8;
 const int  GRUNT_EXPLODE_END = 71;
 
+const int  ZEP_COLS = 8;
+const int  ZEP_WIDTH = 128;
+const int  ZEP_HEIGHT = 64;
+const int  ZEP_IDLE_START = 0;
+const int  ZEP_IDLE_END = 0;
+const int  ZEP_EXPLODE_START = 8;
+const int  ZEP_EXPLODE_END = 71;
+
 // key mappings
 // In this game simple constants are used for key mappings. If variables were used
 // it would be possible to save and restore key mappings from a data file.

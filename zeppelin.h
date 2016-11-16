@@ -10,8 +10,8 @@ class Zeppelin;
 
 namespace zepNS
 {
-    const int WIDTH = 744;                   // image width   EDIT
-    const int HEIGHT = 431;                  // image height
+    const int WIDTH = 64;                   // image width   EDIT
+    const int HEIGHT = 32;                  // image height
     const int X = GAME_WIDTH/2 - WIDTH/2;   // location on screen
     const int Y = GAME_HEIGHT/2 - HEIGHT/2;
     const float SPEED_X = 0;                
