@@ -16,8 +16,8 @@ Global Settings
     Header File = C:\Programming 2D Games\Object Version\Chapter 7 Sound\SoundExample1\audio\SoundExample1.h;
     Exclude Category Names = 0;
     Exclude Variable Names = 0;
-    Last Modified Low = 3180022128;
-    Last Modified High = 30138571;
+    Last Modified Low = 1969779589;
+    Last Modified High = 30556176;
 
     Category
     {
@@ -227,10 +227,10 @@ Wave Bank
     Compression Preset Name = <none>;
     Xbox Bank Last Modified Low = 0;
     Xbox Bank Last Modified High = 0;
-    PC Bank Last Modified Low = 3180022128;
-    PC Bank Last Modified High = 30138571;
-    Bank Last Revised Low = 3180022128;
-    Bank Last Revised High = 30138571;
+    PC Bank Last Modified Low = 1969989730;
+    PC Bank Last Modified High = 30556176;
+    Bank Last Revised Low = 1837087154;
+    Bank Last Revised High = 30556176;
 
     Wave
     {
@@ -250,8 +250,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 2920097662;
-            Last Modified High = 30138571;
+            Last Modified Low = 1842213095;
+            Last Modified High = 30555700;
         }
     }
 
@@ -273,8 +273,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 594390174;
-            Last Modified High = 30138570;
+            Last Modified Low = 1842263124;
+            Last Modified High = 30555700;
         }
     }
 
@@ -296,8 +296,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 1370597106;
-            Last Modified High = 30138446;
+            Last Modified Low = 1842303155;
+            Last Modified High = 30555700;
         }
     }
 
@@ -319,8 +319,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 1949082125;
-            Last Modified High = 30138446;
+            Last Modified Low = 1842373205;
+            Last Modified High = 30555700;
         }
     }
 
@@ -342,8 +342,31 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 2303158751;
-            Last Modified High = 30138446;
+            Last Modified Low = 1842423235;
+            Last Modified High = 30555700;
+        }
+    }
+
+    Wave
+    {
+        Name = boom9;
+        File = boom9.wav;
+        Build Settings Last Modified Low = 1172558082;
+        Build Settings Last Modified High = 30556176;
+
+        Cache
+        {
+            Format Tag = 0;
+            Channels = 1;
+            Sampling Rate = 44100;
+            Bits Per Sample = 1;
+            Play Region Offset = 44;
+            Play Region Length = 121756;
+            Loop Region Offset = 0;
+            Loop Region Length = 0;
+            File Type = 1;
+            Last Modified Low = 911417088;
+            Last Modified High = 30298172;
         }
     }
 }
@@ -355,8 +378,6 @@ Sound Bank
     Windows File = Win\SoundsExample1.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
-    Bank Last Modified Low = 3180178128;
-    Bank Last Modified High = 30138571;
     Header Last Modified High = 0;
     Header Last Modified Low = 0;
 
@@ -595,6 +616,53 @@ Sound Bank
         }
     }
 
+    Sound
+    {
+        Name = Boom9;
+        Volume = -2140;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaker Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = WavesExample1;
+                    Bank Index = 0;
+                    Entry Name = boom9;
+                    Entry Index = 5;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
     Cue
     {
         Name = beep1;
@@ -690,6 +758,26 @@ Sound Bank
         {
             Name = hit;
             Index = 4;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = Boom9;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = Boom9;
+            Index = 5;
             Weight Min = 0;
             Weight Max = 255;
         }

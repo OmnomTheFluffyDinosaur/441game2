@@ -293,6 +293,7 @@ void CollisionTypes::collisions()
 		if(grunts[i].isHitBy(laser) && !grunts[i].getDead()){
 			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
 			grunts[i].setDead(true);
+			audio->playCue(BOOM9);
 			//grunts[i].setDead(true);
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
