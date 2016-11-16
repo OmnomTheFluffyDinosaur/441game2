@@ -203,8 +203,8 @@ void CollisionTypes::update()
 			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
 			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
 			timeSinceSpawn = 0;
-			if(lastGrunt == NUMGRUNTS)
-				lastGrunt = 0;
+			if(lastGrunt == NUMGRUNTS-1)
+				lastGrunt = 1;
 		}
 		if(input->isKeyDown(VK_LEFT))
 			player.left();
@@ -231,15 +231,15 @@ void CollisionTypes::update()
 			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
 			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
 			timeSinceSpawn = 0;
-			if(lastGrunt == NUMGRUNTS)
-				lastGrunt = 0;
+			if(lastGrunt == NUMGRUNTS-1)
+				lastGrunt = 1;
 		}
 		if(timeInState > 5 && !bossSpawn)
 		{
-			//if (!bossSpawn) {
-		//		zep.spawn();
-		//		zep.setFrames(ZEP_IDLE_START, ZEP_IDLE_END);
-		//	}
+			if (!bossSpawn) {
+				zep.spawn();
+				zep.setFrames(ZEP_IDLE_START, ZEP_IDLE_END);
+			}
 			bossSpawn = true;
 		}
 		if(input->isKeyDown(VK_LEFT))
@@ -315,6 +315,7 @@ void CollisionTypes::collisions()
 			laser.setVisible(false);
 			if(zep.getHealth() <= 0) {
 				zep.setDead(true);
+				audio->playCue(BOOM4);
 				zep.setFrames(ZEP_EXPLODE_START, ZEP_EXPLODE_END);
 			}
 		}
