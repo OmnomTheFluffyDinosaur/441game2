@@ -69,7 +69,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	for(int i = 0; i < NUMGRUNTS; i++) {
 		if (!gruntTM.initialize(graphics,GRUNT_IMAGE))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
-		if (!grunts[i].initialize(this, 0, 0, 0,&gruntTM))
+		if (!grunts[i].initialize(this, GRUNT_WIDTH, GRUNT_HEIGHT, GRUNT_COLS,&gruntTM))
 			throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
 		grunts[i].setPosition(VECTOR2(400, 100 + i*40));
 		grunts[i].setCollision(entityNS::BOX);
@@ -78,6 +78,8 @@ void CollisionTypes::initialize(HWND hwnd)
 		grunts[i].setY(grunts[i].getPositionY());
 		grunts[i].setScale(1);
 		grunts[i].setDead(true);
+		grunts[i].setCurrentFrame(GRUNT_IDLE_START);
+		grunts[i].setFrameDelay(.01);
 	}
 
 
@@ -193,7 +195,8 @@ void CollisionTypes::update()
 		if(timeSinceSpawn > 3)
 		{
 			lastGrunt++;
-			grunts[lastGrunt].spawn();			
+			grunts[lastGrunt].spawn();	
+			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
 			timeSinceSpawn = 0;
 			if(lastGrunt == NUMGRUNTS)
 				lastGrunt = 0;
@@ -219,7 +222,8 @@ void CollisionTypes::update()
 		if(timeSinceSpawn > 3)
 		{
 			lastGrunt++;
-			grunts[lastGrunt].spawn();			
+			grunts[lastGrunt].spawn();	
+			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
 			timeSinceSpawn = 0;
 			if(lastGrunt == NUMGRUNTS)
 				lastGrunt = 0;
@@ -279,8 +283,12 @@ void CollisionTypes::collisions()
 			grunts[i].setCollides(false);
 
 		if(grunts[i].isHitBy(laser) && !grunts[i].getDead()){
-			grunts[i].setDead(true);
+			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
+			
+			//grunts[i].setDead(true);
 		}
+		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
+			grunts[i].setDead(true);
 	}
 
 	if(zep.collidesWith(player) && !zep.getDead()){

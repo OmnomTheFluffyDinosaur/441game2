@@ -98,6 +98,14 @@ const char LASER_IMAGE[] = "pictures\\laser.png";
 const char GRUNT_IMAGE[] = "pictures\\grunt.png";
 const char ZEP_IMAGE[] = "pictures\\Zeppelin.png";
 
+const int  GRUNT_COLS = 8;
+const int  GRUNT_WIDTH = 64;
+const int  GRUNT_HEIGHT = 32;
+const int  GRUNT_IDLE_START = 0;
+const int  GRUNT_IDLE_END = 0;
+const int  GRUNT_EXPLODE_START = 8;
+const int  GRUNT_EXPLODE_END = 71;
+
 // key mappings
 // In this game simple constants are used for key mappings. If variables were used
 // it would be possible to save and restore key mappings from a data file.
