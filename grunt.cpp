@@ -176,7 +176,7 @@ bool Grunt::isHitBy(Entity p) {
 void Grunt::spawn() {
 	if(getDead())
 	{
-		setPosition(VECTOR2(GAME_WIDTH-1, rand()%(GAME_HEIGHT-gruntNS::HEIGHT)));
+		setPosition(VECTOR2(GAME_WIDTH-1, rand()%(GAME_HEIGHT-gruntNS::HEIGHT-2)+1) );
 	//	grunts[++lastGrunt].setX(GAME_WIDTH-gruntNS::WIDTH);
 	//	grunts[lastGrunt].setY(40);
 		setDead(false);

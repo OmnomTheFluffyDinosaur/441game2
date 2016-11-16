@@ -173,7 +173,7 @@ bool Zeppelin::isHitBy(Entity p) {
 void Zeppelin::spawn() {
 	if(getDead())
 	{
-		setPosition(VECTOR2(GAME_WIDTH-6, rand()%(GAME_HEIGHT-zepNS::HEIGHT)));
+		setPosition(VECTOR2(GAME_WIDTH-6, rand()%(GAME_HEIGHT-zepNS::HEIGHT-2)+1));
 	//	grunts[++lastGrunt].setX(GAME_WIDTH-gruntNS::WIDTH);
 	//	grunts[lastGrunt].setY(40);
 		setDead(false);

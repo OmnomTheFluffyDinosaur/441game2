@@ -33,10 +33,11 @@ class CollisionTypes : public Game
 {
 private:
     // game items
-    TextureManager playerTM, puckTM, laserTM, gruntTM, zepTM;   // game texture
-    Image   playerTexture, puckTexture, laserTexture, gruntTexture, zepTexture;
+    TextureManager playerTM, puckTM, laserTM, gruntTM, zepTM, healthTM;   // game texture
+    Image   playerTexture, puckTexture, laserTexture, gruntTexture, zepTexture, healthTexture;
     VECTOR2 collisionVector;    // collision vector
 	Player player;
+	Entity health;
 	Puck puck;
 	Laser laser;
 	Grunt grunts[NUMGRUNTS];

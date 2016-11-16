@@ -97,6 +97,7 @@ const char PLAYER_IMAGE[] = "pictures\\biplane.png";      // menu texture
 const char LASER_IMAGE[] = "pictures\\laser.png";
 const char GRUNT_IMAGE[] = "pictures\\grunt.png";
 const char ZEP_IMAGE[] = "pictures\\Zeppelin.png";
+const char HEALTH_IMAGE[] = "pictures\\health.png";
 
 const int  GRUNT_COLS = 8;
 const int  GRUNT_WIDTH = 64;
@@ -113,6 +114,16 @@ const int  ZEP_IDLE_START = 0;
 const int  ZEP_IDLE_END = 0;
 const int  ZEP_EXPLODE_START = 8;
 const int  ZEP_EXPLODE_END = 71;
+
+const int HEALTH_COLS = 3;
+const int HEALTH_WIDTH = 64;
+const int HEALTH_HEIGHT = 64;
+const int HEALTH_FULL = 0;
+const int HEALTH_80 = 1;
+const int HEALTH_60 = 2;
+const int HEALTH_40 = 3;
+const int HEALTH_20 = 4;
+const int HEALTH_00 = 5;
 
 // key mappings
 // In this game simple constants are used for key mappings. If variables were used

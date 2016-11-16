@@ -60,6 +60,15 @@ void CollisionTypes::initialize(HWND hwnd)
 	player.setScale(1.0);
 	player.setHealth(100);
 
+	if (!healthTM.initialize(graphics,HEALTH_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
+	if (!health.initialize(this, HEALTH_WIDTH, HEALTH_HEIGHT, HEALTH_COLS,&healthTM))
+		throw(GameError(gameErrorNS::WARNING, "Player not initialized"));
+	health.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-2*health.getHeight()));
+	health.setCollisionType(entityNS::BOX);
+	health.setScale(1.0);
+	health.setCurrentFrame(HEALTH_FULL);
+
 	if (!laserTM.initialize(graphics,LASER_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background"));
 	if (!laser.initialize(this,laserNS::WIDTH, laserNS::HEIGHT, laserNS::TEXTURE_COLS, &laserTM))
@@ -261,11 +270,23 @@ void CollisionTypes::update()
 			player.up();
 		if(input->isKeyDown(VK_DOWN))
 			player.down();
+		//Math didn't work right
+		if(player.getHealth() == 100)
+			health.setCurrentFrame(HEALTH_FULL);
+		if(player.getHealth() == 80)
+			health.setCurrentFrame(HEALTH_80);
+		if(player.getHealth() == 60)
+			health.setCurrentFrame(HEALTH_60);
+		if(player.getHealth() == 40)
+			health.setCurrentFrame(HEALTH_40);
+		if(player.getHealth() == 20)
+			health.setCurrentFrame(HEALTH_20);
 		player.update(frameTime);
 		laser.update(frameTime, player, audio);
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
+		health.update(frameTime);
 		//zep.update(frameTime);
 		break;
 
@@ -300,12 +321,23 @@ void CollisionTypes::update()
 			player.up();
 		if(input->isKeyDown(VK_DOWN))
 			player.down();
+		if(player.getHealth() == 100)
+			health.setCurrentFrame(HEALTH_FULL);
+		if(player.getHealth() == 80)
+			health.setCurrentFrame(HEALTH_80);
+		if(player.getHealth() == 60)
+			health.setCurrentFrame(HEALTH_60);
+		if(player.getHealth() == 40)
+			health.setCurrentFrame(HEALTH_40);
+		if(player.getHealth() == 20)
+			health.setCurrentFrame(HEALTH_20);
 		player.update(frameTime);
 		laser.update(frameTime, player, audio);
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
 		zep.update(frameTime);
+		health.update(frameTime);
 		break;
 	}
 }
@@ -403,6 +435,7 @@ void CollisionTypes::render()
 		laser.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
+		health.draw();
 		break;
 	case wave2:
 		if(timeInState < 3)
@@ -413,6 +446,7 @@ void CollisionTypes::render()
 			grunts[i].draw();
 		if(zep.getVisible())
 			zep.draw();
+		health.draw();
 		break;
 		//draw stuff
 	case end:
