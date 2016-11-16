@@ -79,11 +79,12 @@ public:
 
 	bool isHitBy(Entity p);
 
+	bool needEvade;
 	//void spawn();
 
 	void vectorTrack();
 	void deltaTrack();
-	void evade();
+	void evade(Entity &t);
 	void setCollides(bool c){isHit = c;}
 	void setDead(bool c){isDead = c;}
 	bool getDead(){return isDead;}

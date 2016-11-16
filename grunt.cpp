@@ -88,16 +88,17 @@ void Grunt::update(float frameTime)
     Entity::update(frameTime);
 }
 
-void Grunt::evade()
+//hacked at this code to make it avoid other grunts
+void Grunt::evade(Entity &t)
 {
-	VECTOR2 vel = getCenterPoint() - targetEntity.getCenterPoint();
+	VECTOR2 vel = getCenterPoint() - t.getCenterPoint();
 	float length = D3DXVec2Length(&vel);
-	if (length < 200) {
+	if (length < 30) {
 		VECTOR2* foo = D3DXVec2Normalize(&vel,&vel);
 		setVelocity(vel);
 		return;
 	}
-	setVelocity(D3DXVECTOR2(0,0));
+	//setVelocity(D3DXVECTOR2(0,0));
 	return;
 }
 

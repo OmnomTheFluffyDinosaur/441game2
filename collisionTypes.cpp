@@ -260,24 +260,27 @@ void CollisionTypes::update()
 
 	case wave2:
 		//spawn grunts
-		if(timeSinceSpawn > 3)
+		if(timeSinceSpawn > 1.5 && !bossSpawn)
 		{
-			lastGrunt++;
-			grunts[lastGrunt].spawn();	
+			//lastGrunt++;
+			grunts[++lastGrunt].spawn();	
+			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
+			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
+			grunts[++lastGrunt].spawn();	
 			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
 			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
 			timeSinceSpawn = 0;
 			if(lastGrunt == NUMGRUNTS-1)
 				lastGrunt = 1;
 		}
-		if(timeInState > 5 && !bossSpawn)
+	/*	if(timeInState > 5 && !bossSpawn)
 		{
 			if (!bossSpawn) {
 				zep.spawn();
 				zep.setFrames(ZEP_IDLE_START, ZEP_IDLE_END);
 			}
 			bossSpawn = true;
-		}
+		}*/
 		if(input->isKeyDown(VK_LEFT))
 			player.left();
 		if(input->isKeyDown(VK_RIGHT))
@@ -301,8 +304,14 @@ void CollisionTypes::update()
 //=============================================================================
 void CollisionTypes::ai()
 {
-	for(int i = 0; i < NUMGRUNTS; i++)
+	for(int i = 0; i < NUMGRUNTS; i++) {
 		grunts[i].ai(frameTime, player);
+		for(int j = 0; j < NUMGRUNTS; j++)
+		{
+			if(j != i)
+				grunts[i].evade(grunts[j]);
+		}
+	}
 	zep.ai(frameTime, player);
 	/*if (patternStepIndex == maxPatternSteps)
 	return;

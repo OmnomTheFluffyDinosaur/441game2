@@ -59,7 +59,7 @@ void Zeppelin::update(float frameTime)
 		{
 			setPosition(D3DXVECTOR2(0,getPositionY()));
 		}*/
-		if (getPositionX() + zepNS::WIDTH < 0)
+		if (getPositionX() + zepNS::WIDTH*Image::getScale() < 0)
 		{
 			setPosition(D3DXVECTOR2(GAME_WIDTH,getPositionY()));
 		}
@@ -159,7 +159,7 @@ bool Zeppelin::isHitBy(Entity p) {
 	float zeppelinL = spriteData.x + 16;
 	float zeppelinR = spriteData.x+zepNS::WIDTH*spriteData.scale-16;
 	float zeppelinT = spriteData.y +8;
-	float zeppelinB = spriteData.y+zepNS::HEIGHT*spriteData.scale-16;
+	float zeppelinB = spriteData.y+zepNS::HEIGHT*spriteData.scale-8;
 
 	//player box
 	float pL = p.getX();
