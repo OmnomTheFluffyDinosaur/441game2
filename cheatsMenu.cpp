@@ -1,19 +1,19 @@
 
-#include "mainMenu.h"
+#include "cheatsMenu.h"
 
-mainMenu::mainMenu()
+cheatsMenu::cheatsMenu()
 {
 	selectedItem = -1;	//nothing return
 	menuItemFont = new TextDX();
 	menuHeadingFont = new TextDX();
 }
 
-void mainMenu::initialize(Graphics *g, Input *i)
+void cheatsMenu::initialize(Graphics *g, Input *i)
 {
 	menuHeading ="Neon Sky";
-	menuItem1 = "Play";
-	menuItem2 = "Cheats";
-	menuItem3 = "Credits";
+	menuItem1 = "Invincible";
+	menuItem2 = "1";
+	menuItem3 = "Back";
 	highlightColor = graphicsNS::RED;
 	normalColor = graphicsNS::WHITE;
 	menuAnchor = D3DXVECTOR2(270,10);
@@ -38,7 +38,7 @@ void mainMenu::initialize(Graphics *g, Input *i)
 	downDepressedLastFrame = false;
 }
 
-void mainMenu::update()
+void cheatsMenu::update()
 {
 	if (input->wasKeyPressed(VK_UP))
 	{
@@ -56,7 +56,7 @@ void mainMenu::update()
 	else selectedItem = -1;
 }
 
-void mainMenu::displayMenu()
+void cheatsMenu::displayMenu()
 {
 	menuHeadingFont->print(menuHeading, menuAnchor.x, menuAnchor.y);
 	if (linePtr==0)

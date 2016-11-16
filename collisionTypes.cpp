@@ -42,6 +42,9 @@ void CollisionTypes::initialize(HWND hwnd)
 	menu = new mainMenu();
 	menu->initialize(graphics, input); //, menuText);
 
+	cheat = new cheatsMenu();
+	cheat->initialize(graphics, input);
+
 	waveFont = new TextDX();
 	if(waveFont->initialize(graphics, 15, true, false, "Arial") == false)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
@@ -125,11 +128,40 @@ void CollisionTypes::gameStateUpdate()
 {
 
 	timeInState += frameTime;
-	if (gameStates==intro && menu->getSelectedItem() == 0)//timeInState > 2.5)
+	//main menu
+	if (gameStates==intro && menu->getSelectedItem() == 0)// && timeInState > 0.5)
 	{
 		gameStates = wave1;
 		timeInState = 0;
 	}
+	else if (gameStates==intro && menu->getSelectedItem() == 1)// && timeInState > 0.5)
+	{
+		gameStates = cheats;
+		timeInState = 0;
+	}
+	else if (gameStates==intro && menu->getSelectedItem() == 2)// && timeInState > 0.5)
+	{
+		gameStates = credits;
+		timeInState = 0;
+	}
+
+	//cheats menu
+	if (gameStates==cheats && cheat->getSelectedItem() == 0)//timeInState > 2.5)
+	{
+		//gameStates = wave1;
+		timeInState = 0;
+	}
+	else if (gameStates==cheats && cheat->getSelectedItem() == 1)//timeInState > 2.5)
+	{
+		//gameStates = wave1;
+		timeInState = 0;
+	}
+	else if (gameStates==cheats && cheat->getSelectedItem() == 2)//timeInState > 2.5)
+	{
+		gameStates = intro;
+		timeInState = 0;
+	}
+
 	if (gameStates== wave1 && timeInState > 10)
 	{
 		gameStates = wave2;
@@ -164,6 +196,8 @@ void CollisionTypes::update()
 	}
 	gameStateUpdate();
 	menu->update();
+	cheat->update();
+
 	/*
 	switch (gameStates)
 	{
@@ -193,6 +227,8 @@ void CollisionTypes::update()
 		//nothing yet
 		//case readyToPlay:
 		//nothing yet
+		break;
+	case cheats:
 		break;
 	case wave1:
 		//spawn grunts
@@ -333,6 +369,9 @@ void CollisionTypes::render()
 	{
 	case intro:
 		menu->displayMenu();
+		break;
+	case cheats:
+		cheat->displayMenu();
 		break;
 	case wave1:
 		if(timeInState < 3)

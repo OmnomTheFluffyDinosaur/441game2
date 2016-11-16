@@ -22,6 +22,7 @@ class CollisionTypes;
 #include "grunt.h"
 #include "zeppelin.h"
 #include "patternStep.h"
+#include "cheatsMenu.h"
 
 #define maxPatternSteps 4
 
@@ -55,6 +56,7 @@ private:
 	void gameStateUpdate();
 	Image tex;
 	mainMenu *menu;
+	cheatsMenu *cheat;
 	TextDX  *waveFont;     
 	PatternStep patternSteps[maxPatternSteps];
 	int patternStepIndex;

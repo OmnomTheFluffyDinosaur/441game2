@@ -19,6 +19,12 @@
     <Filter Include="Source Files\entities">
       <UniqueIdentifier>{e8a0f869-60dc-405f-ac71-da6d5fefe484}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\menus">
+      <UniqueIdentifier>{0c349c58-c920-42e0-b1e9-fab6f6a097e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\menus">
+      <UniqueIdentifier>{04880c96-97a2-4866-a7f8-c8782408c05c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="game.cpp">
@@ -43,9 +49,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="audio.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="textDX.cpp">
@@ -74,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="zeppelin.cpp">
       <Filter>Source Files\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="mainMenu.cpp">
+      <Filter>Source Files\menus</Filter>
+    </ClCompile>
+    <ClCompile Include="cheatsMenu.cpp">
+      <Filter>Source Files\menus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,13 +113,7 @@
     <ClInclude Include="audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mainMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="textDX.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="player.h">
@@ -136,6 +139,15 @@
     </ClInclude>
     <ClInclude Include="zeppelin.h">
       <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>Header Files\menus</Filter>
+    </ClInclude>
+    <ClInclude Include="mainMenu.h">
+      <Filter>Header Files\menus</Filter>
+    </ClInclude>
+    <ClInclude Include="cheatsMenu.h">
+      <Filter>Header Files\menus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

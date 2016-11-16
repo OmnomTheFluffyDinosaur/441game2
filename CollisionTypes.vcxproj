@@ -89,6 +89,7 @@
   <ItemGroup>
     <ClCompile Include="audio.cpp" />
     <ClCompile Include="bricks.cpp" />
+    <ClCompile Include="cheatsMenu.cpp" />
     <ClCompile Include="collisionTypes.cpp" />
     <ClCompile Include="grunt.cpp" />
     <ClCompile Include="entity.cpp" />
@@ -109,6 +110,7 @@
   <ItemGroup>
     <ClInclude Include="audio.h" />
     <ClInclude Include="bricks.h" />
+    <ClInclude Include="cheatsMenu.h" />
     <ClInclude Include="collisionTypes.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="grunt.h" />

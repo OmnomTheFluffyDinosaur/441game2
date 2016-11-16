@@ -25,6 +25,7 @@ private:
     bool collision;                 
     bool target;                    
 	int health;
+	//int notInvincible;
 public:
     // constructor
     Player();
