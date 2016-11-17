@@ -65,6 +65,8 @@ void CollisionTypes::initialize(HWND hwnd)
 	player.setCollisionRadius(COLLISION_RADIUS);
 	player.setScale(1.0);
 	player.setHealth(100);
+	timeSinceHit = time(0);
+			
 
 	if (!healthTM.initialize(graphics,HEALTH_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
@@ -408,6 +410,8 @@ void CollisionTypes::collisions()
 			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
 			grunts[i].setDead(true);
 			audio->playCue(BOOM9);
+			timeSinceHit = time(0);
+			//player.setColorFilter(D3DCOLOR_RGBA(0,255,0,0));
 			//player.setX(240);
 			//player.setY(100);
 		}
@@ -470,7 +474,10 @@ void CollisionTypes::render()
 	case wave1:
 		if(timeInState < 3)
 			waveFont->print("Wave 1",310,100);
-		player.draw();
+		if(difftime(time(0), timeSinceHit) < .2)
+			player.draw(D3DCOLOR_RGBA(255,0,0,255));
+		else 
+			player.draw();
 		laser.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
@@ -479,7 +486,10 @@ void CollisionTypes::render()
 	case wave2:
 		if(timeInState < 3)
 			waveFont->print("Wave 2",310,100);
-		player.draw();
+		if(difftime(time(0), timeSinceHit) < .2)
+			player.draw(D3DCOLOR_RGBA(255,0,0,255));
+		else 
+			player.draw();
 		laser.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
