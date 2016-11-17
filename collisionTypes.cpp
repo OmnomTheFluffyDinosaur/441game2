@@ -45,6 +45,12 @@ void CollisionTypes::initialize(HWND hwnd)
 	cheat = new cheatsMenu();
 	cheat->initialize(graphics, input);
 
+	creditsMenu = new genericMenu("1","2","");
+	creditsMenu->initialize(graphics, input);
+
+	controlsMenu = new genericMenu("Press Arrow Keys to Move","Press Space to Shoot","");
+	controlsMenu->initialize(graphics, input);
+
 	waveFont = new TextDX();
 	if(waveFont->initialize(graphics, 15, true, false, "Arial") == false)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
@@ -138,36 +144,59 @@ void CollisionTypes::gameStateUpdate()
 
 	timeInState += frameTime;
 	//main menu
-	if (gameStates==intro && menu->getSelectedItem() == 0)// && timeInState > 0.5)
+	if (gameStates==intro && menu->getSelectedItem() == 0 && timeInState > .05)
 	{
 		gameStates = wave1;
 		timeInState = 0;
 	}
-	else if (gameStates==intro && menu->getSelectedItem() == 1)// && timeInState > 0.5)
+	else if (gameStates==intro && menu->getSelectedItem() == 1 && timeInState > .05)
 	{
 		gameStates = cheats;
 		timeInState = 0;
 	}
-	else if (gameStates==intro && menu->getSelectedItem() == 2)// && timeInState > 0.5)
+	else if (gameStates==intro && menu->getSelectedItem() == 2 && timeInState > .05)
 	{
 		gameStates = credits;
 		timeInState = 0;
 	}
+	else if (gameStates==intro && menu->getSelectedItem() == 3 && timeInState > .05)
+	{
+		gameStates = controls;
+		timeInState = 0;
+	}
 
-	//cheats menu
-	if (gameStates==cheats && cheat->getSelectedItem() == 0)//timeInState > 2.5)
-	{
-		//gameStates = wave1;
-		timeInState = 0;
-	}
-	else if (gameStates==cheats && cheat->getSelectedItem() == 1)//timeInState > 2.5)
-	{
-		//gameStates = wave1;
-		timeInState = 0;
-	}
-	else if (gameStates==cheats && cheat->getSelectedItem() == 2)//timeInState > 2.5)
+	if  (gameStates==credits && creditsMenu->getSelectedItem() == 2 && timeInState > .05)
 	{
 		gameStates = intro;
+		timeInState = 0;
+	}
+
+	if  (gameStates==controls && controlsMenu->getSelectedItem() == 2 && timeInState > .05)
+	{
+		gameStates = intro;
+		timeInState = 0;
+	}
+
+	//cheats menu
+	if (gameStates==cheats && cheat->getSelectedItem() == 0&& timeInState > .05)
+	{
+		//gameStates = wave1;
+		timeInState = 0;
+	}
+	else if (gameStates==cheats && cheat->getSelectedItem() == 1 && timeInState > .05)
+	{
+		//gameStates = wave1;
+		timeInState = 0;
+	}
+	else if (gameStates==cheats && cheat->getSelectedItem() == 2 && timeInState > .05)
+	{
+		gameStates = intro;
+		timeInState = 0;
+	}
+
+	if (gameStates==cheats && cheat->getSelectedItem() == 0 && timeInState > .05)
+	{
+		//gameStates = wave1;
 		timeInState = 0;
 	}
 
@@ -197,6 +226,8 @@ void CollisionTypes::gameStateUpdate()
 		timeInState = 0;
 	}
 	//gameStates = gamePlay;
+
+
 	/*if (input->isKeyDown(VK_F1))
 	{
 	gameStates = readyToPlay;
@@ -217,6 +248,8 @@ void CollisionTypes::update()
 	gameStateUpdate();
 	menu->update();
 	cheat->update();
+	creditsMenu->update();
+	controlsMenu->update();
 
 	/*
 	switch (gameStates)
@@ -305,14 +338,14 @@ void CollisionTypes::update()
 			if(lastGrunt == NUMGRUNTS-1)
 				lastGrunt = 1;
 		}
-	/*	if(timeInState > 5 && !bossSpawn)
+		if(timeInState > 5 && !bossSpawn)
 		{
 			if (!bossSpawn) {
 				zep.spawn();
 				zep.setFrames(ZEP_IDLE_START, ZEP_IDLE_END);
 			}
 			bossSpawn = true;
-		}*/
+		}
 		if(input->isKeyDown(VK_LEFT))
 			player.left();
 		if(input->isKeyDown(VK_RIGHT))
@@ -427,6 +460,12 @@ void CollisionTypes::render()
 		break;
 	case cheats:
 		cheat->displayMenu();
+		break;
+	case credits:
+		creditsMenu->displayMenu();
+		break;
+	case controls:
+		controlsMenu->displayMenu();
 		break;
 	case wave1:
 		if(timeInState < 3)

@@ -91,6 +91,7 @@
     <ClCompile Include="bricks.cpp" />
     <ClCompile Include="cheatsMenu.cpp" />
     <ClCompile Include="collisionTypes.cpp" />
+    <ClCompile Include="genericMenu.cpp" />
     <ClCompile Include="grunt.cpp" />
     <ClCompile Include="entity.cpp" />
     <ClCompile Include="game.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="cheatsMenu.h" />
     <ClInclude Include="collisionTypes.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="genericMenu.h" />
     <ClInclude Include="grunt.h" />
     <ClInclude Include="entity.h" />
     <ClInclude Include="game.h" />

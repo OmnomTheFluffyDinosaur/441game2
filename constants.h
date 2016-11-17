@@ -151,7 +151,7 @@ const char HIT[]   = "hit";
 const char BOOM9[] = "Boom9";
 const char BOOM4[] = "Boom4";
 
-enum GameStates {intro, cheats, credits, readyToPlay, wave1, wave2, end, gameEnd};
+enum GameStates {intro, cheats, credits, controls, readyToPlay, wave1, wave2, end, gameEnd};
 const char SPLASHSCREEN_IMAGE[] = "pictures\\MyGame.png"; 
 const char GAMEOVER_IMAGE[] = "pictures\\MyGameOver.jpg"; 
 const char TEX_IMAGE[] = "pictures\\texture1.bmp";

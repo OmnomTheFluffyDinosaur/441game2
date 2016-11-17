@@ -84,6 +84,9 @@
     <ClCompile Include="cheatsMenu.cpp">
       <Filter>Source Files\menus</Filter>
     </ClCompile>
+    <ClCompile Include="genericMenu.cpp">
+      <Filter>Source Files\menus</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -147,6 +150,9 @@
       <Filter>Header Files\menus</Filter>
     </ClInclude>
     <ClInclude Include="cheatsMenu.h">
+      <Filter>Header Files\menus</Filter>
+    </ClInclude>
+    <ClInclude Include="genericMenu.h">
       <Filter>Header Files\menus</Filter>
     </ClInclude>
   </ItemGroup>

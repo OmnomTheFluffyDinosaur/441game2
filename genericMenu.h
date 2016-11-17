@@ -1,10 +1,10 @@
 
               // file is included in more than one place
 #define WIN32_LEAN_AND_MEAN
-#ifndef MAINMENU_H                 // Prevent multiple definitions if this 
-#define MAINMENU_H 
+#ifndef GENERICMENU_H                 // Prevent multiple definitions if this 
+#define GENERICMENU_H 
 
-class mainMenu;
+class genericMenu;
 
 #include "graphics.h"
 #include "constants.h"
@@ -14,11 +14,11 @@ class mainMenu;
 #include "input.h"
 #include "menu.h"
 
-namespace mainMenuNS
+namespace genericMenuNS
 { }
 
 // inherits from Entity class
-class mainMenu : public Menu
+class genericMenu : public Menu
 {
 private:
    TextDX *menuItemFont;
@@ -30,7 +30,6 @@ private:
    std::string menuItem1;
    std::string menuItem2;
    std::string menuItem3;
-   std::string menuItem4;
    D3DXVECTOR2 menuAnchor;
    int verticalOffset;
    int linePtr;
@@ -42,7 +41,7 @@ private:
 
 public:
     // constructor
-    mainMenu();
+    genericMenu(std::string item1, std::string item2, std::string item3);
 	void initialize(Graphics *g, Input *i);
 	void update();
 	int getSelectedItem() {return selectedItem;}

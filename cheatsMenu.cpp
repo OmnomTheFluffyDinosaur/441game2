@@ -51,7 +51,7 @@ void cheatsMenu::update()
 	if (linePtr > 2) linePtr = 0;
 	if (linePtr < 0) linePtr = 2;
 
-	if (input->wasKeyPressed(VK_RETURN))
+	if (input->wasKeyPressed(VK_RETURN) || input->wasKeyPressed(VK_SPACE))
 		selectedItem = linePtr;
 	else selectedItem = -1;
 }
