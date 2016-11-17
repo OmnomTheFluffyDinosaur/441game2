@@ -64,6 +64,7 @@ private:
 	TextDX  *waveFont;     
 	PatternStep patternSteps[maxPatternSteps];
 	int patternStepIndex;
+	int timeSinceHit;
 
 public:
     // Constructor

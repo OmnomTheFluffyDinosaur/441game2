@@ -35,6 +35,7 @@ private:
 	bool direction;
 	bool isDead;
 	bool isHit;
+	int score;
 
 public:
     // constructor
@@ -88,6 +89,7 @@ public:
 	void setCollides(bool c){isHit = c;}
 	void setDead(bool c){isDead = c;}
 	bool getDead(){return isDead;}
+	int getScore(){return score;}
 	void spawn();
 };
 #endif

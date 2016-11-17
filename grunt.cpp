@@ -26,7 +26,8 @@ Grunt::Grunt() : Entity()
 	speed = 50;
 	sightDistance = 10;
 	isDead = false;
-	srand(time(NULL));
+	srand(time(NULL)); //Why did I put this here?
+	score = 100;
 
 }
 
