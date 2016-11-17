@@ -7,6 +7,7 @@
 #include "collisionTypes.h"
 #include <time.h>
 
+
 bool bossSpawn = 0;
 
 //=============================================================================
@@ -37,6 +38,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	timeInState = 0;
 	timeSinceSpawn = 0;
 	lastGrunt = 0;
+	score = 0;
 	gameStates = intro;
 
 	menu = new mainMenu();
@@ -422,6 +424,7 @@ void CollisionTypes::collisions()
 			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
 			grunts[i].setDead(true);
 			audio->playCue(BOOM9);
+			score += grunts[i].getScore();
 			//grunts[i].setDead(true);
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
@@ -445,6 +448,7 @@ void CollisionTypes::collisions()
 				zep.setDead(true);
 				audio->playCue(BOOM4);
 				zep.setFrames(ZEP_EXPLODE_START, ZEP_EXPLODE_END);
+				score += zep.getScore();
 			}
 		}
 		if(zep.getCurrentFrame() == ZEP_EXPLODE_END)
@@ -500,9 +504,11 @@ void CollisionTypes::render()
 		//draw stuff
 	case end:
 		//gameOver.draw();
+		waveFont->print("Your score is: " + std::to_string(score),300,100);
 		break;
 	
 	case gameEnd:
+		waveFont->print("Your score is: " + std::to_string(score),300,100);
 		gameOver.draw();
 		break;
 	}
