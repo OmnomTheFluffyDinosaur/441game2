@@ -43,7 +43,8 @@ private:
 	Laser laser;
 	Grunt grunts[NUMGRUNTS];
 	Zeppelin zep;
-	int score;
+	int score1;
+	int score2;
 	bool collision;
 	Brick bricks[5];
 	// STATE Stuff
@@ -65,6 +66,9 @@ private:
 	PatternStep patternSteps[maxPatternSteps];
 	int patternStepIndex;
 	int timeSinceHit;
+	//cheat stuff
+	bool invincible;
+	bool noDeath;
 
 public:
     // Constructor

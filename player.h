@@ -25,7 +25,7 @@ private:
     bool collision;                 
     bool target;                    
 	int health;
-	//int notInvincible;
+	int lives;
 public:
     // constructor
     Player();
@@ -72,7 +72,10 @@ public:
         velocity.y = playerNS::SPEED;
     }
 	int getHealth() { return health; }
+	int getLives() { return lives; }
 	void setHealth(int h) { health = h; }
+	void setLives(int l) { lives = l; }
+
 };
 #endif
 

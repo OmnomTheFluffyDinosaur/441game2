@@ -33,7 +33,9 @@ void Laser::update(float frameTime, Player p, Audio* audio){
 			spriteData.y = p.getY() +10;
 			velocity.x = 1200;
 			reloadTimer = 0.4f;
+			audio->playCue("Laser1");
 		}
 	}
 	spriteData.x += velocity.x*frameTime;
+
 }

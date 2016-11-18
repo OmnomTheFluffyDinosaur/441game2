@@ -46,6 +46,9 @@ public:
 	void update();
 	int getSelectedItem() {return selectedItem;}
 	void displayMenu();
+	void setMenuItem1(std::string s) {menuItem1 = s;}
+
+	void setMenuItem2(std::string s) {menuItem2 = s;}
 };
 #endif
 

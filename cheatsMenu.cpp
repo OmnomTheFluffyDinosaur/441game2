@@ -11,8 +11,8 @@ cheatsMenu::cheatsMenu()
 void cheatsMenu::initialize(Graphics *g, Input *i)
 {
 	menuHeading ="Neon Sky";
-	menuItem1 = "Invincible";
-	menuItem2 = "1";
+	menuItem1 = "Invincible: Off";
+	menuItem2 = "Infinite Lives: Off";
 	menuItem3 = "Back";
 	highlightColor = graphicsNS::RED;
 	normalColor = graphicsNS::WHITE;

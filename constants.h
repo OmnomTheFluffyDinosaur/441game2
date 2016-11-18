@@ -150,6 +150,8 @@ const char BEEP4[] = "beep4";
 const char HIT[]   = "hit";
 const char BOOM9[] = "Boom9";
 const char BOOM4[] = "Boom4";
+const char LASER1[] = "Laser1";
+const char MUSIC[] = "Music";
 
 enum GameStates {intro, cheats, credits, controls, readyToPlay, wave1, wave2, end, gameEnd};
 const char SPLASHSCREEN_IMAGE[] = "pictures\\MyGame.png"; 
