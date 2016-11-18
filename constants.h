@@ -90,6 +90,9 @@ const RECT  COLLISION_RECTANGLE = {-30,-16,30,16};
 const RECT  COLLISION_BOX_PLAYER = {-45,-10,45,10};
 const RECT COLLISION_BOX_PUCK = {-32, -32, 32, 32};
 const float   COLLISION_RADIUS = 29;
+const float BG_SCALE = 1.5f;                 // scale factor of space image
+const int   BG_WIDTH = (int)(512 * BG_SCALE);  // width of scaled space image
+const int   BG_HEIGHT = (int)(512 * BG_SCALE); // height of scaled space image
 
 // graphic images
 const char PUCK_IMAGE[] = "pictures\\PS4_new.png";  // game textures
@@ -98,7 +101,11 @@ const char LASER_IMAGE[] = "pictures\\laser.png";
 const char GRUNT_IMAGE[] = "pictures\\grunt.png";
 const char ZEP_IMAGE[] = "pictures\\Zeppelin.png";
 const char HEALTH_IMAGE[] = "pictures\\health.png";
+<<<<<<< HEAD
 const char BACKGROUND_IMAGE[] = "pictures\\sky2.jpg";
+=======
+const char BG_IMAGE[] = "pictures\\sky3.jpg";
+>>>>>>> origin/develop2
 
 const int  GRUNT_COLS = 8;
 const int  GRUNT_WIDTH = 64;

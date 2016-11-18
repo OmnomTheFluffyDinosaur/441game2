@@ -49,7 +49,6 @@ void Player::update(float frameTime)
 
 	spriteData.x += velocity.x * frameTime;
     spriteData.y += velocity.y * frameTime;
-	velocity = D3DXVECTOR2(0,0);
 
 	
     // wrap around screen

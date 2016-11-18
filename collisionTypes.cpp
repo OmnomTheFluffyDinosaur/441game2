@@ -59,6 +59,12 @@ void CollisionTypes::initialize(HWND hwnd)
 	if(waveFont->initialize(graphics, 15, true, false, "Arial") == false)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
 
+	if (!bgTM.initialize(graphics,BG_IMAGE))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
+	if (!bgTexture.initialize(graphics,0,0,0,&bgTM))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
+    bgTexture.setScale(BG_SCALE);
+
 	if (!playerTM.initialize(graphics,PLAYER_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
 	if (!player.initialize(this, playerTM.getWidth(), playerTM.getHeight(), 0,&playerTM))
@@ -140,6 +146,8 @@ void CollisionTypes::initialize(HWND hwnd)
 	patternSteps[3].setTimeForStep(2);*/
 
 	audio->playCue("Music");
+	bgTexture.setX(0);
+	bgTexture.setY(0);
 
 	//background
 	/*if (!backTexture1.initialize(graphics, BACKGROUND_IMAGE))
@@ -349,6 +357,7 @@ void CollisionTypes::update()
 	case cheats:
 		break;
 	case wave1:
+		{
 		//spawn grunts
 		if(timeSinceSpawn > 3)
 		{
@@ -393,9 +402,36 @@ void CollisionTypes::update()
 		}
 		health.update(frameTime);
 		//zep.update(frameTime);
-		break;
+		// move space along X
+		bgTexture.setX(bgTexture.getX() - (frameTime * player.getVelocity().x*0.3f) - 0.5);
+		// move space along Y
+		bgTexture.setY(bgTexture.getY() - frameTime * player.getVelocity().y*0.3f);
 
-	case wave2:
+		// Wrap space image around at edge
+		// if left edge of space > screen left edge
+		if (bgTexture.getX() > 0)               
+			// move space image left by SPACE_WIDTH
+			bgTexture.setX(bgTexture.getX() - BG_WIDTH);
+		// if space image off screen left
+		if (bgTexture.getX() < -BG_WIDTH)
+			// move space image right by SPACE_WIDTH
+			bgTexture.setX(bgTexture.getX() + BG_WIDTH);
+		// if top edge of space > screen top edge
+		if (bgTexture.getY() > 0)
+			// move space image up by SPACE_HEIGHT
+			bgTexture.setY(bgTexture.getY() - BG_HEIGHT);
+		// if space image off screen top
+		if (bgTexture.getY() < -BG_HEIGHT)
+			// move space image down by SPACE_IMAGE
+			bgTexture.setY(bgTexture.getY() + BG_HEIGHT);
+
+		VECTOR2 v = D3DXVECTOR2(0,0);
+		player.setVelocity(v);
+
+		break;
+		}
+	case wave2: 
+		{
 		//spawn grunts
 		if(timeSinceSpawn > 2 && !bossSpawn)
 		{
@@ -448,7 +484,34 @@ void CollisionTypes::update()
 		}
 		zep.update(frameTime);
 		health.update(frameTime);
+		// move space along X
+		bgTexture.setX(bgTexture.getX() - frameTime * player.getVelocity().x*0.1f);
+		// move space along Y
+		bgTexture.setY(bgTexture.getY() - frameTime * player.getVelocity().y*0.1f);
+
+		// Wrap space image around at edge
+		// if left edge of space > screen left edge
+		if (bgTexture.getX() > 0)               
+			// move space image left by SPACE_WIDTH
+			bgTexture.setX(bgTexture.getX() - BG_WIDTH);
+		// if space image off screen left
+		if (bgTexture.getX() < -BG_WIDTH)
+			// move space image right by SPACE_WIDTH
+			bgTexture.setX(bgTexture.getX() + BG_WIDTH);
+		// if top edge of space > screen top edge
+		if (bgTexture.getY() > 0)
+			// move space image up by SPACE_HEIGHT
+			bgTexture.setY(bgTexture.getY() - BG_HEIGHT);
+		// if space image off screen top
+		if (bgTexture.getY() < -BG_HEIGHT)
+			// move space image down by SPACE_IMAGE
+			bgTexture.setY(bgTexture.getY() + BG_HEIGHT);
+
+		VECTOR2 vb = D3DXVECTOR2(0,0);
+		player.setVelocity(vb);
+
 		break;
+			}
 	}
 	
 	/*float x = background1.getCenterX() + Vel1.xVel * frameTime;
@@ -569,6 +632,8 @@ void CollisionTypes::collisions()
 //=============================================================================
 void CollisionTypes::render()
 {
+	float x = bgTexture.getX();
+    float y = bgTexture.getY();
 	graphics->spriteBegin(); // begin drawing sprites
 	switch (gameStates)
 	{
@@ -585,8 +650,23 @@ void CollisionTypes::render()
 		controlsMenu->displayMenu();
 		break;
 	case wave1:
+<<<<<<< HEAD
 	//	background1.draw();
 	//	background2.draw();
+=======
+		// Wrap space image around at edge
+		// The Scrolling Bitmap example uses if statements so the space image is
+		// only drawn when necessary. This code always draws the space image even
+		// when it may be off screen.
+		bgTexture.draw();
+		bgTexture.setX(bgTexture.getX() + BG_WIDTH);
+		bgTexture.draw();
+		bgTexture.setY(bgTexture.getY() + BG_HEIGHT);
+		bgTexture.draw();
+		bgTexture.setX(x);
+		bgTexture.draw();
+		bgTexture.setY(y);
+>>>>>>> origin/develop2
 		health.draw();
 		waveFont->print(std::to_string(score1 + score2), 50, 50);
 		if(timeInState < 3)
@@ -601,8 +681,23 @@ void CollisionTypes::render()
 		
 		break;
 	case wave2:
+<<<<<<< HEAD
 	//	background1.draw();
 	//	background2.draw();
+=======
+		// Wrap space image around at edge
+		// The Scrolling Bitmap example uses if statements so the space image is
+		// only drawn when necessary. This code always draws the space image even
+		// when it may be off screen.
+		bgTexture.draw();
+		bgTexture.setX(bgTexture.getX() + BG_WIDTH);
+		bgTexture.draw();
+		bgTexture.setY(bgTexture.getY() + BG_HEIGHT);
+		bgTexture.draw();
+		bgTexture.setX(x);
+		bgTexture.draw();
+		bgTexture.setY(y);
+>>>>>>> origin/develop2
 		health.draw();
 		waveFont->print(std::to_string(score1 + score2), 50, 50);
 		if(timeInState < 3)
@@ -653,6 +748,7 @@ void CollisionTypes::releaseAll()
 	healthTM.onLostDevice();
 	gruntTM.onLostDevice();
 	playerTM.onLostDevice();
+	bgTM.onLostDevice();
 	Game::releaseAll();
 	return;
 }
@@ -668,6 +764,7 @@ void CollisionTypes::resetAll()
 	healthTM.onResetDevice();
 	gruntTM.onResetDevice();
 	playerTM.onResetDevice();
+	bgTM.onResetDevice();
 	Game::resetAll();
 	return;
 }
