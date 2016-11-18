@@ -98,6 +98,7 @@ const char LASER_IMAGE[] = "pictures\\laser.png";
 const char GRUNT_IMAGE[] = "pictures\\grunt.png";
 const char ZEP_IMAGE[] = "pictures\\Zeppelin.png";
 const char HEALTH_IMAGE[] = "pictures\\health.png";
+const char BACKGROUND_IMAGE[] = "pictures\\sky2.jpg";
 
 const int  GRUNT_COLS = 8;
 const int  GRUNT_WIDTH = 64;

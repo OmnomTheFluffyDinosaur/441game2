@@ -69,6 +69,24 @@ private:
 	//cheat stuff
 	bool invincible;
 	bool noDeath;
+	//background
+	float background1XVel;
+	float background2XVel;
+	TextureManager backTexture1;
+	Image background1;
+	Image background2;
+
+	struct position{
+		float xPos;
+		float yPos;
+		position() {xPos = 0; yPos = 0;}
+	} Pos1, Pos2;
+
+	struct velocity{
+		float xVel;
+		float yVel;
+		velocity() {xVel = 0; yVel = 0;}
+	} Vel1, Vel2;
 
 public:
     // Constructor
