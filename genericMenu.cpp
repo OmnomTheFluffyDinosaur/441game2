@@ -71,7 +71,7 @@ void genericMenu::displayMenu()
 //		menuItemFontHighlight->print(menuItem2, menuAnchor.x, menuAnchor.y+foo);
 //	else
 		menuItemFont->print(menuItem2, menuAnchor.x, menuAnchor.y+foo);
-	foo = 3*verticalOffset;
+	foo = 4*verticalOffset;
 	//if (linePtr==2)
 		menuItemFontHighlight->print(menuItem3, menuAnchor.x, menuAnchor.y+foo);
 	//else

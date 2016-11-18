@@ -103,6 +103,7 @@ const char ZEP_IMAGE[] = "pictures\\Zeppelin.png";
 const char HEALTH_IMAGE[] = "pictures\\health.png";
 const char BACKGROUND_IMAGE[] = "pictures\\sky2.jpg";
 const char BG_IMAGE[] = "pictures\\sky3.jpg";
+const char SPLASH[] = "pictures\\Splash.png";
 
 const int  GRUNT_COLS = 8;
 const int  GRUNT_WIDTH = 64;
@@ -158,7 +159,7 @@ const char BOOM4[] = "Boom4";
 const char LASER1[] = "Laser1";
 const char MUSIC[] = "Music";
 
-enum GameStates {intro, cheats, credits, controls, readyToPlay, wave1, wave2, end, gameEnd};
+enum GameStates {splash, intro, cheats, credits, controls, readyToPlay, wave1, wave2, end, gameEnd};
 const char SPLASHSCREEN_IMAGE[] = "pictures\\MyGame.png"; 
 const char GAMEOVER_IMAGE[] = "pictures\\MyGameOver.jpg"; 
 const char TEX_IMAGE[] = "pictures\\texture1.bmp";

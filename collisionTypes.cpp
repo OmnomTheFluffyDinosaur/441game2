@@ -39,7 +39,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	timeSinceSpawn = 0;
 	lastGrunt = 0;
 	score1 = score2 = 0;
-	gameStates = intro;
+	gameStates = splash;
 	invincible = false;
 	noDeath = false;
 
@@ -49,21 +49,29 @@ void CollisionTypes::initialize(HWND hwnd)
 	cheat = new cheatsMenu();
 	cheat->initialize(graphics, input);
 
-	creditsMenu = new genericMenu("Explosion and laser sounds by dklon from OpenGameArt.org","Background by Downdate from OpenGameArt.org","");
+	creditsMenu = new genericMenu("Explosion and laser sounds by dklon from OpenGameArt.org","Background by Downdate from OpenGameArt.org \n\nMusic by Circlerun from OpenGameArt.org","");
 	creditsMenu->initialize(graphics, input);
 
 	controlsMenu = new genericMenu("Press Arrow Keys to Move","Press Space to Shoot","");
 	controlsMenu->initialize(graphics, input);
 
 	waveFont = new TextDX();
-	if(waveFont->initialize(graphics, 15, true, false, "Arial") == false)
+	if(waveFont->initialize(graphics, 20, true, false, "Arial") == false)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
+
 
 	if (!bgTM.initialize(graphics,BG_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
 	if (!bgTexture.initialize(graphics,0,0,0,&bgTM))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
     bgTexture.setScale(BG_SCALE);
+
+	if (!splashTM.initialize(graphics,SPLASH))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
+	if (!splashTexture.initialize(graphics,0,0,0,&splashTM))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
+
+
 
 	if (!playerTM.initialize(graphics,PLAYER_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
@@ -175,6 +183,11 @@ void CollisionTypes::gameStateUpdate()
 
 	timeInState += frameTime;
 	//main menu
+	if(gameStates == splash && timeInState > 3.5)
+	{
+		timeInState = 0;
+		gameStates = intro;
+	}
 	if (gameStates==intro && menu->getSelectedItem() == 0 && timeInState > .05)
 	{
 		gameStates = wave1;
@@ -433,7 +446,7 @@ void CollisionTypes::update()
 	case wave2: 
 		{
 		//spawn grunts
-		if(timeSinceSpawn > 2 && !bossSpawn)
+		if(timeSinceSpawn > 1.8 && !bossSpawn)
 		{
 			//lastGrunt++;
 			grunts[++lastGrunt].spawn();	
@@ -637,6 +650,9 @@ void CollisionTypes::render()
 	graphics->spriteBegin(); // begin drawing sprites
 	switch (gameStates)
 	{
+	case splash:
+		splashTexture.draw();
+		break;
 	case intro:
 		menu->displayMenu();
 		break;
@@ -667,7 +683,7 @@ void CollisionTypes::render()
 		health.draw();
 		waveFont->print(std::to_string(score1 + score2), 50, 50);
 		if(timeInState < 3)
-			waveFont->print("Wave 1 \n" + std::to_string(player.getLives()) + " Lives Remaining",310,100);
+			waveFont->print("Wave 1 \n" + std::to_string(player.getLives()) + " Live(s) Remaining",310,100);
 		if(difftime(time(0), timeSinceHit) < .2)
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
@@ -678,8 +694,7 @@ void CollisionTypes::render()
 		
 		break;
 	case wave2:
-	//	background1.draw();
-	//	background2.draw();
+
 		// Wrap space image around at edge
 		// The Scrolling Bitmap example uses if statements so the space image is
 		// only drawn when necessary. This code always draws the space image even
@@ -695,7 +710,7 @@ void CollisionTypes::render()
 		health.draw();
 		waveFont->print(std::to_string(score1 + score2), 50, 50);
 		if(timeInState < 3)
-			waveFont->print("Wave 2 \n" + std::to_string(player.getLives()) + " Lives Remaining",310,100);
+			waveFont->print("Wave 2 \n" + std::to_string(player.getLives()) + " Live(s) Remaining",310,100);
 		if(difftime(time(0), timeSinceHit) < .2)
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
@@ -709,11 +724,11 @@ void CollisionTypes::render()
 		//draw stuff
 	case end:
 		//gameOver.draw();
-		waveFont->print("Your score is: " + std::to_string(score1 + score2),300,100);
+		waveFont->print("Congratulations \n\nYour score is: " + std::to_string(score1 + score2),300,100);
 		break;
 	
 	case gameEnd:
-		waveFont->print("Your score is: " + std::to_string(score1 + score2),300,100);
+		waveFont->print("Game Over \n\nYour score is: " + std::to_string(score1 + score2),300,100);
 		gameOver.draw();
 		break;
 	}
