@@ -147,20 +147,20 @@ bool Zeppelin::collidesWith(Entity p) {
 	float zeppelinB = spriteData.y+zepNS::HEIGHT*spriteData.scale -16;
 
 	//player box
-	float pL = p.getX();
-	float pR = p.getX()+p.getWidth()*spriteData.scale;
-	float pT = p.getY();
-	float pB = p.getY()+p.getHeight()*spriteData.scale;
+	float pL = p.getX() + 16;
+	float pR = p.getX()+p.getWidth()*spriteData.scale -16;
+	float pT = p.getY() + 8;
+	float pB = p.getY()+p.getHeight()*spriteData.scale - 8;
 
 	return (zeppelinL < pR && zeppelinR > pL && zeppelinT < pB && zeppelinB > pT);
 }
 
 bool Zeppelin::isHitBy(Entity p) {
 	//zeppelin box
-	float zeppelinL = spriteData.x + 16;
-	float zeppelinR = spriteData.x+zepNS::WIDTH*spriteData.scale-16;
-	float zeppelinT = spriteData.y +8;
-	float zeppelinB = spriteData.y+zepNS::HEIGHT*spriteData.scale-8;
+	float zeppelinL = spriteData.x + 20;
+	float zeppelinR = spriteData.x+zepNS::WIDTH*spriteData.scale-20;
+	float zeppelinT = spriteData.y + 12;
+	float zeppelinB = spriteData.y+zepNS::HEIGHT*spriteData.scale-12;
 
 	//player box
 	float pL = p.getX();
@@ -174,7 +174,7 @@ bool Zeppelin::isHitBy(Entity p) {
 void Zeppelin::spawn() {
 	if(getDead())
 	{
-		setPosition(VECTOR2(GAME_WIDTH-6, rand()%(GAME_HEIGHT-zepNS::HEIGHT-2)+1));
+		setPosition(VECTOR2(GAME_WIDTH-6, rand()%(GAME_HEIGHT-zepNS::HEIGHT-12)+8));
 	//	grunts[++lastGrunt].setX(GAME_WIDTH-gruntNS::WIDTH);
 	//	grunts[lastGrunt].setY(40);
 		setDead(false);

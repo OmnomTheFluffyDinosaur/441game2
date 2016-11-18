@@ -38,8 +38,10 @@ void CollisionTypes::initialize(HWND hwnd)
 	timeInState = 0;
 	timeSinceSpawn = 0;
 	lastGrunt = 0;
-	score = 0;
+	score1 = score2 = 0;
 	gameStates = intro;
+	invincible = false;
+	noDeath = false;
 
 	menu = new mainMenu();
 	menu->initialize(graphics, input); //, menuText);
@@ -47,7 +49,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	cheat = new cheatsMenu();
 	cheat->initialize(graphics, input);
 
-	creditsMenu = new genericMenu("1","2","");
+	creditsMenu = new genericMenu("explosion and laser sounds by dklon from OpenGameArt.org","2","");
 	creditsMenu->initialize(graphics, input);
 
 	controlsMenu = new genericMenu("Press Arrow Keys to Move","Press Space to Shoot","");
@@ -67,6 +69,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	player.setCollisionRadius(COLLISION_RADIUS);
 	player.setScale(1.0);
 	player.setHealth(100);
+	player.setLives(3);
 	timeSinceHit = time(0);
 			
 
@@ -136,6 +139,8 @@ void CollisionTypes::initialize(HWND hwnd)
 	patternSteps[3].setAction(BRTL);
 	patternSteps[3].setTimeForStep(2);*/
 
+	audio->playCue("Music");
+
 	return;
 }
 
@@ -184,12 +189,20 @@ void CollisionTypes::gameStateUpdate()
 	//cheats menu
 	if (gameStates==cheats && cheat->getSelectedItem() == 0&& timeInState > .05)
 	{
-		//gameStates = wave1;
+		invincible = !invincible;
+		if(invincible)
+			cheat->setMenuItem1("Invincible: On");
+		else
+			cheat->setMenuItem1("Invincible: Off");
 		timeInState = 0;
 	}
 	else if (gameStates==cheats && cheat->getSelectedItem() == 1 && timeInState > .05)
 	{
-		//gameStates = wave1;
+		noDeath = !noDeath;
+		if(noDeath)
+			cheat->setMenuItem2("Infinite Lives: On");
+		else
+			cheat->setMenuItem2("Infinite Lives: Off");
 		timeInState = 0;
 	}
 	else if (gameStates==cheats && cheat->getSelectedItem() == 2 && timeInState > .05)
@@ -214,11 +227,27 @@ void CollisionTypes::gameStateUpdate()
 		gameStates = end;
 		timeInState = 0;
 	}
-	if ((gameStates == wave1 || gameStates == wave2) && player.getHealth() == 0)
+	if ((gameStates == wave1 || gameStates == wave2) && player.getLives() == 0)
 	{
 		gameStates = gameEnd;
 		timeInState = 0;
 	}
+	if((gameStates == wave1 || gameStates == wave2) && player.getHealth() <= 0)
+	{
+		timeInState = 0;
+		for(int i = 0; i < NUMGRUNTS; i++)
+		{
+			grunts[i].setDead(true);
+			grunts[i].setInvisible();
+		}
+		zep.setDead(true);
+		zep.setInvisible();
+		player.setHealth(100);
+		if(!noDeath)
+			player.setLives(player.getLives()-1);
+		bossSpawn = 0;
+	}
+
 	if (gameStates==end && timeInState > 4)
 	{
 		PostQuitMessage(0);
@@ -329,7 +358,7 @@ void CollisionTypes::update()
 
 	case wave2:
 		//spawn grunts
-		if(timeSinceSpawn > 1.5 && !bossSpawn)
+		if(timeSinceSpawn > 2 && !bossSpawn)
 		{
 			//lastGrunt++;
 			grunts[++lastGrunt].spawn();	
@@ -339,7 +368,7 @@ void CollisionTypes::update()
 			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
 			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
 			timeSinceSpawn = 0;
-			if(lastGrunt == NUMGRUNTS-1)
+			if(lastGrunt >= NUMGRUNTS-2)
 				lastGrunt = 1;
 		}
 		if(timeInState > 5 && !bossSpawn)
@@ -408,7 +437,9 @@ void CollisionTypes::collisions()
 	for(int i = 0; i < NUMGRUNTS; i++) {
 		if(grunts[i].collidesWith(player) && !grunts[i].getDead()){
 			grunts[i].setCollides(true);
-			player.setHealth(player.getHealth()-20);
+			if(!invincible) {
+				player.setHealth(player.getHealth()-20);
+			}
 			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
 			grunts[i].setDead(true);
 			audio->playCue(BOOM9);
@@ -420,11 +451,24 @@ void CollisionTypes::collisions()
 		else
 			grunts[i].setCollides(false);
 
+		/*if(grunts[i].getVelocity() == D3DXVECTOR2(0,0) && timeSinceSpawn > 1.5) 
+		{
+			grunts[i].setDead(true);
+			grunts[i].setInvisible();
+		}*/
+
 		if(grunts[i].isHitBy(laser) && !grunts[i].getDead()){
 			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
 			grunts[i].setDead(true);
 			audio->playCue(BOOM9);
-			score += grunts[i].getScore();
+			switch(gameStates) {
+			case wave1:
+				score1 += grunts[i].getScore();
+				break;
+			case wave2:
+				score2+= grunts[i].getScore();
+				break;
+			}
 			//grunts[i].setDead(true);
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
@@ -448,7 +492,16 @@ void CollisionTypes::collisions()
 				zep.setDead(true);
 				audio->playCue(BOOM4);
 				zep.setFrames(ZEP_EXPLODE_START, ZEP_EXPLODE_END);
-				score += zep.getScore();
+				
+				switch(gameStates) {
+			//	case wave1:					//Not necessary at moment, since the zep only spawns in wave 2
+			//		score1 += zep.getScore();
+			//		break;
+				case wave2:
+					score2+= zep.getScore();
+					break;
+				}
+			
 			}
 		}
 		if(zep.getCurrentFrame() == ZEP_EXPLODE_END)
@@ -476,6 +529,7 @@ void CollisionTypes::render()
 		controlsMenu->displayMenu();
 		break;
 	case wave1:
+		health.draw();
 		if(timeInState < 3)
 			waveFont->print("Wave 1",310,100);
 		if(difftime(time(0), timeSinceHit) < .2)
@@ -485,9 +539,10 @@ void CollisionTypes::render()
 		laser.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
-		health.draw();
+		
 		break;
 	case wave2:
+		health.draw();
 		if(timeInState < 3)
 			waveFont->print("Wave 2",310,100);
 		if(difftime(time(0), timeSinceHit) < .2)
@@ -499,16 +554,15 @@ void CollisionTypes::render()
 			grunts[i].draw();
 		if(zep.getVisible())
 			zep.draw();
-		health.draw();
 		break;
 		//draw stuff
 	case end:
 		//gameOver.draw();
-		waveFont->print("Your score is: " + std::to_string(score),300,100);
+		waveFont->print("Your score is: " + std::to_string(score1 + score2),300,100);
 		break;
 	
 	case gameEnd:
-		waveFont->print("Your score is: " + std::to_string(score),300,100);
+		waveFont->print("Your score is: " + std::to_string(score1 + score2),300,100);
 		gameOver.draw();
 		break;
 	}
@@ -532,7 +586,9 @@ void CollisionTypes::render()
 //=============================================================================
 void CollisionTypes::releaseAll()
 {
-
+	zepTM.onLostDevice();
+	healthTM.onLostDevice();
+	gruntTM.onLostDevice();
 	playerTM.onLostDevice();
 	Game::releaseAll();
 	return;
@@ -544,7 +600,9 @@ void CollisionTypes::releaseAll()
 //=============================================================================
 void CollisionTypes::resetAll()
 {
-
+	zepTM.onResetDevice();
+	healthTM.onResetDevice();
+	gruntTM.onResetDevice();
 	playerTM.onResetDevice();
 	Game::resetAll();
 	return;

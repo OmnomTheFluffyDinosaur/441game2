@@ -16,8 +16,8 @@ Global Settings
     Header File = C:\Programming 2D Games\Object Version\Chapter 7 Sound\SoundExample1\audio\SoundExample1.h;
     Exclude Category Names = 0;
     Exclude Variable Names = 0;
-    Last Modified Low = 1969779589;
-    Last Modified High = 30556176;
+    Last Modified Low = 304974413;
+    Last Modified High = 30556450;
 
     Category
     {
@@ -227,10 +227,12 @@ Wave Bank
     Compression Preset Name = <none>;
     Xbox Bank Last Modified Low = 0;
     Xbox Bank Last Modified High = 0;
-    PC Bank Last Modified Low = 844885587;
-    PC Bank Last Modified High = 30556184;
-    Bank Last Revised Low = 4142180369;
-    Bank Last Revised High = 30556183;
+    PC Bank Last Modified Low = 0;
+    PC Bank Last Modified High = 0;
+    Header Last Modified Low = 0;
+    Header Last Modified High = 0;
+    Bank Last Revised Low = 207834687;
+    Bank Last Revised High = 30556449;
 
     Wave
     {
@@ -365,8 +367,8 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 911417088;
-            Last Modified High = 30298172;
+            Last Modified Low = 391505410;
+            Last Modified High = 30556204;
         }
     }
 
@@ -388,8 +390,54 @@ Wave Bank
             Loop Region Offset = 0;
             Loop Region Length = 0;
             File Type = 1;
-            Last Modified Low = 411286272;
-            Last Modified High = 30298168;
+            Last Modified Low = 390118229;
+            Last Modified High = 30556204;
+        }
+    }
+
+    Wave
+    {
+        Name = laser1;
+        File = laser1.wav;
+        Build Settings Last Modified Low = 2845458178;
+        Build Settings Last Modified High = 30556444;
+
+        Cache
+        {
+            Format Tag = 0;
+            Channels = 1;
+            Sampling Rate = 44100;
+            Bits Per Sample = 1;
+            Play Region Offset = 44;
+            Play Region Length = 16740;
+            Loop Region Offset = 0;
+            Loop Region Length = 0;
+            File Type = 1;
+            Last Modified Low = 2298344043;
+            Last Modified High = 30556444;
+        }
+    }
+
+    Wave
+    {
+        Name = Circlerun_Seasons_Forever_Elevator_Sky_loop_;
+        File = Circlerun_Seasons_Forever_Elevator_Sky_loop_.wav;
+        Build Settings Last Modified Low = 4037249970;
+        Build Settings Last Modified High = 30556448;
+
+        Cache
+        {
+            Format Tag = 0;
+            Channels = 2;
+            Sampling Rate = 44100;
+            Bits Per Sample = 1;
+            Play Region Offset = 180;
+            Play Region Length = 2829312;
+            Loop Region Offset = 0;
+            Loop Region Length = 0;
+            File Type = 1;
+            Last Modified Low = 3589900183;
+            Last Modified High = 30556448;
         }
     }
 }
@@ -401,8 +449,8 @@ Sound Bank
     Windows File = Win\SoundsExample1.xsb;
     Xbox Bank Path Edited = 0;
     Windows Bank Path Edited = 0;
-    Bank Last Modified Low = 844945627;
-    Bank Last Modified High = 30556184;
+    Bank Last Modified Low = 305024451;
+    Bank Last Modified High = 30556450;
     Header Last Modified High = 0;
     Header Last Modified Low = 0;
 
@@ -644,7 +692,7 @@ Sound Bank
     Sound
     {
         Name = Boom9;
-        Volume = -2140;
+        Volume = -1650;
         Pitch = 0;
         Priority = 0;
 
@@ -691,7 +739,7 @@ Sound Bank
     Sound
     {
         Name = Boom4;
-        Volume = -1610;
+        Volume = -1440;
         Pitch = 0;
         Priority = 0;
 
@@ -728,6 +776,101 @@ Sound Bank
                     Bank Index = 0;
                     Entry Name = boom4;
                     Entry Index = 6;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
+    Sound
+    {
+        Name = Laser1;
+        Volume = -1200;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaker Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = WavesExample1;
+                    Bank Index = 0;
+                    Entry Name = laser1;
+                    Entry Index = 7;
+                    Weight = 255;
+                    Weight Min = 0;
+                }
+            }
+        }
+    }
+
+    Sound
+    {
+        Name = Music;
+        Volume = -1200;
+        Pitch = 0;
+        Priority = 0;
+
+        Category Entry
+        {
+            Name = Default;
+        }
+
+        Track
+        {
+            Volume = 0;
+            Use Filter = 0;
+
+            Play Wave Event
+            {
+                Loop Count = 255;
+                Break Loop = 0;
+                Use Speaker Position = 0;
+                Use Center Speaker = 1;
+                New Speaker Position On Loop = 1;
+                Speaker Position Angle = 0.000000;
+                Speaker Position Arc = 0.000000;
+
+                Event Header
+                {
+                    Timestamp = 0;
+                    Relative = 0;
+                    Random Recurrence = 0;
+                    Random Offset = 0;
+                }
+
+                Wave Entry
+                {
+                    Bank Name = WavesExample1;
+                    Bank Index = 0;
+                    Entry Name = Circlerun_Seasons_Forever_Elevator_Sky_loop_;
+                    Entry Index = 8;
                     Weight = 255;
                     Weight Min = 0;
                 }
@@ -870,6 +1013,46 @@ Sound Bank
         {
             Name = Boom4;
             Index = 6;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = Laser1;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = Laser1;
+            Index = 7;
+            Weight Min = 0;
+            Weight Max = 255;
+        }
+    }
+
+    Cue
+    {
+        Name = Music;
+
+        Variation
+        {
+            Variation Type = 3;
+            Variation Table Type = 1;
+            New Variation on Loop = 0;
+        }
+
+        Sound Entry
+        {
+            Name = Music;
+            Index = 8;
             Weight Min = 0;
             Weight Max = 255;
         }
