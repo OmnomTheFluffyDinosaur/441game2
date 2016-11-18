@@ -650,10 +650,8 @@ void CollisionTypes::render()
 		controlsMenu->displayMenu();
 		break;
 	case wave1:
-<<<<<<< HEAD
 	//	background1.draw();
 	//	background2.draw();
-=======
 		// Wrap space image around at edge
 		// The Scrolling Bitmap example uses if statements so the space image is
 		// only drawn when necessary. This code always draws the space image even
@@ -666,7 +664,6 @@ void CollisionTypes::render()
 		bgTexture.setX(x);
 		bgTexture.draw();
 		bgTexture.setY(y);
->>>>>>> origin/develop2
 		health.draw();
 		waveFont->print(std::to_string(score1 + score2), 50, 50);
 		if(timeInState < 3)
@@ -681,10 +678,8 @@ void CollisionTypes::render()
 		
 		break;
 	case wave2:
-<<<<<<< HEAD
 	//	background1.draw();
 	//	background2.draw();
-=======
 		// Wrap space image around at edge
 		// The Scrolling Bitmap example uses if statements so the space image is
 		// only drawn when necessary. This code always draws the space image even
@@ -697,11 +692,10 @@ void CollisionTypes::render()
 		bgTexture.setX(x);
 		bgTexture.draw();
 		bgTexture.setY(y);
->>>>>>> origin/develop2
 		health.draw();
 		waveFont->print(std::to_string(score1 + score2), 50, 50);
 		if(timeInState < 3)
-			waveFont->print("Wave 2\ n" + std::to_string(player.getLives()) + " Lives Remaining",310,100);
+			waveFont->print("Wave 2 \n" + std::to_string(player.getLives()) + " Lives Remaining",310,100);
 		if(difftime(time(0), timeSinceHit) < .2)
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
