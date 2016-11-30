@@ -42,6 +42,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	gameStates = splash;
 	invincible = false;
 	noDeath = false;
+	scoreCount = 0;
 
 	menu = new mainMenu();
 	menu->initialize(graphics, input); //, menuText);
@@ -336,6 +337,17 @@ void CollisionTypes::update()
 	cheat->update();
 	creditsMenu->update();
 	controlsMenu->update();
+	if (input->isKeyDown(VK_F1)) {
+		gameStates = intro;
+		health.setCurrentFrame(HEALTH_FULL);
+		player.setHealth(100);
+		player.setLives(3);
+		player.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-2*player.getHeight()));
+		timeSinceHit=time(0);
+		score1=0;
+		score2=0;
+		scoreCount = 0;
+	}
 
 	/*
 	switch (gameStates)
@@ -645,6 +657,8 @@ void CollisionTypes::collisions()
 //=============================================================================
 void CollisionTypes::render()
 {
+	if (scoreCount < score1+score2)
+			scoreCount++;
 	float x = bgTexture.getX();
     float y = bgTexture.getY();
 	graphics->spriteBegin(); // begin drawing sprites
@@ -681,7 +695,7 @@ void CollisionTypes::render()
 		bgTexture.draw();
 		bgTexture.setY(y);
 		health.draw();
-		waveFont->print(std::to_string(score1 + score2), 50, 50);
+		waveFont->print(std::to_string(scoreCount), 50, 50);
 		if(timeInState < 3)
 			waveFont->print("Wave 1 \n" + std::to_string(player.getLives()) + " Live(s) Remaining",310,100);
 		if(difftime(time(0), timeSinceHit) < .2)
@@ -708,7 +722,7 @@ void CollisionTypes::render()
 		bgTexture.draw();
 		bgTexture.setY(y);
 		health.draw();
-		waveFont->print(std::to_string(score1 + score2), 50, 50);
+		waveFont->print(std::to_string(scoreCount), 50, 50);
 		if(timeInState < 3)
 			waveFont->print("Wave 2 \n" + std::to_string(player.getLives()) + " Live(s) Remaining",310,100);
 		if(difftime(time(0), timeSinceHit) < .2)

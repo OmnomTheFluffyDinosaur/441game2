@@ -75,6 +75,7 @@ private:
 	TextureManager backTexture1;
 	Image background1;
 	Image background2;
+	int scoreCount;
 
 	struct position{
 		float xPos;
