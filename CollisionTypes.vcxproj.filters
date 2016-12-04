@@ -87,6 +87,9 @@
     <ClCompile Include="genericMenu.cpp">
       <Filter>Source Files\menus</Filter>
     </ClCompile>
+    <ClCompile Include="laserManager.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="genericMenu.h">
       <Filter>Header Files\menus</Filter>
+    </ClInclude>
+    <ClInclude Include="laserManager.h">
+      <Filter>Header Files\entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

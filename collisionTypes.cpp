@@ -5,8 +5,10 @@
 // Press '1', '2' or '3' to select collision type for ship.
 
 #include "collisionTypes.h"
+#include "laserManager.h"
 #include <time.h>
 
+LaserManager lm;
 
 bool bossSpawn = 0;
 
@@ -97,15 +99,6 @@ void CollisionTypes::initialize(HWND hwnd)
 	health.setScale(1.0);
 	health.setCurrentFrame(HEALTH_FULL);
 
-	if (!laserTM.initialize(graphics,LASER_IMAGE))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background"));
-	if (!laser.initialize(this,laserNS::WIDTH, laserNS::HEIGHT, laserNS::TEXTURE_COLS, &laserTM))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing background"));
-	laser.setScale(1.25);
-	laser.setX(10);
-	laser.setY(10);
-	laser.setVisible(false);
-
 	for(int i = 0; i < NUMGRUNTS; i++) {
 		if (!gruntTM.initialize(graphics,GRUNT_IMAGE))
 			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
@@ -172,6 +165,9 @@ void CollisionTypes::initialize(HWND hwnd)
 	Vel1.xVel = -60;
 	Vel2.yVel = -60;*/
 
+	lm.initialize(graphics);
+	reloadTime = 0;
+
 	return;
 }
 
@@ -179,9 +175,16 @@ void CollisionTypes::initialize(HWND hwnd)
 // Update all game items
 //=============================================================================
 
+void createParticleEffect(VECTOR2 pos, VECTOR2 vel, int numParticles){
+
+	lm.setPosition(pos);
+	lm.setVelocity(vel);
+	lm.setVisibleNParticles(numParticles);
+
+}
+
 void CollisionTypes::gameStateUpdate()
 {
-
 	timeInState += frameTime;
 	//main menu
 	if(gameStates == splash && timeInState > 3.5)
@@ -329,6 +332,8 @@ void CollisionTypes::gameStateUpdate()
 }
 void CollisionTypes::update()
 {
+	reloadTime += frameTime;
+	VECTOR2 foo,bar;
 	if (input->isKeyDown(VK_ESCAPE)) {
 		exitGame();
 	}
@@ -409,6 +414,15 @@ void CollisionTypes::update()
 			player.up();
 		if(input->isKeyDown(VK_DOWN))
 			player.down();
+		if (reloadTime >= 0.2f) {
+			if (input->isKeyDown(VK_SPACE)) {
+				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
+				bar = VECTOR2(500,0);
+				createParticleEffect(foo, bar, 1);
+				reloadTime = 0;
+			}
+		}
+		lm.update(frameTime);
 		//Math didn't work right
 		if(player.getHealth() == 100)
 			health.setCurrentFrame(HEALTH_FULL);
@@ -421,7 +435,6 @@ void CollisionTypes::update()
 		if(player.getHealth() == 20)
 			health.setCurrentFrame(HEALTH_20);
 		player.update(frameTime);
-		laser.update(frameTime, player, audio);
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
@@ -503,7 +516,6 @@ void CollisionTypes::update()
 		if(player.getHealth() == 20)
 			health.setCurrentFrame(HEALTH_20);
 		player.update(frameTime);
-		laser.update(frameTime, player, audio);
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
@@ -599,7 +611,7 @@ void CollisionTypes::collisions()
 			grunts[i].setInvisible();
 		}*/
 
-		if(grunts[i].isHitBy(laser) && !grunts[i].getDead() && !laser.getDead()){
+		/*if(grunts[i].isHitBy(laser) && !grunts[i].getDead() && !laser.getDead()){
 			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
 			grunts[i].setDead(true);
 			laser.setDead(true);
@@ -617,6 +629,7 @@ void CollisionTypes::collisions()
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
 			grunts[i].setInvisible();
+		*/
 	}
 
 	if(zep.collidesWith(player) && !zep.getDead()){
@@ -628,7 +641,7 @@ void CollisionTypes::collisions()
 		else
 			zep.setCollides(false);
 
-		if(zep.isHitBy(laser) && !zep.getDead() && !laser.getDead()) {
+		/*if(zep.isHitBy(laser) && !zep.getDead() && !laser.getDead()) {
 			zep.setHealth(zep.getHealth() - 10);
 			laser.setDead(true);
 			laser.setVisible(false);
@@ -647,7 +660,7 @@ void CollisionTypes::collisions()
 				}
 			
 			}
-		}
+		}*/
 		if(zep.getCurrentFrame() == ZEP_EXPLODE_END)
 			zep.setInvisible();
 }
@@ -702,7 +715,7 @@ void CollisionTypes::render()
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
 			player.draw();
-		laser.draw();
+		lm.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
 		
@@ -729,7 +742,7 @@ void CollisionTypes::render()
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
 			player.draw();
-		laser.draw();
+		lm.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
 		if(zep.getVisible())

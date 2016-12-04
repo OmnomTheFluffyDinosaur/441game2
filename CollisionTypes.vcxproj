@@ -100,6 +100,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="laser.cpp" />
     <ClCompile Include="mainMenu.cpp" />
+    <ClCompile Include="laserManager.cpp" />
     <ClCompile Include="patternStep.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="puck.cpp" />
@@ -125,6 +126,7 @@
     <ClInclude Include="laser.h" />
     <ClInclude Include="mainMenu.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="laserManager.h" />
     <ClInclude Include="patternStep.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="puck.h" />

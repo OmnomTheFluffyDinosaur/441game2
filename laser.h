@@ -1,39 +1,74 @@
+//Particle System
 
-#ifndef _LASER_H               // Prevent multiple definitions if this 
-#define _LASER_H               // file is included in more than one place
+#ifndef _LASER_H 
+#define _LASER_H
+
+
 #define WIN32_LEAN_AND_MEAN
 
-#include "entity.h"
-#include "constants.h"
-#include "player.h"
-#include <vector>
+class Laser;
 
+#include "image.h"
+#include "input.h"
+#include "game.h"
 
-namespace laserNS
+namespace particleNS
 {
-    const int   WIDTH = 16;                // image width
-    const int   HEIGHT = 8;               // image height
-    const int   X = 0;
-    const int   Y = 0;
-    const float MASS = 1.0e14f;         // mass
-	const float SPEED = 100;	
-	const int TEXTURE_COLS = 1;
-	const float SCALE = 0.5;
 }
 
-class Laser : public Entity            // inherits from Entity class
+class Laser : public Image
 {
-public:
-    // constructor
-    Laser();
-	void update(float frameTime, Player p, Audio *audio);
-	bool canShoot;
-	void setDead(bool c){isDead = c;}
-	bool getDead(){return isDead;}
+	// Entity properties
 private:
-	bool direction;
-	bool isDead;
-	int cR;
-	float reloadTimer;
+	//VECTOR2 position;
+	bool active;
+	VECTOR2 velocity;
+	float timeAlive;
+	float maxTimeAlive;
+	float fadeValue; //1: opaque, 0: transparent
+	float scaleValue;
+	float rotationValue; //in radians
+
+
+public:
+	// Constructor
+	Laser();
+
+	////////////////////////////////////////
+	//           Get functions            //
+	////////////////////////////////////////
+
+
+	const VECTOR2 getVelocity() const {return velocity;}
+
+	// Return active.
+	bool  getActive()          {return active;}
+	float getTimeAlive() {return timeAlive;}
+	float getRotationValue() {return rotationValue;}
+	float getMaxTimeAlive() {return maxTimeAlive;}
+	bool getVisible() {return visible;}
+
+	////////////////////////////////////////
+	//           Set functions            //
+	////////////////////////////////////////
+
+	// Set velocity.
+	void  setVelocity(VECTOR2 v)    {velocity = v;}
+	void  setActive(bool a)         {active = a;}
+	void setMaxTimeAlive(float t) {maxTimeAlive = t;}
+	void setRotationValue(float r) {rotationValue = r;}
+	void setVisible(bool b) {visible = b;}
+
+
+	////////////////////////////////////////
+	//         Other functions            //
+	////////////////////////////////////////
+
+	void update(float frameTime);
+	bool initialize(Graphics *g, int width, int height, int ncols,
+		TextureManager *textureM);
+	void resetParticle();
+
 };
+
 #endif
