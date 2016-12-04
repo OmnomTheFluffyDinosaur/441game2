@@ -5,6 +5,7 @@
 #include "laser.h"
 #include "constants.h"
 #include "textureManager.h"
+#include "entity.h"
 
 class LaserManager
 {
@@ -27,6 +28,8 @@ public:
 
 	void LaserManager::update(float frametime);
 	void LaserManager::draw();
+	bool LaserManager::collidesWith(Entity e);
+	void LaserManager::resetAll();
 
 
 };

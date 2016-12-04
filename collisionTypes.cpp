@@ -352,6 +352,7 @@ void CollisionTypes::update()
 		score1=0;
 		score2=0;
 		scoreCount = 0;
+		lm.resetAll();
 	}
 
 	/*
@@ -505,6 +506,15 @@ void CollisionTypes::update()
 			player.up();
 		if(input->isKeyDown(VK_DOWN))
 			player.down();
+		if (reloadTime >= 0.2f) {
+			if (input->isKeyDown(VK_SPACE)) {
+				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
+				bar = VECTOR2(500,0);
+				createParticleEffect(foo, bar, 1);
+				reloadTime = 0;
+			}
+		}
+		lm.update(frameTime);
 		if(player.getHealth() == 100)
 			health.setCurrentFrame(HEALTH_FULL);
 		if(player.getHealth() == 80)
@@ -611,11 +621,9 @@ void CollisionTypes::collisions()
 			grunts[i].setInvisible();
 		}*/
 
-		/*if(grunts[i].isHitBy(laser) && !grunts[i].getDead() && !laser.getDead()){
+		if(lm.collidesWith(grunts[i]) && !grunts[i].getDead()){
 			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
 			grunts[i].setDead(true);
-			laser.setDead(true);
-			laser.setVisible(false);
 			audio->playCue(BOOM9);
 			switch(gameStates) {
 			case wave1:
@@ -629,7 +637,7 @@ void CollisionTypes::collisions()
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
 			grunts[i].setInvisible();
-		*/
+		
 	}
 
 	if(zep.collidesWith(player) && !zep.getDead()){
@@ -641,10 +649,8 @@ void CollisionTypes::collisions()
 		else
 			zep.setCollides(false);
 
-		/*if(zep.isHitBy(laser) && !zep.getDead() && !laser.getDead()) {
+		if(lm.collidesWith(zep) && !zep.getDead()) {
 			zep.setHealth(zep.getHealth() - 10);
-			laser.setDead(true);
-			laser.setVisible(false);
 			if(zep.getHealth() <= 0) {
 				zep.setDead(true);
 				audio->playCue(BOOM4);
@@ -660,7 +666,7 @@ void CollisionTypes::collisions()
 				}
 			
 			}
-		}*/
+		}
 		if(zep.getCurrentFrame() == ZEP_EXPLODE_END)
 			zep.setInvisible();
 }

@@ -51,6 +51,7 @@ private:
     bool    active;         // only active entities may collide
     bool    rotatedBoxReady;    // true when rotated collision box is ready
     DWORD   pixelsColliding;    // number of pixels colliding in pixel perfect collision
+	float scale;
 
     // --- The following functions are protected because they are not intended to be
     // --- called from outside the class.
@@ -147,6 +148,8 @@ private:
 	VECTOR2 getPosition() {return position;}
 	float getPositionX() {return position.x;}
 	float getPositionY() {return position.y;}
+
+	float getScale() {return scale;}
 
     ////////////////////////////////////////
     //           Set functions            //

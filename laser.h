@@ -68,6 +68,7 @@ public:
 	bool initialize(Graphics *g, int width, int height, int ncols,
 		TextureManager *textureM);
 	void resetParticle();
+	float getScale() {return scaleValue;}
 
 };
 
