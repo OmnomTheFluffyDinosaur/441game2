@@ -60,6 +60,10 @@ void Laser::update(float frametime)
 
 	setX(getX() + velocity.x * frametime);
 	setY(getY() + velocity.y * frametime);
+	if (getX() > GAME_WIDTH) {
+		resetParticle();
+		return;
+	}
 	/*rotationValue += frametime;
 	if (rotationValue> 2*2.14159) //prevent overrotation
 		rotationValue = 0;*/

@@ -69,8 +69,6 @@ void LaserManager::update(float frametime)
 	for (int i = 0; i < MAX_NUMBER_PARTICLES; i++){
 		if (particles[i].getActive())
 			particles[i].update(frametime);
-		if (position.x > GAME_WIDTH-4)
-			particles[i].resetParticle();
 	}
 }
 
@@ -104,8 +102,7 @@ bool LaserManager::collidesWith(Entity e) {
 			float eB = e.getY()+e.getHeight()*e.getScale();
 			bool collided = (laserL < eR && laserR > eL && laserT < eB && laserB > eT);
 			if (collided)  {
-				particles[i].setActive(false);
-				particles[i].setVisible(false);
+				particles[i].resetParticle();
 				return collided;
 			}
 		}

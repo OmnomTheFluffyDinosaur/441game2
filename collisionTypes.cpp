@@ -621,19 +621,21 @@ void CollisionTypes::collisions()
 			grunts[i].setInvisible();
 		}*/
 
-		if(lm.collidesWith(grunts[i]) && !grunts[i].getDead()){
-			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
-			grunts[i].setDead(true);
-			audio->playCue(BOOM9);
-			switch(gameStates) {
-			case wave1:
-				score1 += grunts[i].getScore();
-				break;
-			case wave2:
-				score2+= grunts[i].getScore();
-				break;
+		if (!grunts[i].getDead()) {
+			if(lm.collidesWith(grunts[i]) && !grunts[i].getDead()){
+				grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
+				grunts[i].setDead(true);
+				audio->playCue(BOOM9);
+				switch(gameStates) {
+				case wave1:
+					score1 += grunts[i].getScore();
+					break;
+				case wave2:
+					score2+= grunts[i].getScore();
+					break;
+				}
+				//grunts[i].setDead(true);
 			}
-			//grunts[i].setDead(true);
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
 			grunts[i].setInvisible();
@@ -721,10 +723,9 @@ void CollisionTypes::render()
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
 			player.draw();
-		lm.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
-		
+		lm.draw();
 		break;
 	case wave2:
 
@@ -748,11 +749,11 @@ void CollisionTypes::render()
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
 			player.draw();
-		lm.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
 		if(zep.getVisible())
 			zep.draw();
+		lm.draw();
 		break;
 		//draw stuff
 	case end:
