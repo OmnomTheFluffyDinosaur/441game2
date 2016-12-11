@@ -167,6 +167,7 @@ void CollisionTypes::initialize(HWND hwnd)
 
 	lm.initialize(graphics);
 	reloadTime = 0;
+	shotReload = 0;
 
 	return;
 }
@@ -333,6 +334,7 @@ void CollisionTypes::gameStateUpdate()
 void CollisionTypes::update()
 {
 	reloadTime += frameTime;
+	shotReload += frameTime;
 	VECTOR2 foo,bar;
 	if (input->isKeyDown(VK_ESCAPE)) {
 		exitGame();
@@ -421,6 +423,18 @@ void CollisionTypes::update()
 				bar = VECTOR2(500,0);
 				createParticleEffect(foo, bar, 1);
 				reloadTime = 0;
+			}
+		}
+		if (shotReload >= 1.3f) {
+			if (input->isKeyDown(0x56)) {
+				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
+				bar = VECTOR2(400,0);
+				createParticleEffect(foo, bar, 1);
+				bar = VECTOR2(400,-200);
+				createParticleEffect(foo, bar, 1);
+				bar = VECTOR2(400,200);
+				createParticleEffect(foo, bar, 1);
+				shotReload = 0;
 			}
 		}
 		lm.update(frameTime);
@@ -512,6 +526,18 @@ void CollisionTypes::update()
 				bar = VECTOR2(500,0);
 				createParticleEffect(foo, bar, 1);
 				reloadTime = 0;
+			}
+		}
+		if (shotReload >= 1.3f) {
+			if (input->isKeyDown(0x56)) {
+				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
+				bar = VECTOR2(400,0);
+				createParticleEffect(foo, bar, 1);
+				bar = VECTOR2(400,-200);
+				createParticleEffect(foo, bar, 1);
+				bar = VECTOR2(400,200);
+				createParticleEffect(foo, bar, 1);
+				shotReload = 0;
 			}
 		}
 		lm.update(frameTime);

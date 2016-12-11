@@ -76,6 +76,7 @@ private:
 	Image background2;
 	int scoreCount;
 	float reloadTime;
+	float shotReload;
 
 	struct position{
 		float xPos;
