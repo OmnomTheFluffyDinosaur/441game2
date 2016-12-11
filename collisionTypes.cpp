@@ -622,7 +622,7 @@ void CollisionTypes::collisions()
 		}*/
 
 		if (!grunts[i].getDead()) {
-			if(lm.collidesWith(grunts[i]) && !grunts[i].getDead()){
+			if(lm.collidesWith(grunts[i])){
 				grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
 				grunts[i].setDead(true);
 				audio->playCue(BOOM9);
@@ -634,7 +634,6 @@ void CollisionTypes::collisions()
 					score2+= grunts[i].getScore();
 					break;
 				}
-				//grunts[i].setDead(true);
 			}
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
@@ -652,7 +651,7 @@ void CollisionTypes::collisions()
 			zep.setCollides(false);
 
 		if (!zep.getDead()) {
-			if(lm.collidesWith(zep) && !zep.getDead()) {
+			if(lm.collidesWith(zep)) {
 				zep.setHealth(zep.getHealth() - 10);
 				if(zep.getHealth() <= 0) {
 					zep.setDead(true);
@@ -685,6 +684,7 @@ void CollisionTypes::render()
 	float x = bgTexture.getX();
     float y = bgTexture.getY();
 	graphics->spriteBegin(); // begin drawing sprites
+
 	switch (gameStates)
 	{
 	case splash:
