@@ -415,7 +415,7 @@ void CollisionTypes::update()
 			player.up();
 		if(input->isKeyDown(VK_DOWN))
 			player.down();
-		if (reloadTime >= 0.2f) {
+		if (reloadTime >= 0.4f) {
 			if (input->isKeyDown(VK_SPACE)) {
 				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
 				bar = VECTOR2(500,0);
@@ -506,7 +506,7 @@ void CollisionTypes::update()
 			player.up();
 		if(input->isKeyDown(VK_DOWN))
 			player.down();
-		if (reloadTime >= 0.2f) {
+		if (reloadTime >= 0.4f) {
 			if (input->isKeyDown(VK_SPACE)) {
 				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
 				bar = VECTOR2(500,0);
@@ -651,22 +651,24 @@ void CollisionTypes::collisions()
 		else
 			zep.setCollides(false);
 
-		if(lm.collidesWith(zep) && !zep.getDead()) {
-			zep.setHealth(zep.getHealth() - 10);
-			if(zep.getHealth() <= 0) {
-				zep.setDead(true);
-				audio->playCue(BOOM4);
-				zep.setFrames(ZEP_EXPLODE_START, ZEP_EXPLODE_END);
+		if (!zep.getDead()) {
+			if(lm.collidesWith(zep) && !zep.getDead()) {
+				zep.setHealth(zep.getHealth() - 10);
+				if(zep.getHealth() <= 0) {
+					zep.setDead(true);
+					audio->playCue(BOOM4);
+					zep.setFrames(ZEP_EXPLODE_START, ZEP_EXPLODE_END);
 				
-				switch(gameStates) {
-			//	case wave1:					//Not necessary at moment, since the zep only spawns in wave 2
-			//		score1 += zep.getScore();
-			//		break;
-				case wave2:
-					score2+= zep.getScore();
-					break;
-				}
+					switch(gameStates) {
+				//	case wave1:					//Not necessary at moment, since the zep only spawns in wave 2
+				//		score1 += zep.getScore();
+				//		break;
+					case wave2:
+						score2+= zep.getScore();
+						break;
+					}
 			
+				}
 			}
 		}
 		if(zep.getCurrentFrame() == ZEP_EXPLODE_END)
