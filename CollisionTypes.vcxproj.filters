@@ -90,6 +90,9 @@
     <ClCompile Include="laserManager.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
+    <ClCompile Include="medPack.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -159,6 +162,9 @@
       <Filter>Header Files\menus</Filter>
     </ClInclude>
     <ClInclude Include="laserManager.h">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="med.h">
       <Filter>Header Files\entities</Filter>
     </ClInclude>
   </ItemGroup>

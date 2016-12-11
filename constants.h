@@ -89,6 +89,7 @@ const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calcul
 const RECT  COLLISION_RECTANGLE = {-30,-16,30,16}; 
 const RECT  COLLISION_BOX_PLAYER = {-45,-10,45,10};
 const RECT COLLISION_BOX_PUCK = {-32, -32, 32, 32};
+const RECT COLLISION_BOX_PICKUP = {-14,-14,14,14};
 const float   COLLISION_RADIUS = 29;
 const float BG_SCALE = 1.5f;                 // scale factor of space image
 const int   BG_WIDTH = (int)(512 * BG_SCALE);  // width of scaled space image
@@ -104,6 +105,8 @@ const char HEALTH_IMAGE[] = "pictures\\health.png";
 const char BACKGROUND_IMAGE[] = "pictures\\sky2.jpg";
 const char BG_IMAGE[] = "pictures\\sky3.jpg";
 const char SPLASH[] = "pictures\\Splash.png";
+const char HEALTH_PICKUP[] = "pictures\\medPack.png";
+const char POINT_PICKUP[] = "pictures\\point.png";
 
 const int  GRUNT_COLS = 8;
 const int  GRUNT_WIDTH = 64;

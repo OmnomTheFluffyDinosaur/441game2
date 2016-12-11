@@ -116,6 +116,21 @@ void CollisionTypes::initialize(HWND hwnd)
 		grunts[i].setFrameDelay(.008);
 	}
 
+	if (!medTM.initialize(graphics,HEALTH_PICKUP))
+			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+	if (!medPack.initialize(this, 0, 0, 0,&medTM))
+		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+		medPack.setPosition(VECTOR2(400, 100));
+		medPack.setCollision(entityNS::BOX);
+		medPack.setEdge(COLLISION_BOX_PICKUP);
+		medPack.setX(medPack.getPositionX());
+		medPack.setY(medPack.getPositionY());
+		medPack.setScale(1);
+		medPack.setDead(true);
+		medPack.setInvisible();
+
+
+
 
 	if (!zepTM.initialize(graphics,ZEP_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
@@ -409,6 +424,10 @@ void CollisionTypes::update()
 			if(lastGrunt >= NUMGRUNTS-3)
 				lastGrunt = 1;
 		}
+		if(timeInState > 5 && timeInState < 6) {
+			medPack.spawn();
+			medPack.setDead(false);
+		}
 		if(input->isKeyDown(VK_LEFT))
 			player.left();
 		if(input->isKeyDown(VK_RIGHT))
@@ -454,6 +473,7 @@ void CollisionTypes::update()
 			grunts[i].update(frameTime);
 		}
 		health.update(frameTime);
+		medPack.update(frameTime);
 		//zep.update(frameTime);
 		// move space along X
 		bgTexture.setX(bgTexture.getX() - (frameTime * player.getVelocity().x*0.3f) - 0.5);
@@ -612,6 +632,7 @@ void CollisionTypes::ai()
 		}
 	}
 	zep.ai(frameTime, player);
+	medPack.ai();
 	/*if (patternStepIndex == maxPatternSteps)
 	return;
 	if (patternSteps[patternStepIndex].isFinished())
@@ -641,6 +662,7 @@ void CollisionTypes::collisions()
 		else
 			grunts[i].setCollides(false);
 
+
 		/*if(grunts[i].getVelocity() == D3DXVECTOR2(0,0) && timeSinceSpawn > 1.5) 
 		{
 			grunts[i].setDead(true);
@@ -664,8 +686,16 @@ void CollisionTypes::collisions()
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
 			grunts[i].setInvisible();
-		
 	}
+
+	if(medPack.collidesWith(player) && !medPack.getDead()){
+		medPack.setCollides(true);
+		player.setHealth(player.getHealth()+20);
+		medPack.setDead(true);
+		medPack.setInvisible();
+	}
+	else
+		medPack.setCollides(false);
 
 	if(zep.collidesWith(player) && !zep.getDead()){
 			zep.setCollides(true);
@@ -751,6 +781,7 @@ void CollisionTypes::render()
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
 			player.draw();
+		medPack.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
 		lm.draw();
@@ -777,6 +808,7 @@ void CollisionTypes::render()
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
 			player.draw();
+		medPack.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
 		if(zep.getVisible())
