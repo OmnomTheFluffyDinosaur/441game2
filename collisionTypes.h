@@ -26,6 +26,7 @@ class CollisionTypes;
 #include "genericMenu.h"
 #include "med.h"
 #include "point.h"
+#include "UFO.h"
 
 #define maxPatternSteps 4
 
@@ -36,10 +37,11 @@ class CollisionTypes : public Game
 {
 private:
     // game items
-    TextureManager playerTM, puckTM, laserTM, gruntTM, zepTM, healthTM, bgTM, splashTM, pointsTM, medTM;   // game texture
-    Image   playerTexture, puckTexture, gruntTexture, zepTexture, healthTexture, bgTexture, splashTexture, med, points;
+    TextureManager playerTM, puckTM, laserTM, gruntTM, zepTM, ufoTM, healthTM, bgTM, splashTM, pointsTM, medTM;   // game texture
+    Image   playerTexture, puckTexture, gruntTexture, zepTexture, ufoTexture, healthTexture, bgTexture, splashTexture, med, points;
     VECTOR2 collisionVector;    // collision vector
 	Player player;
+	Ufo ufo;
 	Entity health;
 	Puck puck;
 	Grunt grunts[NUMGRUNTS];

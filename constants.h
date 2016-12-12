@@ -107,6 +107,7 @@ const char BG_IMAGE[] = "pictures\\sky3.jpg";
 const char SPLASH[] = "pictures\\Splash.png";
 const char HEALTH_PICKUP[] = "pictures\\medPack.png";
 const char POINT_PICKUP[] = "pictures\\point.png";
+const char UFO_IMAGE[] = "pictures\\ufo.png";
 
 const int  GRUNT_COLS = 8;
 const int  GRUNT_WIDTH = 64;
@@ -133,6 +134,12 @@ const int HEALTH_60 = 2;
 const int HEALTH_40 = 3;
 const int HEALTH_20 = 4;
 const int HEALTH_00 = 5;
+
+const int UFO_COLS = 4;
+const int UFO_WIDTH = 256;
+const int UFO_HEIGHT = 256;
+const int UFO_START = 0;
+const int UFO_END = 11;
 
 // key mappings
 // In this game simple constants are used for key mappings. If variables were used

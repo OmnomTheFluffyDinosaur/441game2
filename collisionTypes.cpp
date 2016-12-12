@@ -56,7 +56,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	creditsMenu = new genericMenu("Explosion and laser sounds by dklon from OpenGameArt.org","Background by Downdate from OpenGameArt.org \n\nMusic by Circlerun from OpenGameArt.org","");
 	creditsMenu->initialize(graphics, input);
 
-	controlsMenu = new genericMenu("Press Arrow Keys to Move","Press Space to Shoot","");
+	controlsMenu = new genericMenu("Press Arrow Keys to Move","Press Space and 'v' to Shoot","");
 	controlsMenu->initialize(graphics, input);
 
 	waveFont = new TextDX();
@@ -160,6 +160,24 @@ void CollisionTypes::initialize(HWND hwnd)
 	zep.setInvisible();
 	zep.setCurrentFrame(ZEP_IDLE_START);
 	zep.setFrameDelay(.01);
+
+	if (!ufoTM.initialize(graphics,UFO_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+	if (!ufo.initialize(this, UFO_WIDTH, UFO_HEIGHT, UFO_COLS,&ufoTM))
+		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+	ufo.setPosition(VECTOR2(400, 100));
+	ufo.setCollision(entityNS::BOX);
+	ufo.setEdge(COLLISION_BOX_PUCK);
+	ufo.setX(ufo.getPositionX());
+	ufo.setY(ufo.getPositionY());
+	ufo.setScale(0.25);
+	ufo.setDead(true);
+	ufo.setInvisible();
+	ufo.setCurrentFrame(UFO_START);
+	ufo.setFrameDelay(.01);
+	ufo.setFrames(UFO_START, UFO_END);
+	ufo.setHealth(100);
+
 
 	//patternsteps
 	/*patternStepIndex = 0;
@@ -287,7 +305,7 @@ void CollisionTypes::gameStateUpdate()
 		timeInState = 0;
 	}
 
-	if (gameStates== wave1 && timeInState > 30)	/////////////////////////////////////////////////////////fix state time
+	if (gameStates== wave1 && timeInState > 40)	/////////////////////////////////////////////////////////fix state time
 	{
 		gameStates = wave2;
 		timeInState = 0;
@@ -443,7 +461,14 @@ void CollisionTypes::update()
 			if(lastGrunt >= NUMGRUNTS-3)
 				lastGrunt = 1;
 		}
-		if(timeInState > 5 && !pickupSpawn) {
+		if(!bossSpawn && timeInState > 5) {
+		//	ufo.spawn();
+		//	ufo.setFrames(UFO_START, UFO_END);
+		//	ufo.setDead(false);
+		//	ufo.setVisible();
+			bossSpawn = 1;
+		}
+		if(timeInState > 15 && !pickupSpawn) {
 			if(rand()%2 == 0) {
 				medPack.spawn();
 				medPack.setDead(false);
@@ -501,7 +526,8 @@ void CollisionTypes::update()
 		health.update(frameTime);
 		medPack.update(frameTime);
 		point.update(frameTime);
-		//zep.update(frameTime);
+		ufo.update(frameTime);
+		
 		// move space along X
 		bgTexture.setX(bgTexture.getX() - (frameTime * player.getVelocity().x*0.3f) - 0.5);
 		// move space along Y
@@ -551,7 +577,7 @@ void CollisionTypes::update()
 			if(lastGrunt >= NUMGRUNTS-3)
 				lastGrunt = 1;
 		}
-		if(timeInState > 5 && !pickupSpawn) {
+		if(timeInState > 15 && !pickupSpawn) {
 			if(rand()%2 == 0) {
 				medPack.spawn();
 				medPack.setDead(false);
@@ -602,7 +628,7 @@ void CollisionTypes::update()
 		//
 		for(int i = 0; i < NUMGRUNTS; i++)
 		{
-			if(!grunts[i].getDead() && enemyReload >= 0.4f)
+			if(!grunts[i].getDead() && enemyReload >= 0.65f)
 			{
 				if(rand()%3 == 0) {
 					foo = VECTOR2(grunts[i].getCenterX()-35, grunts[i].getCenterY());
@@ -632,6 +658,8 @@ void CollisionTypes::update()
 		}
 		zep.update(frameTime);
 		health.update(frameTime);
+		medPack.update(frameTime);
+		point.update(frameTime);
 		// move space along X
 		bgTexture.setX(bgTexture.getX() - frameTime * player.getVelocity().x*0.1f);
 		// move space along Y
@@ -698,6 +726,7 @@ void CollisionTypes::ai()
 				break;
 		}
 	}
+	ufo.ai(frameTime);
 	zep.ai(frameTime, player);
 	medPack.ai();
 	point.ai();
@@ -793,6 +822,37 @@ void CollisionTypes::collisions()
 
 		}
 
+if(ufo.collidesWith(player) && !ufo.getDead()){
+			ufo.setCollides(true);
+			player.setHealth(player.getHealth()-20);
+			player.setX(240);
+			player.setY(100);
+		}
+		else
+			ufo.setCollides(false);
+
+		if (!ufo.getDead()) {
+			if(lm.collidesWith(ufo)) {
+				ufo.setHealth(ufo.getHealth() - 20);
+				if(ufo.getHealth() <= 0) {
+					ufo.setDead(true);
+					ufo.setInvisible();
+					audio->playCue(BOOM4);
+				
+					switch(gameStates) {
+					case wave1:					//Not necessary at moment, since the ufo only spawns in wave 1
+						score1 += ufo.getScore();
+						break;
+				//	case wave2:
+				//		score2+= ufo.getScore();
+				//		break;
+					}
+			
+				}
+			}
+		}
+
+
 	if(zep.collidesWith(player) && !zep.getDead()){
 			zep.setCollides(true);
 			player.setHealth(player.getHealth()-20);
@@ -822,6 +882,7 @@ void CollisionTypes::collisions()
 				}
 			}
 		}
+
 		if(zep.getCurrentFrame() == ZEP_EXPLODE_END)
 			zep.setInvisible();
 }
@@ -881,6 +942,7 @@ void CollisionTypes::render()
 		point.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
+		ufo.draw();
 		lm.draw();
 		break;
 	case wave2:

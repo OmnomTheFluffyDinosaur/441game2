@@ -108,6 +108,7 @@
     <ClCompile Include="puck.cpp" />
     <ClCompile Include="textDX.cpp" />
     <ClCompile Include="textureManager.cpp" />
+    <ClCompile Include="UFO.cpp" />
     <ClCompile Include="winmain.cpp" />
     <ClCompile Include="zeppelin.cpp" />
   </ItemGroup>
@@ -136,6 +137,7 @@
     <ClInclude Include="puck.h" />
     <ClInclude Include="textDX.h" />
     <ClInclude Include="textureManager.h" />
+    <ClInclude Include="UFO.h" />
     <ClInclude Include="zeppelin.h" />
   </ItemGroup>
   <ItemGroup>
