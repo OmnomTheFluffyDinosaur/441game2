@@ -11,6 +11,7 @@
 LaserManager lm;
 
 bool bossSpawn = 0;
+bool pickupSpawn = 0;
 
 //=============================================================================
 // Constructor
@@ -128,6 +129,19 @@ void CollisionTypes::initialize(HWND hwnd)
 		medPack.setScale(1);
 		medPack.setDead(true);
 		medPack.setInvisible();
+
+		if (!pointsTM.initialize(graphics,POINT_PICKUP))
+			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+	if (!point.initialize(this, 0, 0, 0,&pointsTM))
+		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+		point.setPosition(VECTOR2(400, 100));
+		point.setCollision(entityNS::BOX);
+		point.setEdge(COLLISION_BOX_PICKUP);
+		point.setX(point.getPositionX());
+		point.setY(point.getPositionY());
+		point.setScale(1);
+		point.setDead(true);
+		point.setInvisible();
 
 
 
@@ -302,6 +316,8 @@ void CollisionTypes::gameStateUpdate()
 		if(!noDeath)
 			player.setLives(player.getLives()-1);
 		bossSpawn = 0;
+		pickupSpawn = 0;
+
 	}
 	if(gameStates == wave2 && player.getHealth() <= 0)
 	{
@@ -318,6 +334,7 @@ void CollisionTypes::gameStateUpdate()
 		if(!noDeath)
 			player.setLives(player.getLives()-1);
 		bossSpawn = 0;
+		pickupSpawn = 0;
 	}
 
 
@@ -424,9 +441,16 @@ void CollisionTypes::update()
 			if(lastGrunt >= NUMGRUNTS-3)
 				lastGrunt = 1;
 		}
-		if(timeInState > 5 && timeInState < 6) {
-			medPack.spawn();
-			medPack.setDead(false);
+		if(timeInState > 5 && !pickupSpawn) {
+			if(rand()%2 == 0) {
+				medPack.spawn();
+				medPack.setDead(false);
+			}
+			else {
+				point.spawn();
+				point.setDead(false);
+			}
+			pickupSpawn = true;
 		}
 		if(input->isKeyDown(VK_LEFT))
 			player.left();
@@ -474,6 +498,7 @@ void CollisionTypes::update()
 		}
 		health.update(frameTime);
 		medPack.update(frameTime);
+		point.update(frameTime);
 		//zep.update(frameTime);
 		// move space along X
 		bgTexture.setX(bgTexture.getX() - (frameTime * player.getVelocity().x*0.3f) - 0.5);
@@ -523,6 +548,17 @@ void CollisionTypes::update()
 			}
 			if(lastGrunt >= NUMGRUNTS-3)
 				lastGrunt = 1;
+		}
+		if(timeInState > 5 && !pickupSpawn) {
+			if(rand()%2 == 0) {
+				medPack.spawn();
+				medPack.setDead(false);
+			}
+			else {
+				point.spawn();
+				point.setDead(false);
+			}
+			pickupSpawn = true;
 		}
 		if(timeInState > 25 && !bossSpawn)
 		{
@@ -633,6 +669,7 @@ void CollisionTypes::ai()
 	}
 	zep.ai(frameTime, player);
 	medPack.ai();
+	point.ai();
 	/*if (patternStepIndex == maxPatternSteps)
 	return;
 	if (patternSteps[patternStepIndex].isFinished())
@@ -694,8 +731,30 @@ void CollisionTypes::collisions()
 		medPack.setDead(true);
 		medPack.setInvisible();
 	}
+	if(point.collidesWith(player) && !point.getDead()){
+		point.setCollides(true);
+		switch(gameStates) {
+			case wave1:
+				score1 += 500;
+				break;
+			case wave2:
+				score2+= 500;
+				break;
+		}
+		point.setDead(true);
+		point.setInvisible();
+	}
 	else
-		medPack.setCollides(false);
+		point.setCollides(false);
+
+		if(point.collidesWith(player) && !point.getDead()){
+		point.setCollides(true);
+		player.setHealth(player.getHealth()+20);
+		point.setDead(true);
+		point.setInvisible();
+	}
+	else
+		point.setCollides(false);
 
 	if(zep.collidesWith(player) && !zep.getDead()){
 			zep.setCollides(true);
@@ -782,6 +841,7 @@ void CollisionTypes::render()
 		else 
 			player.draw();
 		medPack.draw();
+		point.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
 		lm.draw();
@@ -809,6 +869,7 @@ void CollisionTypes::render()
 		else 
 			player.draw();
 		medPack.draw();
+		point.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
 		if(zep.getVisible())

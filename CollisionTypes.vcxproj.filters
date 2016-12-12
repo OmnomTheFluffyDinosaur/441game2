@@ -93,6 +93,9 @@
     <ClCompile Include="medPack.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
+    <ClCompile Include="point.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -165,6 +168,9 @@
       <Filter>Header Files\entities</Filter>
     </ClInclude>
     <ClInclude Include="med.h">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="point.h">
       <Filter>Header Files\entities</Filter>
     </ClInclude>
   </ItemGroup>

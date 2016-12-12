@@ -25,6 +25,7 @@ class CollisionTypes;
 #include "cheatsMenu.h"
 #include "genericMenu.h"
 #include "med.h"
+#include "point.h"
 
 #define maxPatternSteps 4
 
@@ -43,6 +44,7 @@ private:
 	Puck puck;
 	Grunt grunts[NUMGRUNTS];
 	medPack medPack;
+	point point;
 	Zeppelin zep;
 	int score1;
 	int score2;

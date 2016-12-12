@@ -104,6 +104,7 @@
     <ClCompile Include="medPack.cpp" />
     <ClCompile Include="patternStep.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="point.cpp" />
     <ClCompile Include="puck.cpp" />
     <ClCompile Include="textDX.cpp" />
     <ClCompile Include="textureManager.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="laserManager.h" />
     <ClInclude Include="patternStep.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="point.h" />
     <ClInclude Include="puck.h" />
     <ClInclude Include="textDX.h" />
     <ClInclude Include="textureManager.h" />
