@@ -81,6 +81,7 @@ private:
 	int scoreCount;
 	float reloadTime;
 	float shotReload;
+	float enemyReload;
 
 	struct position{
 		float xPos;

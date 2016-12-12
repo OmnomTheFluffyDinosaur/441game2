@@ -74,7 +74,9 @@ public:
 
 	VECTOR2 getVelocity() {return velocity;}
 
-	void ai(float time, Entity &t);
+	void ai1(float time, Entity &t);
+
+	void ai2();
 
 	bool collidesWith(Entity p);
 

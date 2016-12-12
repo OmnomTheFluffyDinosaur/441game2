@@ -197,6 +197,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	lm.initialize(graphics);
 	reloadTime = 0;
 	shotReload = 0;
+	enemyReload = 0;
 
 	return;
 }
@@ -286,7 +287,7 @@ void CollisionTypes::gameStateUpdate()
 		timeInState = 0;
 	}
 
-	if (gameStates== wave1 && timeInState > 30)
+	if (gameStates== wave1 && timeInState > 30)	/////////////////////////////////////////////////////////fix state time
 	{
 		gameStates = wave2;
 		timeInState = 0;
@@ -367,6 +368,7 @@ void CollisionTypes::update()
 {
 	reloadTime += frameTime;
 	shotReload += frameTime;
+	enemyReload += frameTime;
 	VECTOR2 foo,bar;
 	if (input->isKeyDown(VK_ESCAPE)) {
 		exitGame();
@@ -462,7 +464,7 @@ void CollisionTypes::update()
 			player.down();
 		if (reloadTime >= 0.4f) {
 			if (input->isKeyDown(VK_SPACE)) {
-				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
+				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
 				bar = VECTOR2(500,0);
 				createParticleEffect(foo, bar, 1);
 				reloadTime = 0;
@@ -470,7 +472,7 @@ void CollisionTypes::update()
 		}
 		if (shotReload >= 1.3f) {
 			if (input->isKeyDown(0x56)) {
-				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
+				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
 				bar = VECTOR2(400,0);
 				createParticleEffect(foo, bar, 1);
 				bar = VECTOR2(400,-200);
@@ -578,7 +580,7 @@ void CollisionTypes::update()
 			player.down();
 		if (reloadTime >= 0.4f) {
 			if (input->isKeyDown(VK_SPACE)) {
-				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
+				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
 				bar = VECTOR2(500,0);
 				createParticleEffect(foo, bar, 1);
 				reloadTime = 0;
@@ -586,7 +588,7 @@ void CollisionTypes::update()
 		}
 		if (shotReload >= 1.3f) {
 			if (input->isKeyDown(0x56)) {
-				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
+				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
 				bar = VECTOR2(400,0);
 				createParticleEffect(foo, bar, 1);
 				bar = VECTOR2(400,-200);
@@ -596,6 +598,23 @@ void CollisionTypes::update()
 				shotReload = 0;
 			}
 		}
+
+		//
+		for(int i = 0; i < NUMGRUNTS; i++)
+		{
+			if(!grunts[i].getDead() && enemyReload >= 0.4f)
+			{
+				if(rand()%3 == 0) {
+					foo = VECTOR2(grunts[i].getCenterX()-35, grunts[i].getCenterY());
+					bar = VECTOR2(-500,0);
+					createParticleEffect(foo, bar, 1);
+					enemyReload = 0;
+				}
+			}
+		}
+
+		//
+
 		lm.update(frameTime);
 		if(player.getHealth() == 100)
 			health.setCurrentFrame(HEALTH_FULL);
@@ -660,11 +679,23 @@ void CollisionTypes::update()
 void CollisionTypes::ai()
 {
 	for(int i = 0; i < NUMGRUNTS; i++) {
-		grunts[i].ai(frameTime, player);
-		for(int j = 0; j < NUMGRUNTS; j++)
-		{
-			if(j != i)
-				grunts[i].evade(grunts[j]);
+		switch(gameStates) {
+			case wave1:
+				grunts[i].ai1(frameTime, player);
+				for(int j = 0; j < NUMGRUNTS; j++)
+					{
+						if(j != i)
+							grunts[i].evade(grunts[j]);
+					}
+				break;
+			case wave2:
+				grunts[i].ai2();
+				for(int j = 0; j < NUMGRUNTS; j++)
+					{
+						if(j != i)
+							grunts[i].evade(grunts[j]);
+					}
+				break;
 		}
 	}
 	zep.ai(frameTime, player);
@@ -716,7 +747,7 @@ void CollisionTypes::collisions()
 					score1 += grunts[i].getScore();
 					break;
 				case wave2:
-					score2+= grunts[i].getScore();
+					score2+= grunts[i].getScore()*1.5;
 					break;
 				}
 			}
@@ -755,6 +786,12 @@ void CollisionTypes::collisions()
 	}
 	else
 		point.setCollides(false);
+	
+		if(lm.collidesWith(player))
+		{
+			player.setHealth(player.getHealth()-20);
+
+		}
 
 	if(zep.collidesWith(player) && !zep.getDead()){
 			zep.setCollides(true);

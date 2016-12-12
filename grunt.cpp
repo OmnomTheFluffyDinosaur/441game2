@@ -132,13 +132,19 @@ void Grunt::vectorTrack()
 	setVelocity(-vel);
 }
 
-void Grunt::ai(float time, Entity &t)
+void Grunt::ai1(float time, Entity &t)
 { 
 	targetEntity = t;
 	vectorTrack();
 	//deltaTrack();	
 	//evade();
 	//evade();
+	return;
+}
+
+void Grunt::ai2()
+{ 
+	setVelocity(VECTOR2(-3,0));
 	return;
 }
 
