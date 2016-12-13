@@ -13,7 +13,7 @@ SparkManager::~SparkManager()
 float SparkManager::getVariance()
 {
 	float foo = (rand() );
-	foo = ((int)foo	% 100)/100.0f;
+	foo = ((int)foo	% 500)/10.0f - 25;
 	foo += 0.5f;
 	return foo;
 }
@@ -33,7 +33,7 @@ void SparkManager::setVisibleNSparks(int n)
 		if (!sparks[i].getActive()) //found an inactive spark
 		{
 			sparks[i].setActive(true);
-			sparks[i].setMaxTimeAlive(MAX_SPARK_LIFETIME*getVariance());
+			sparks[i].setMaxTimeAlive(MAX_SPARK_LIFETIME*getVariance()/10);
 			float newX = velocity.x * getVariance(); 
 			float newY = velocity.y  * getVariance();
 			VECTOR2 v = VECTOR2(newX,newY);
@@ -58,7 +58,7 @@ bool SparkManager::initialize(Graphics *g)
 			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing dust"));
 		sparks[i].setActive(false);
 		sparks[i].setVisible(false);
-		sparks[i].setScale(0.3f);
+		sparks[i].setScale(0.2f);
 		sparks[i].setRotationValue(0.05f);
 	}
 	return true;
@@ -81,10 +81,10 @@ void SparkManager::draw()
 	{
 		if (!sparks[i].getActive())
 			continue;
-		float foo = sparks[i].getMaxTimeAlive();  //MAX_spark_LIFETIME;
-		float bar = sparks[i].getTimeAlive();
-		float foobar = (foo-bar)/foo;
-		fadeAmount = 255 * foobar;
+	//	float foo = sparks[i].getMaxTimeAlive();  //MAX_spark_LIFETIME;
+	//	float bar = sparks[i].getTimeAlive();
+	//	float foobar = (foo-bar)/foo;
+		fadeAmount = 128;// * foobar;
 		color = D3DCOLOR_ARGB(fadeAmount,0xff,0xff,0xff);//fadeAmount,fadeAmount,fadeAmount);
 		sparks[i].draw(color);
 		if (fadeAmount <= 20)

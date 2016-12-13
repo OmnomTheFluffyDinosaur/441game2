@@ -60,7 +60,7 @@ void Laser::update(float frametime)
 	// update physics and drawing stuff
 	setX(getX() + velocity.x * frametime);
 	setY(getY() + velocity.y * frametime);
-	col->createSparkEffect(VECTOR2(getX(),getY()),VECTOR2(0,0),1);
+	col->createSparkEffect(VECTOR2(getX(),getY()),VECTOR2(0,1),1);
 	if (getX() > GAME_WIDTH) {
 		resetParticle();
 		return;
