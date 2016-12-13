@@ -95,9 +95,9 @@ void CollisionTypes::initialize(HWND hwnd)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
 	if (!health.initialize(this, HEALTH_WIDTH, HEALTH_HEIGHT, HEALTH_COLS,&healthTM))
 		throw(GameError(gameErrorNS::WARNING, "Player not initialized"));
-	health.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-2*health.getHeight()));
+	health.setPosition(VECTOR2(player.getX(), player.getY() + 40));
 	health.setCollisionType(entityNS::BOX);
-	health.setScale(1.0);
+	health.setScale(0.5);
 	health.setCurrentFrame(HEALTH_FULL);
 
 	for(int i = 0; i < NUMGRUNTS; i++) {
@@ -519,6 +519,9 @@ void CollisionTypes::update()
 			health.setCurrentFrame(HEALTH_40);
 		if(player.getHealth() == 20)
 			health.setCurrentFrame(HEALTH_20);
+		health.setX(player.getX()+7); 
+		health.setY(player.getY()+20);
+		health.setPosition(VECTOR2(player.getX(), player.getY() + 40));
 		player.update(frameTime);
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
@@ -931,7 +934,7 @@ void CollisionTypes::render()
 		bgTexture.draw();
 		bgTexture.setY(y);
 		health.draw();
-		waveFont->print(std::to_string(scoreCount), 50, 50);
+		waveFont->print(std::to_string(scoreCount), 20, 20);
 		if(timeInState < 3)
 			waveFont->print("Wave 1 \n" + std::to_string(player.getLives()) + " Live(s) Remaining",310,100);
 		if(difftime(time(0), timeSinceHit) < .2)
