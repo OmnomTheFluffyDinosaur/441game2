@@ -37,8 +37,8 @@ class CollisionTypes : public Game
 {
 private:
     // game items
-    TextureManager playerTM, puckTM, laserTM, gruntTM, zepTM, ufoTM, healthTM, bgTM, splashTM, pointsTM, medTM, livesTM;   // game texture
-    Image   playerTexture, puckTexture, gruntTexture, zepTexture, ufoTexture, healthTexture, bgTexture, splashTexture, med, points, lives;
+    TextureManager playerTM, puckTM, laserTM, gruntTM, zepTM, ufoTM, healthTM, bgTM, splashTM, pointsTM, medTM, livesTM, mapTM;   // game texture
+    Image   playerTexture, puckTexture, gruntTexture, zepTexture, ufoTexture, healthTexture, bgTexture, splashTexture, med, points, lives, map;
     VECTOR2 collisionVector;    // collision vector
 	Player player;
 	Ufo ufo;

@@ -55,7 +55,7 @@ void CollisionTypes::initialize(HWND hwnd)
 	cheat = new cheatsMenu();
 	cheat->initialize(graphics, input);
 
-	creditsMenu = new genericMenu("Explosion and laser sounds by dklon from OpenGameArt.org","Background by Downdate from OpenGameArt.org \n\nMusic by Circlerun from OpenGameArt.org","");
+	creditsMenu = new genericMenu("Explosion and laser sounds by dklon from OpenGameArt.org","Background by Downdate from OpenGameArt.org \nMusic by Circlerun from OpenGameArt.org","");
 	creditsMenu->initialize(graphics, input);
 
 	controlsMenu = new genericMenu("Press Arrow Keys to Move","Press Space and 'v' to Shoot","");
@@ -73,6 +73,13 @@ void CollisionTypes::initialize(HWND hwnd)
 	if (!bgTexture.initialize(graphics,0,0,0,&bgTM))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
     bgTexture.setScale(BG_SCALE);
+
+	//if (!mapTM.initialize(graphics,MENU_BACKGROUND))
+     //   throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
+	if (!map.initialize(graphics,0,0,0,&bgTM))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
+    map.setScale(BG_SCALE);
+
 
 	if (!splashTM.initialize(graphics,SPLASH))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
@@ -966,15 +973,19 @@ void CollisionTypes::render()
 		splashTexture.draw();
 		break;
 	case intro:
+		map.draw();
 		menu->displayMenu();
 		break;
 	case cheats:
+		map.draw();
 		cheat->displayMenu();
 		break;
 	case credits:
+		map.draw();
 		creditsMenu->displayMenu();
 		break;
 	case controls:
+		map.draw();
 		controlsMenu->displayMenu();
 		break;
 	case wave1:

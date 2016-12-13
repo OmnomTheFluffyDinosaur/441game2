@@ -15,9 +15,9 @@ void mainMenu::initialize(Graphics *g, Input *i)
 	menuItem2 = "Cheats";
 	menuItem3 = "Credits";
 	menuItem4 = "Controls";
-	highlightColor = graphicsNS::RED;
-	normalColor = graphicsNS::WHITE;
-	menuAnchor = D3DXVECTOR2(270,10);
+	highlightColor = D3DCOLOR_ARGB(255,190,  0,  0);
+	normalColor = graphicsNS::BLACK;
+	menuAnchor = D3DXVECTOR2(70,10);
 	input = i;
 	verticalOffset = 30;
 	linePtr = 0;
@@ -26,11 +26,11 @@ void mainMenu::initialize(Graphics *g, Input *i)
 	menuItemFont = new TextDX();
 	menuHeadingFont = new TextDX();
 	menuItemFontHighlight = new TextDX();
-	if(menuItemFont->initialize(graphics, 15, true, false, "Calibri") == false)
+	if(menuItemFont->initialize(graphics, 25, true, false, "Calibri") == false)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing menuItem font"));
-	if(menuItemFontHighlight->initialize(graphics, 18, true, false, "Calibri") == false)
+	if(menuItemFontHighlight->initialize(graphics, 28, true, false, "Calibri") == false)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing menuItem font"));
-	if(menuHeadingFont->initialize(graphics, 25, true, false, "Calibri") == false)
+	if(menuHeadingFont->initialize(graphics, 34, true, false, "Calibri") == false)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing menuHeading font"));
 	menuHeadingFont->setFontColor(normalColor);
 	menuItemFont->setFontColor(normalColor);
