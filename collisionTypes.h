@@ -112,6 +112,8 @@ public:
     void render();      // "
     void releaseAll();
     void resetAll();
+	void createSparkEffect(VECTOR2 pos, VECTOR2 vel, int numParticles);
+
 };
 
 #endif

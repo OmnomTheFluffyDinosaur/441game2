@@ -48,7 +48,7 @@ void LaserManager::setVisibleNParticles(int n)
 	}
 }
 
-bool LaserManager::initialize(Graphics *g)
+bool LaserManager::initialize(Graphics *g, CollisionTypes *c)
 {
 	if (!tm.initialize(g, LASER_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing dust texture"));
@@ -60,6 +60,7 @@ bool LaserManager::initialize(Graphics *g)
 		particles[i].setVisible(false);
 		particles[i].setScale(2.0f);
 		particles[i].setRotationValue(0.0f);
+		particles[i].setCol(c);
 	}
 	return true;
 }

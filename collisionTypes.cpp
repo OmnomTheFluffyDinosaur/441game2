@@ -7,8 +7,10 @@
 #include "collisionTypes.h"
 #include "laserManager.h"
 #include <time.h>
+#include "sparkManager.h"
 
 LaserManager lm;
+SparkManager sm;
 
 bool bossSpawn = 0;
 bool pickupSpawn = 0;
@@ -212,7 +214,8 @@ void CollisionTypes::initialize(HWND hwnd)
 	Vel1.xVel = -60;
 	Vel2.yVel = -60;*/
 
-	lm.initialize(graphics);
+	lm.initialize(graphics, this);
+	sm.initialize(graphics);
 	reloadTime = 0;
 	shotReload = 0;
 	enemyReload = 0;
@@ -229,6 +232,14 @@ void createParticleEffect(VECTOR2 pos, VECTOR2 vel, int numParticles){
 	lm.setPosition(pos);
 	lm.setVelocity(vel);
 	lm.setVisibleNParticles(numParticles);
+
+}
+
+void CollisionTypes::createSparkEffect(VECTOR2 pos, VECTOR2 vel, int numParticles){
+
+	sm.setPosition(pos);
+	sm.setVelocity(vel);
+	sm.setVisibleNSparks(numParticles);
 
 }
 
@@ -508,6 +519,7 @@ void CollisionTypes::update()
 			}
 		}
 		lm.update(frameTime);
+		sm.update(frameTime);
 		//Math didn't work right
 		if(player.getHealth() == 100)
 			health.setCurrentFrame(HEALTH_FULL);
@@ -521,11 +533,12 @@ void CollisionTypes::update()
 			health.setCurrentFrame(HEALTH_20);
 		health.setX(player.getX()+7); 
 		health.setY(player.getY()+20);
-		health.setPosition(VECTOR2(player.getX(), player.getY() + 40));
 		player.update(frameTime);
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
+		health.setX(player.getX()+7); 
+		health.setY(player.getY()+20);
 		health.update(frameTime);
 		medPack.update(frameTime);
 		point.update(frameTime);
@@ -643,8 +656,9 @@ void CollisionTypes::update()
 		}
 
 		//
-
+		
 		lm.update(frameTime);
+		sm.update(frameTime);
 		if(player.getHealth() == 100)
 			health.setCurrentFrame(HEALTH_FULL);
 		if(player.getHealth() == 80)
@@ -745,6 +759,8 @@ void CollisionTypes::ai()
 //=============================================================================
 void CollisionTypes::collisions()
 {
+	VECTOR2 foo;
+	VECTOR2 bar;
 	for(int i = 0; i < NUMGRUNTS; i++) {
 		if(grunts[i].collidesWith(player) && !grunts[i].getDead()){
 			grunts[i].setCollides(true);
@@ -770,9 +786,12 @@ void CollisionTypes::collisions()
 		}*/
 
 		if (!grunts[i].getDead()) {
-			if(lm.collidesWith(grunts[i])){
+			if(lm.collidesWith(grunts[i])  ){
 				grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
 				grunts[i].setDead(true);
+				foo = VECTOR2(grunts[i].getCenterX()-grunts[i].getWidth()/2, grunts[i].getCenterY());
+				bar = VECTOR2(10,0);
+				createSparkEffect(foo, bar, 10);
 				audio->playCue(BOOM9);
 				switch(gameStates) {
 				case wave1:
@@ -947,6 +966,7 @@ void CollisionTypes::render()
 			grunts[i].draw();
 		ufo.draw();
 		lm.draw();
+		sm.draw();
 		break;
 	case wave2:
 
@@ -977,6 +997,7 @@ void CollisionTypes::render()
 		if(zep.getVisible())
 			zep.draw();
 		lm.draw();
+		sm.draw();
 		break;
 		//draw stuff
 	case end:

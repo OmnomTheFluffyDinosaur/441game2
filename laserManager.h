@@ -24,7 +24,7 @@ public:
 	void LaserManager::setVisibleNParticles(int n);
 	void LaserManager::setPosition(VECTOR2 pos) {position = pos;}
 	void LaserManager::setVelocity(VECTOR2 vel) {velocity = vel;}
-	bool LaserManager::initialize(Graphics *g);
+	bool LaserManager::initialize(Graphics *g, CollisionTypes *c);
 
 	void LaserManager::update(float frametime);
 	void LaserManager::draw();

@@ -94,6 +94,8 @@ const float   COLLISION_RADIUS = 29;
 const float BG_SCALE = 1.5f;                 // scale factor of space image
 const int   BG_WIDTH = (int)(512 * BG_SCALE);  // width of scaled space image
 const int   BG_HEIGHT = (int)(512 * BG_SCALE); // height of scaled space image
+const int MAX_NUM_SPARKS = 10000;
+const int MAX_SPARK_LIFETIME = 1.0f;
 
 // graphic images
 const char PUCK_IMAGE[] = "pictures\\PS4_new.png";  // game textures
@@ -108,6 +110,8 @@ const char SPLASH[] = "pictures\\Splash.png";
 const char HEALTH_PICKUP[] = "pictures\\medPack.png";
 const char POINT_PICKUP[] = "pictures\\point.png";
 const char UFO_IMAGE[] = "pictures\\ufo.png";
+const char SPARK_IMAGE[]   = "pictures\\sparks_effect.png";//sparks.jpg";
+
 
 const int  GRUNT_COLS = 8;
 const int  GRUNT_WIDTH = 64;

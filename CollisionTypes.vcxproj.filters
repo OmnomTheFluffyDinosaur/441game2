@@ -99,6 +99,12 @@
     <ClCompile Include="UFO.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
+    <ClCompile Include="spark.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="sparkManager.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -177,6 +183,12 @@
       <Filter>Header Files\entities</Filter>
     </ClInclude>
     <ClInclude Include="UFO.h">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="spark.h">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="sparkManager.h">
       <Filter>Header Files\entities</Filter>
     </ClInclude>
   </ItemGroup>
