@@ -62,9 +62,9 @@ void Grunt::update(float frameTime)
 		{
 			setPosition(D3DXVECTOR2(0,getPositionY()));
 		}*/
-		if (getPositionX() < 0)
+		if (getPositionX() < (0- Image::getWidth()*Image::getScale()))
 		{
-			setPosition(D3DXVECTOR2(GAME_WIDTH-Image::getWidth()*Image::getScale(),getPositionY()));
+			setDead(true);
 		}
 		if (getPositionY() + Image::getHeight()*Image::getScale() > GAME_HEIGHT)
 		{

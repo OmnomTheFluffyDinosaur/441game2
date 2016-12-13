@@ -455,7 +455,7 @@ void CollisionTypes::update()
 	case wave1:
 		{
 		//spawn grunts
-		if(timeSinceSpawn > 3)
+		if(timeInState < 37 && timeSinceSpawn > 3)
 		{
 			grunts[++lastGrunt].spawn();	
 			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
@@ -477,7 +477,7 @@ void CollisionTypes::update()
 		//	ufo.setFrames(UFO_START, UFO_END);
 		//	ufo.setDead(false);
 		//	ufo.setVisible();
-			bossSpawn = 1;
+		//	bossSpawn = 1;
 		}
 		if(timeInState > 15 && !pickupSpawn) {
 			if(rand()%2 == 0) {
@@ -543,8 +543,6 @@ void CollisionTypes::update()
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
-		health.setX(player.getX()+7); 
-		health.setY(player.getY()+20);
 		health.update(frameTime);
 		medPack.update(frameTime);
 		point.update(frameTime);
@@ -680,6 +678,8 @@ void CollisionTypes::update()
 			grunts[i].update(frameTime);
 		}
 		zep.update(frameTime);
+		health.setX(player.getX()+7); 
+		health.setY(player.getY()+20);
 		health.update(frameTime);
 		medPack.update(frameTime);
 		point.update(frameTime);
