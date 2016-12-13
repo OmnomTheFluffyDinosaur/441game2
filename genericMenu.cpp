@@ -16,7 +16,7 @@ void genericMenu::initialize(Graphics *g, Input *i)
 	//menuItem1 = "Play";
 	//menuItem2 = "Cheats";
 	menuItem3 = "Back";
-	highlightColor = graphicsNS::RED;
+	highlightColor = D3DCOLOR_ARGB(255,190,  0,  0);
 	normalColor = graphicsNS::BLACK;
 	menuAnchor = D3DXVECTOR2(70,10);
 	input = i;

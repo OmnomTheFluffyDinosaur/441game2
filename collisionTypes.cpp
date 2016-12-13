@@ -524,11 +524,11 @@ void CollisionTypes::update()
 			player.right();
 		if(input->isKeyDown(VK_UP)) {
 			player.up();
-			player.setDegrees(-5);
+			player.setDegrees(-7);
 		}
 		else if(input->isKeyDown(VK_DOWN)){
 			player.down();
-			player.setDegrees(5);
+			player.setDegrees(7);
 		}
 		else
 			player.setDegrees(0);
@@ -653,11 +653,11 @@ void CollisionTypes::update()
 			player.right();
 		if(input->isKeyDown(VK_UP)) {
 			player.up();
-			player.setDegrees(-5);
+			player.setDegrees(-7);
 		}
 		else if(input->isKeyDown(VK_DOWN)){
 			player.down();
-			player.setDegrees(5);
+			player.setDegrees(7);
 		}
 		else
 			player.setDegrees(0);
@@ -1066,13 +1066,14 @@ void CollisionTypes::render()
 		break;
 		//draw stuff
 	case end:
-		//gameOver.draw();
-		waveFont->print("Congratulations \n\nYour score is: " + std::to_string(score1 + score2),300,100);
+		map.draw();
+		waveFont->print("Congratulations \n\nYour score is: " + std::to_string(score1 + score2),190,100);
 		break;
 	
 	case gameEnd:
-		waveFont->print("Game Over \n\nYour score is: " + std::to_string(score1 + score2),300,100);
-		gameOver.draw();
+		map.draw();
+		waveFont->print("Game Over \n\nYour score is: " + std::to_string(score1 + score2),190,100);
+
 		break;
 	}
 	/*switch (gameStates)
