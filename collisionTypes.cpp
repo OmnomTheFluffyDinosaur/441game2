@@ -494,10 +494,16 @@ void CollisionTypes::update()
 			player.left();
 		if(input->isKeyDown(VK_RIGHT))
 			player.right();
-		if(input->isKeyDown(VK_UP))
+		if(input->isKeyDown(VK_UP)) {
 			player.up();
-		if(input->isKeyDown(VK_DOWN))
+			player.setDegrees(-5);
+		}
+		else if(input->isKeyDown(VK_DOWN)){
 			player.down();
+			player.setDegrees(5);
+		}
+		else
+			player.setDegrees(0);
 		if (reloadTime >= 0.4f) {
 			if (input->isKeyDown(VK_SPACE)) {
 				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
@@ -790,8 +796,8 @@ void CollisionTypes::collisions()
 				grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
 				grunts[i].setDead(true);
 				foo = VECTOR2(grunts[i].getCenterX()-grunts[i].getWidth()/2, grunts[i].getCenterY());
-				bar = VECTOR2(10,0);
-				createSparkEffect(foo, bar, 10);
+				bar = VECTOR2(1,1);
+				createSparkEffect(foo, bar, 100);
 				audio->playCue(BOOM9);
 				switch(gameStates) {
 				case wave1:
