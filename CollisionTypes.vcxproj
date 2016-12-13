@@ -106,6 +106,8 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="point.cpp" />
     <ClCompile Include="puck.cpp" />
+    <ClCompile Include="smoke.cpp" />
+    <ClCompile Include="smokeManager.cpp" />
     <ClCompile Include="sparkManager.cpp" />
     <ClCompile Include="spark.cpp" />
     <ClCompile Include="textDX.cpp" />
@@ -133,6 +135,8 @@
     <ClInclude Include="med.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="laserManager.h" />
+    <ClInclude Include="smoke.h" />
+    <ClInclude Include="smokeManager.h" />
     <ClInclude Include="sparkManager.h" />
     <ClInclude Include="patternStep.h" />
     <ClInclude Include="player.h" />

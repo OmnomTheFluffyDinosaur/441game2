@@ -105,6 +105,12 @@
     <ClCompile Include="sparkManager.cpp">
       <Filter>Source Files\entities</Filter>
     </ClCompile>
+    <ClCompile Include="smokeManager.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
+    <ClCompile Include="smoke.cpp">
+      <Filter>Source Files\entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constants.h">
@@ -189,6 +195,12 @@
       <Filter>Header Files\entities</Filter>
     </ClInclude>
     <ClInclude Include="sparkManager.h">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="smokeManager.h">
+      <Filter>Header Files\entities</Filter>
+    </ClInclude>
+    <ClInclude Include="smoke.h">
       <Filter>Header Files\entities</Filter>
     </ClInclude>
   </ItemGroup>

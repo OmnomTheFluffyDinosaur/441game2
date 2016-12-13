@@ -8,9 +8,11 @@
 #include "laserManager.h"
 #include <time.h>
 #include "sparkManager.h"
+#include "smokeManager.h"
 
 LaserManager lm;
 SparkManager sm;
+SmokeManager smokem;
 
 bool bossSpawn = 0;
 bool pickupSpawn = 0;
@@ -231,6 +233,7 @@ void CollisionTypes::initialize(HWND hwnd)
 
 	lm.initialize(graphics, this);
 	sm.initialize(graphics);
+	smokem.initialize(graphics);
 	reloadTime = 0;
 	shotReload = 0;
 	enemyReload = 0;
@@ -256,6 +259,12 @@ void CollisionTypes::createSparkEffect(VECTOR2 pos, VECTOR2 vel, int numParticle
 	sm.setVelocity(vel);
 	sm.setVisibleNSparks(numParticles);
 
+}
+
+void createSmokeEffect(VECTOR2 pos, VECTOR2 vel, int numParticles) {
+	smokem.setPosition(pos);
+	smokem.setVelocity(vel);
+	smokem.setVisibleNParticles(numParticles);
 }
 
 void CollisionTypes::gameStateUpdate()
@@ -427,6 +436,7 @@ void CollisionTypes::update()
 	shotReload += frameTime;
 	enemyReload += frameTime;
 	VECTOR2 foo,bar;
+	VECTOR2 smokeXY,smokeV;
 	if (input->isKeyDown(VK_ESCAPE)) {
 		exitGame();
 	}
@@ -532,6 +542,7 @@ void CollisionTypes::update()
 		}
 		else
 			player.setDegrees(0);
+		//SHOOTING
 		if (reloadTime >= 0.4f) {
 			if (input->isKeyDown(VK_SPACE)) {
 				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
@@ -552,8 +563,15 @@ void CollisionTypes::update()
 				shotReload = 0;
 			}
 		}
+		smokeXY = VECTOR2(player.getCenterX()-30, player.getCenterY()-5);
+		smokeV = VECTOR2(-50,-5);
+		if (player.getHealth() <=60) {
+			createSmokeEffect(smokeXY,smokeV,20);
+		}
+
 		lm.update(frameTime);
 		sm.update(frameTime);
+		smokem.update(frameTime);
 		//Math didn't work right
 		if(player.getHealth() == 100)
 			health.setCurrentFrame(HEALTH_FULL);
@@ -579,6 +597,7 @@ void CollisionTypes::update()
 		ufo.update(frameTime);
 		lives.update(frameTime);
 		
+		//SCROLLING BACKGROUND
 		// move space along X
 		bgTexture.setX(bgTexture.getX() - (frameTime * player.getVelocity().x*0.3f) - 0.5);
 		// move space along Y
@@ -604,7 +623,6 @@ void CollisionTypes::update()
 
 		VECTOR2 v = D3DXVECTOR2(0,0);
 		player.setVelocity(v);
-
 		break;
 		}
 	case wave2: 
@@ -697,9 +715,15 @@ void CollisionTypes::update()
 		}
 
 		//
+		smokeXY = VECTOR2(player.getCenterX()-30, player.getCenterY()-5);
+		smokeV = VECTOR2(-50,-5);
+		if (player.getHealth() <=60) {
+			createSmokeEffect(smokeXY,smokeV,20);
+		}
 		
 		lm.update(frameTime);
 		sm.update(frameTime);
+		smokem.update(frameTime);
 		if(player.getHealth() == 100)
 			health.setCurrentFrame(HEALTH_FULL);
 		if(player.getHealth() == 80)
@@ -1025,6 +1049,7 @@ void CollisionTypes::render()
 		ufo.draw();
 		lm.draw();
 		sm.draw();
+		smokem.draw();
 		break;
 	case wave2:
 
@@ -1063,6 +1088,7 @@ void CollisionTypes::render()
 			zep.draw();
 		lm.draw();
 		sm.draw();
+		smokem.draw();
 		break;
 		//draw stuff
 	case end:
