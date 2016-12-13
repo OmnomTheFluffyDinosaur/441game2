@@ -81,13 +81,13 @@ void CollisionTypes::initialize(HWND hwnd)
 
 	if (!livesTM.initialize(graphics,PLAYER_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
-	if (!lives.initialize(graphics,0,0,0,&livesTM))
+	if (!lives.initialize(graphics,PLAYER_WIDTH,PLAYER_HEIGHT,PLAYER_COLS,&livesTM))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
 	lives.setScale(.6);
 
 	if (!playerTM.initialize(graphics,PLAYER_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
-	if (!player.initialize(this, playerTM.getWidth(), playerTM.getHeight(), 0,&playerTM))
+	if (!player.initialize(this, PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_COLS,&playerTM))
 		throw(GameError(gameErrorNS::WARNING, "Player not initialized"));
 	player.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-2*player.getHeight()));
 	player.setCollisionType(entityNS::BOX);
@@ -96,6 +96,8 @@ void CollisionTypes::initialize(HWND hwnd)
 	player.setScale(1.0);
 	player.setHealth(100);
 	player.setLives(3);
+	player.setCurrentFrame(PLAYER_IDLE_START);
+	player.setFrameDelay(.012);
 	timeSinceHit = time(0);
 			
 
@@ -339,38 +341,51 @@ void CollisionTypes::gameStateUpdate()
 	}
 	if(gameStates == wave1 && player.getHealth() <= 0)
 	{
-		timeInState = 0;
-		score1 = 0;
-		for(int i = 0; i < NUMGRUNTS; i++)
-		{
-			grunts[i].setDead(true);
-			grunts[i].setInvisible();
+		player.setFrames(PLAYER_EXPLODE_START, PLAYER_EXPLODE_END);
+		if(player.getCurrentFrame() == PLAYER_EXPLODE_END) {
+			player.setCurrentFrame(PLAYER_IDLE_START);
+			player.setFrames(PLAYER_IDLE_START, PLAYER_IDLE_END);
+			player.setX(240);
+			player.setY(100);
+			timeInState = 0;
+			score1 = 0;
+			for(int i = 0; i < NUMGRUNTS; i++)
+			{
+				grunts[i].setDead(true);
+				grunts[i].setInvisible();
+			}
+			zep.setDead(true);
+			zep.setInvisible();
+			player.setHealth(100);
+			if(!noDeath)
+				player.setLives(player.getLives()-1);
+			bossSpawn = 0;
+			pickupSpawn = 0;
 		}
-		zep.setDead(true);
-		zep.setInvisible();
-		player.setHealth(100);
-		if(!noDeath)
-			player.setLives(player.getLives()-1);
-		bossSpawn = 0;
-		pickupSpawn = 0;
-
 	}
 	if(gameStates == wave2 && player.getHealth() <= 0)
 	{
-		timeInState = 0;
-		score2 = 0;
-		for(int i = 0; i < NUMGRUNTS; i++)
-		{
-			grunts[i].setDead(true);
-			grunts[i].setInvisible();
+		player.setFrames(PLAYER_EXPLODE_START, PLAYER_EXPLODE_END);
+		if(player.getCurrentFrame() == PLAYER_EXPLODE_END) {
+			player.setCurrentFrame(PLAYER_IDLE_START);
+			player.setFrames(PLAYER_IDLE_START, PLAYER_IDLE_END);
+			player.setX(240);
+			player.setY(100);
+			timeInState = 0;
+			score2 = 0;
+			for(int i = 0; i < NUMGRUNTS; i++)
+			{
+				grunts[i].setDead(true);
+				grunts[i].setInvisible();
+			}
+			zep.setDead(true);
+			zep.setInvisible();
+			player.setHealth(100);
+			if(!noDeath)
+				player.setLives(player.getLives()-1);
+			bossSpawn = 0;
+			pickupSpawn = 0;
 		}
-		zep.setDead(true);
-		zep.setInvisible();
-		player.setHealth(100);
-		if(!noDeath)
-			player.setLives(player.getLives()-1);
-		bossSpawn = 0;
-		pickupSpawn = 0;
 	}
 
 
@@ -543,6 +558,8 @@ void CollisionTypes::update()
 			health.setCurrentFrame(HEALTH_40);
 		if(player.getHealth() == 20)
 			health.setCurrentFrame(HEALTH_20);
+		if(player.getHealth() == 0)
+			health.setCurrentFrame(HEALTH_00);
 		health.setX(player.getX()+7); 
 		health.setY(player.getY()+20);
 		player.update(frameTime);
@@ -686,6 +703,8 @@ void CollisionTypes::update()
 			health.setCurrentFrame(HEALTH_40);
 		if(player.getHealth() == 20)
 			health.setCurrentFrame(HEALTH_20);
+		if(player.getHealth() == 0)
+			health.setCurrentFrame(HEALTH_00);
 		player.update(frameTime);
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);

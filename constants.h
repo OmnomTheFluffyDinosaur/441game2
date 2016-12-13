@@ -113,6 +113,14 @@ const char UFO_IMAGE[] = "pictures\\ufo.png";
 const char SPARK_IMAGE[]   = "pictures\\sparks_effect.png";//sparks.jpg";
 
 
+const int  PLAYER_COLS = 8;
+const int  PLAYER_WIDTH = 64;
+const int  PLAYER_HEIGHT = 32;
+const int  PLAYER_IDLE_START = 0;
+const int  PLAYER_IDLE_END = 0;
+const int  PLAYER_EXPLODE_START = 8;
+const int  PLAYER_EXPLODE_END = 71;
+
 const int  GRUNT_COLS = 8;
 const int  GRUNT_WIDTH = 64;
 const int  GRUNT_HEIGHT = 32;
