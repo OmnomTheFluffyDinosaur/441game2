@@ -37,8 +37,8 @@ class CollisionTypes : public Game
 {
 private:
     // game items
-    TextureManager playerTM, puckTM, laserTM, gruntTM, zepTM, ufoTM, healthTM, bgTM, splashTM, pointsTM, medTM;   // game texture
-    Image   playerTexture, puckTexture, gruntTexture, zepTexture, ufoTexture, healthTexture, bgTexture, splashTexture, med, points;
+    TextureManager playerTM, puckTM, laserTM, gruntTM, zepTM, ufoTM, healthTM, bgTM, splashTM, pointsTM, medTM, livesTM;   // game texture
+    Image   playerTexture, puckTexture, gruntTexture, zepTexture, ufoTexture, healthTexture, bgTexture, splashTexture, med, points, lives;
     VECTOR2 collisionVector;    // collision vector
 	Player player;
 	Ufo ufo;
@@ -67,7 +67,7 @@ private:
 	genericMenu *creditsMenu;
 	genericMenu *controlsMenu;
 	cheatsMenu *cheat;
-	TextDX  *waveFont;     
+	TextDX  *waveFont, *scoreFont;     
 	PatternStep patternSteps[maxPatternSteps];
 	int patternStepIndex;
 	int timeSinceHit;

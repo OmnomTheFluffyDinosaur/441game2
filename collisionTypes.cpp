@@ -62,9 +62,11 @@ void CollisionTypes::initialize(HWND hwnd)
 	controlsMenu->initialize(graphics, input);
 
 	waveFont = new TextDX();
-	if(waveFont->initialize(graphics, 20, true, false, "Arial") == false)
+	if(waveFont->initialize(graphics, 40, true, false, "Arial") == false)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
-
+	scoreFont = new TextDX();
+	if(scoreFont->initialize(graphics, 20, true, false, "Arial") == false)
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
 
 	if (!bgTM.initialize(graphics,BG_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
@@ -77,7 +79,11 @@ void CollisionTypes::initialize(HWND hwnd)
 	if (!splashTexture.initialize(graphics,0,0,0,&splashTM))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
 
-
+	if (!livesTM.initialize(graphics,PLAYER_IMAGE))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
+	if (!lives.initialize(graphics,0,0,0,&livesTM))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
+	lives.setScale(.6);
 
 	if (!playerTM.initialize(graphics,PLAYER_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
@@ -547,6 +553,7 @@ void CollisionTypes::update()
 		medPack.update(frameTime);
 		point.update(frameTime);
 		ufo.update(frameTime);
+		lives.update(frameTime);
 		
 		// move space along X
 		bgTexture.setX(bgTexture.getX() - (frameTime * player.getVelocity().x*0.3f) - 0.5);
@@ -620,10 +627,16 @@ void CollisionTypes::update()
 			player.left();
 		if(input->isKeyDown(VK_RIGHT))
 			player.right();
-		if(input->isKeyDown(VK_UP))
+		if(input->isKeyDown(VK_UP)) {
 			player.up();
-		if(input->isKeyDown(VK_DOWN))
+			player.setDegrees(-5);
+		}
+		else if(input->isKeyDown(VK_DOWN)){
 			player.down();
+			player.setDegrees(5);
+		}
+		else
+			player.setDegrees(0);
 		if (reloadTime >= 0.4f) {
 			if (input->isKeyDown(VK_SPACE)) {
 				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
@@ -683,6 +696,8 @@ void CollisionTypes::update()
 		health.update(frameTime);
 		medPack.update(frameTime);
 		point.update(frameTime);
+		lives.update(frameTime);
+
 		// move space along X
 		bgTexture.setX(bgTexture.getX() - frameTime * player.getVelocity().x*0.1f);
 		// move space along Y
@@ -959,9 +974,16 @@ void CollisionTypes::render()
 		bgTexture.draw();
 		bgTexture.setY(y);
 		health.draw();
-		waveFont->print(std::to_string(scoreCount), 20, 20);
+		for(int i = 0; i < 3; i++)
+		{
+			lives.setX(70 + i*40);
+			lives.setY(20);
+			if(player.getLives() > i)
+				lives.draw();
+		}
+		scoreFont->print("Lives: \nScore: " + std::to_string(scoreCount), 20, 20);
 		if(timeInState < 3)
-			waveFont->print("Wave 1 \n" + std::to_string(player.getLives()) + " Live(s) Remaining",310,100);
+			waveFont->print("Wave 1",300,100);
 		if(difftime(time(0), timeSinceHit) < .2)
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
@@ -989,9 +1011,16 @@ void CollisionTypes::render()
 		bgTexture.draw();
 		bgTexture.setY(y);
 		health.draw();
-		waveFont->print(std::to_string(scoreCount), 50, 50);
+		for(int i = 0; i < 3; i++)
+		{
+			lives.setX(70 + i*40);
+			lives.setY(20);
+			if(player.getLives() > i)
+				lives.draw();
+		}
+		scoreFont->print("Lives: \nScore: " + std::to_string(scoreCount), 20, 20);
 		if(timeInState < 3)
-			waveFont->print("Wave 2 \n" + std::to_string(player.getLives()) + " Live(s) Remaining",310,100);
+			waveFont->print("Wave 2",300,100);
 		if(difftime(time(0), timeSinceHit) < .2)
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
