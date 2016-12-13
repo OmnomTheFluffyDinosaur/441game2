@@ -767,19 +767,19 @@ void CollisionTypes::ai()
 		switch(gameStates) {
 			case wave1:
 				grunts[i].ai1(frameTime, player);
-				for(int j = 0; j < NUMGRUNTS; j++)
+			/*	for(int j = 0; j < NUMGRUNTS; j++)
 					{
 						if(j != i)
 							grunts[i].evade(grunts[j]);
-					}
+					}*/
 				break;
 			case wave2:
 				grunts[i].ai2();
-				for(int j = 0; j < NUMGRUNTS; j++)
+				/*for(int j = 0; j < NUMGRUNTS; j++)
 					{
 						if(j != i)
 							grunts[i].evade(grunts[j]);
-					}
+					}*/
 				break;
 		}
 	}

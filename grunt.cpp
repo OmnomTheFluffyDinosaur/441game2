@@ -28,6 +28,7 @@ Grunt::Grunt() : Entity()
 	isDead = false;
 	srand(time(NULL)); //Why did I put this here?
 	score = 100;
+	velValue = 0;
 
 }
 
@@ -128,7 +129,7 @@ void Grunt::vectorTrack()
 {
 	VECTOR2 vel = getCenterPoint() - targetEntity.getCenterPoint();
 	VECTOR2* foo = D3DXVec2Normalize(&vel, &vel);
-	vel.x = 3;
+	vel.x = velValue;
 	setVelocity(-vel);
 }
 
@@ -144,7 +145,7 @@ void Grunt::ai1(float time, Entity &t)
 
 void Grunt::ai2()
 { 
-	setVelocity(VECTOR2(-3,0));
+	setVelocity(VECTOR2(-velValue,0));
 	return;
 }
 
@@ -184,6 +185,7 @@ void Grunt::spawn() {
 	if(getDead())
 	{
 		setPosition(VECTOR2(GAME_WIDTH-1, rand()%(GAME_HEIGHT-gruntNS::HEIGHT-50)+25) );
+		velValue = rand()%3 + 3;
 	//	grunts[++lastGrunt].setX(GAME_WIDTH-gruntNS::WIDTH);
 	//	grunts[lastGrunt].setY(40);
 		setDead(false);

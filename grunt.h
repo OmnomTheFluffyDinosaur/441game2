@@ -36,6 +36,7 @@ private:
 	bool isDead;
 	bool isHit;
 	int score;
+	int velValue;	//set random speed for each plane
 
 public:
     // constructor
