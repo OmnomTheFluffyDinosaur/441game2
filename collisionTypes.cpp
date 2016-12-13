@@ -1128,6 +1128,15 @@ void CollisionTypes::releaseAll()
 	gruntTM.onLostDevice();
 	playerTM.onLostDevice();
 	bgTM.onLostDevice();
+	laserTM.onLostDevice();
+	ufoTM.onLostDevice();
+	splashTM.onLostDevice();
+	pointsTM.onLostDevice();
+	medTM.onLostDevice();
+	livesTM.onLostDevice();
+	mapTM.onLostDevice();
+	splashScreenTM.onLostDevice();
+	gameOverTM.onLostDevice();
 	Game::releaseAll();
 	return;
 }
@@ -1144,6 +1153,15 @@ void CollisionTypes::resetAll()
 	gruntTM.onResetDevice();
 	playerTM.onResetDevice();
 	bgTM.onResetDevice();
+	laserTM.onResetDevice();
+	ufoTM.onResetDevice();
+	splashTM.onResetDevice();
+	pointsTM.onResetDevice();
+	medTM.onResetDevice();
+	livesTM.onResetDevice();
+	mapTM.onResetDevice();
+	splashScreenTM.onResetDevice();
+	gameOverTM.onResetDevice();
 	Game::resetAll();
 	return;
 }
