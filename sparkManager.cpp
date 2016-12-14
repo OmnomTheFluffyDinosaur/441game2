@@ -51,15 +51,15 @@ void SparkManager::setVisibleNSparks(int n)
 bool SparkManager::initialize(Graphics *g)
 {
 	if (!tm.initialize(g, SPARK_IMAGE))
-		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing dust texture"));
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing spark texture"));
 	for (int i = 0; i < MAX_NUM_SPARKS; i++)
 	{
 		if (!sparks[i].initialize(g,0,0,0,&tm))
-			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing dust"));
+			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing spark"));
 		sparks[i].setActive(false);
 		sparks[i].setVisible(false);
-		sparks[i].setScale(0.2f);
-		sparks[i].setRotationValue(0.05f);
+		sparks[i].setScale(0.4f);
+		sparks[i].setRotationValue(0.1f);
 	}
 	return true;
 }

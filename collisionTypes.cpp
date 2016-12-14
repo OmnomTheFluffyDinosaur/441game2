@@ -534,14 +534,25 @@ void CollisionTypes::update()
 			player.right();
 		if(input->isKeyDown(VK_UP)) {
 			player.up();
-			player.setDegrees(-7);
+			if (player.getDegrees() > -9) {
+				player.setDegrees(player.getDegrees()-0.5f);
+			}
 		}
 		else if(input->isKeyDown(VK_DOWN)){
 			player.down();
-			player.setDegrees(7);
+			if (player.getDegrees() < 9) {
+				player.setDegrees(player.getDegrees()+0.5f);
+			}
 		}
-		else
-			player.setDegrees(0);
+		else {
+			if (player.getDegrees() ==0)
+				break;
+			else if (player.getDegrees() < 0)
+				player.setDegrees(player.getDegrees()+0.5f);
+			else if (player.getDegrees() > 0)
+				player.setDegrees(player.getDegrees()-0.5f);
+		}
+
 		//SHOOTING
 		if (reloadTime >= 0.4f) {
 			if (input->isKeyDown(VK_SPACE)) {
@@ -876,6 +887,11 @@ void CollisionTypes::collisions()
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
 			grunts[i].setInvisible();
+		if (grunts[i].getCurrentFrame() == GRUNT_EXPLODE_START) {
+			grunts[i].setScale(2.5f);
+			grunts[i].setPositionY(grunts[i].getPositionY()-18);
+			grunts[i].setPositionX(grunts[i].getPositionX()-10);
+		}
 	}
 
 	if(medPack.collidesWith(player) && !medPack.getDead()){

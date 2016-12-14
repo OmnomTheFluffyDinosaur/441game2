@@ -60,7 +60,7 @@ void Spark::update(float frametime)
 
 	setX(getX() + velocity.x * frametime);
 	setY(getY() + velocity.y * frametime);
-	rotationValue += frametime;
+	rotationValue += frametime*5;
 	if (rotationValue> 2*2.14159) //prevent overrotation
 		rotationValue = 0;
 	setRadians(rotationValue);
