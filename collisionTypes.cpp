@@ -892,6 +892,8 @@ void CollisionTypes::collisions()
 			grunts[i].setPositionY(grunts[i].getPositionY()-18);
 			grunts[i].setPositionX(grunts[i].getPositionX()-10);
 		}
+		if (grunts[i].getCurrentFrame() == GRUNT_IDLE_START)
+			grunts[i].setScale(1.0f);
 	}
 
 	if(medPack.collidesWith(player) && !medPack.getDead()){
