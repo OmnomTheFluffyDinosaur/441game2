@@ -497,20 +497,14 @@ void CollisionTypes::update()
 		//spawn grunts
 		if(timeInState < 37 && timeSinceSpawn > 3)
 		{
-			grunts[++lastGrunt].spawn();	
-			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
-			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
-			grunts[++lastGrunt].spawn();	
-			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
-			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
-			timeSinceSpawn = 0;
-			if(timeInState > 15) {
+			for(int i = 0; i < 3; i++){
 				grunts[++lastGrunt].spawn();	
 				grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
 				grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
+				if(lastGrunt >= NUMGRUNTS)
+					lastGrunt = 1;
 			}
-			if(lastGrunt >= NUMGRUNTS-3)
-				lastGrunt = 1;
+			timeSinceSpawn = 0;
 		}
 		if(!bossSpawn && timeInState > 5) {
 		//	ufo.spawn();
@@ -643,21 +637,14 @@ void CollisionTypes::update()
 		//spawn grunts
 		if(timeSinceSpawn > 1.8 && !bossSpawn)
 		{
-			//lastGrunt++;
-			grunts[++lastGrunt].spawn();	
-			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
-			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
-			grunts[++lastGrunt].spawn();	
-			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
-			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
-			timeSinceSpawn = 0;
-			if(timeInState > 15) {
+			for(int i = 0; i < 3; i++){
 				grunts[++lastGrunt].spawn();	
 				grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
 				grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
+				if(lastGrunt >= NUMGRUNTS)
+					lastGrunt = 1;
 			}
-			if(lastGrunt >= NUMGRUNTS-3)
-				lastGrunt = 1;
+			timeSinceSpawn = 0;
 		}
 		if(timeInState > 15 && !pickupSpawn) {
 			if(rand()%2 == 0) {
@@ -716,7 +703,7 @@ void CollisionTypes::update()
 		//
 		for(int i = 0; i < NUMGRUNTS; i++)
 		{
-			if(!grunts[i].getDead() && enemyReload >= 0.65f)
+			if(!grunts[i].getDead() && enemyReload >= 0.38f)
 			{
 				if(rand()%3 == 0) {
 					foo = VECTOR2(grunts[i].getCenterX()-35, grunts[i].getCenterY());
@@ -934,7 +921,7 @@ void CollisionTypes::collisions()
 			player.setHealth(player.getHealth()-20);
 
 		}
-
+		//add this guy in
 if(ufo.collidesWith(player) && !ufo.getDead()){
 			ufo.setCollides(true);
 			player.setHealth(player.getHealth()-20);
@@ -977,7 +964,7 @@ if(ufo.collidesWith(player) && !ufo.getDead()){
 
 		if (!zep.getDead()) {
 			if(lm.collidesWith(zep)) {
-				zep.setHealth(zep.getHealth() - 10);
+				zep.setHealth(zep.getHealth() - 4);
 				if(zep.getHealth() <= 0) {
 					zep.setDead(true);
 					audio->playCue(BOOM4);
