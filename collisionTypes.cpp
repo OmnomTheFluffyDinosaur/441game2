@@ -9,6 +9,8 @@
 #include <time.h>
 #include "sparkManager.h"
 #include "smokeManager.h"
+#include <fstream>
+#include <string>
 
 LaserManager lm;
 SparkManager sm;
@@ -405,7 +407,7 @@ void CollisionTypes::gameStateUpdate()
 	}
 
 
-	if (gameStates==end && timeInState > 4)
+	if (gameStates==end && timeInState > 10)
 	{
 		PostQuitMessage(0);
 		timeInState = 0;
@@ -1008,7 +1010,9 @@ void CollisionTypes::render()
 	float x = bgTexture.getX();
     float y = bgTexture.getY();
 	graphics->spriteBegin(); // begin drawing sprites
-
+	std::ifstream inHiScore("highscore.txt");
+	std::string str; 
+	int hiScore;
 	switch (gameStates)
 	{
 	case splash:
@@ -1111,13 +1115,22 @@ void CollisionTypes::render()
 		//draw stuff
 	case end:
 		map.draw();
-		waveFont->print("Congratulations \n\nYour score is: " + std::to_string(score1 + score2),190,100);
+		std::getline(inHiScore, str);
+		hiScore = atoi(str.c_str());
+		if ((score1 + score2) > atoi(str.c_str())) {
+			hiScore = (score1 + score2);
+			inHiScore.close();
+			std::ofstream outHiScore("highscore.txt", std::ios::out | std::ios::trunc);
+			outHiScore << (score1 + score2);
+			outHiScore.close();
+		}
+
+		waveFont->print("Congratulations \n\nYour score is: " + std::to_string(score1 + score2) + "\n\n\n High score: " + std::to_string(hiScore),190,100);
 		break;
 	
 	case gameEnd:
 		map.draw();
-		waveFont->print("Game Over \n\nYour score is: " + std::to_string(score1 + score2),190,100);
-
+		waveFont->print("Game Over \n\nYour score is: " + std::to_string(score1 + score2) + "\n\n\n High score: " + std::to_string(hiScore),190,100);
 		break;
 	}
 	/*switch (gameStates)
