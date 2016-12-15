@@ -550,7 +550,7 @@ void CollisionTypes::update()
 		}
 
 		//SHOOTING
-		if (reloadTime >= 0.4f) {
+		if (reloadTime >= 0.6f) {
 			if (input->isKeyDown(VK_SPACE)) {
 				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
 				bar = VECTOR2(500,0);
@@ -679,7 +679,7 @@ void CollisionTypes::update()
 		}
 		else
 			player.setDegrees(0);
-		if (reloadTime >= 0.4f) {
+		if (reloadTime >= 0.6f) {
 			if (input->isKeyDown(VK_SPACE)) {
 				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
 				bar = VECTOR2(500,0);
@@ -1093,11 +1093,11 @@ void CollisionTypes::render()
 		point.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
-		if(zep.getVisible())
-			zep.draw();
 		lm.draw();
 		sm.draw();
 		smokem.draw();
+		if(zep.getVisible())
+			zep.draw();
 		break;
 		//draw stuff
 	case end:
