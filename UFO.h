@@ -1,14 +1,14 @@
 
 #define WIN32_LEAN_AND_MEAN
-#ifndef GRUNT_H                 // Prevent multiple definitions if this 
-#define GRUNT_H   
-class Grunt;
+#ifndef UFO_H                 // Prevent multiple definitions if this 
+#define UFO_H   
+class Ufo;
 
 #include "entity.h"
 #include "constants.h"
 #include "graphics.h"
 
-namespace gruntNS
+namespace ufoNS
 {
     const int WIDTH = 64;                   // image width
     const int HEIGHT = 32;                  // image height
@@ -20,7 +20,7 @@ namespace gruntNS
 }
 
 // inherits from Entity class
-class Grunt : public Entity
+class Ufo : public Entity
 {
 private:
    // puckNS::DIRECTION direction;    
@@ -36,11 +36,10 @@ private:
 	bool isDead;
 	bool isHit;
 	int score;
-	int velValue;	//set random speed for each plane
-
+	float timeSinceMove;
 public:
     // constructor
-    Grunt();
+    Ufo();
 
     // inherited member functions
     virtual bool initialize(Game *gamePtr, int width, int height, int ncols,
@@ -75,9 +74,7 @@ public:
 
 	VECTOR2 getVelocity() {return velocity;}
 
-	void ai1(float time, Entity &t);
-
-	void ai2();
+	void ai(float time);
 
 	bool collidesWith(Entity p);
 

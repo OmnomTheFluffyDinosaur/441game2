@@ -1,17 +1,17 @@
 
 #define WIN32_LEAN_AND_MEAN
-#ifndef GRUNT_H                 // Prevent multiple definitions if this 
-#define GRUNT_H   
-class Grunt;
+#ifndef POINT_H                 // Prevent multiple definitions if this 
+#define POINT_H   
+class point;
 
 #include "entity.h"
 #include "constants.h"
 #include "graphics.h"
 
-namespace gruntNS
+namespace pointNS
 {
-    const int WIDTH = 64;                   // image width
-    const int HEIGHT = 32;                  // image height
+    const int WIDTH = 48;                   // image width
+    const int HEIGHT = 48;                  // image height
     const int X = GAME_WIDTH/2 - WIDTH/2;   // location on screen
     const int Y = GAME_HEIGHT/2 - HEIGHT/2;
     const float SPEED_X = 0;                
@@ -20,7 +20,7 @@ namespace gruntNS
 }
 
 // inherits from Entity class
-class Grunt : public Entity
+class point : public Entity
 {
 private:
    // puckNS::DIRECTION direction;    
@@ -36,11 +36,10 @@ private:
 	bool isDead;
 	bool isHit;
 	int score;
-	int velValue;	//set random speed for each plane
 
 public:
     // constructor
-    Grunt();
+    point();
 
     // inherited member functions
     virtual bool initialize(Game *gamePtr, int width, int height, int ncols,
@@ -75,9 +74,7 @@ public:
 
 	VECTOR2 getVelocity() {return velocity;}
 
-	void ai1(float time, Entity &t);
-
-	void ai2();
+	void ai();
 
 	bool collidesWith(Entity p);
 

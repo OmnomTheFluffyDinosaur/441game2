@@ -101,11 +101,18 @@
     <ClCompile Include="laser.cpp" />
     <ClCompile Include="mainMenu.cpp" />
     <ClCompile Include="laserManager.cpp" />
+    <ClCompile Include="medPack.cpp" />
     <ClCompile Include="patternStep.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="point.cpp" />
     <ClCompile Include="puck.cpp" />
+    <ClCompile Include="smoke.cpp" />
+    <ClCompile Include="smokeManager.cpp" />
+    <ClCompile Include="sparkManager.cpp" />
+    <ClCompile Include="spark.cpp" />
     <ClCompile Include="textDX.cpp" />
     <ClCompile Include="textureManager.cpp" />
+    <ClCompile Include="UFO.cpp" />
     <ClCompile Include="winmain.cpp" />
     <ClCompile Include="zeppelin.cpp" />
   </ItemGroup>
@@ -125,13 +132,20 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="laser.h" />
     <ClInclude Include="mainMenu.h" />
+    <ClInclude Include="med.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="laserManager.h" />
+    <ClInclude Include="smoke.h" />
+    <ClInclude Include="smokeManager.h" />
+    <ClInclude Include="sparkManager.h" />
     <ClInclude Include="patternStep.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="point.h" />
     <ClInclude Include="puck.h" />
+    <ClInclude Include="spark.h" />
     <ClInclude Include="textDX.h" />
     <ClInclude Include="textureManager.h" />
+    <ClInclude Include="UFO.h" />
     <ClInclude Include="zeppelin.h" />
   </ItemGroup>
   <ItemGroup>

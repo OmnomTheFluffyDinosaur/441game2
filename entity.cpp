@@ -45,6 +45,7 @@ bool Entity::initialize(Game *gamePtr, int width, int height, int ncols,
                             TextureManager *textureM)
 {
     input = gamePtr->getInput();            // the input system
+	scale = spriteData.scale;
     return(Image::initialize(gamePtr->getGraphics(), width, height, ncols, textureM));
 }
 

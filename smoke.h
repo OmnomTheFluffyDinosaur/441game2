@@ -1,23 +1,22 @@
 //Particle System
 
-#ifndef _LASER_H 
-#define _LASER_H
+#ifndef _SMOKE_H 
+#define _SMOKE_H
 
 
 #define WIN32_LEAN_AND_MEAN
 
-class Laser;
+class Smoke;
 
 #include "image.h"
 #include "input.h"
 #include "game.h"
-#include "collisionTypes.h"
 
-namespace particleNS
+namespace smokeNS
 {
 }
 
-class Laser : public Image
+class Smoke : public Image
 {
 	// Entity properties
 private:
@@ -29,12 +28,11 @@ private:
 	float fadeValue; //1: opaque, 0: transparent
 	float scaleValue;
 	float rotationValue; //in radians
-	CollisionTypes *col;
 
 
 public:
 	// Constructor
-	Laser();
+	Smoke();
 
 	////////////////////////////////////////
 	//           Get functions            //
@@ -59,7 +57,6 @@ public:
 	void  setActive(bool a)         {active = a;}
 	void setMaxTimeAlive(float t) {maxTimeAlive = t;}
 	void setRotationValue(float r) {rotationValue = r;}
-	void setCol(CollisionTypes *c) {col = c;}
 	void setVisible(bool b) {visible = b;}
 
 
@@ -71,7 +68,6 @@ public:
 	bool initialize(Graphics *g, int width, int height, int ncols,
 		TextureManager *textureM);
 	void resetParticle();
-	float getScale() {return scaleValue;}
 
 };
 

@@ -1,50 +1,50 @@
-#include "grunt.h"
+#include "UFO.h"
 #include <time.h>
 #include <cstdlib>
 //=============================================================================
 // default constructor
 //=============================================================================
-Grunt::Grunt() : Entity()
+Ufo::Ufo() : Entity()
 {
-    spriteData.width = gruntNS::WIDTH;           
-    spriteData.height = gruntNS::HEIGHT;
-    spriteData.x = gruntNS::X;                   // location on screen
-    spriteData.y = gruntNS::Y;
-    spriteData.rect.bottom = gruntNS::HEIGHT/2;    // rectangle to select parts of an image
-    spriteData.rect.right = gruntNS::WIDTH;
+    spriteData.width = ufoNS::WIDTH;           
+    spriteData.height = ufoNS::HEIGHT;
+    spriteData.x = ufoNS::X;                   // location on screen
+    spriteData.y = ufoNS::Y;
+    spriteData.rect.bottom = ufoNS::HEIGHT/2;    // rectangle to select parts of an image
+    spriteData.rect.right = ufoNS::WIDTH;
 	velocity = D3DXVECTOR2(0,0);
     startFrame = 0;              // first frame of ship animation
     endFrame     = 0;              // last frame of ship animation
     currentFrame = startFrame;
-    radius = gruntNS::WIDTH/2.0;                 // collision radius
+    radius = ufoNS::WIDTH/2.0;                 // collision radius
     collision = false;
     collisionType =entityNS::BOX;// entityNS::CIRCLE;
     target = false;
-	edge.bottom = -gruntNS::HEIGHT/2;
+	edge.bottom = -ufoNS::HEIGHT/2;
 	spriteData.scale = 1;
 	active = true;
 	speed = 50;
 	sightDistance = 10;
 	isDead = false;
 	srand(time(NULL)); //Why did I put this here?
-	score = 100;
-	velValue = 0;
+	health = 100;
+	score = 300;
 
 }
 
-bool Grunt::initialize(Game *gamePtr, int width, int height, int ncols,
+bool Ufo::initialize(Game *gamePtr, int width, int height, int ncols,
     TextureManager *textureM)
 {
     return(Entity::initialize(gamePtr, width, height, ncols, textureM));
 }
 
-void Grunt::setInvisible()
+void Ufo::setInvisible()
 {
 	Image::setVisible(false);
 	active = false;
 }
 
-void Grunt::setVisible()
+void Ufo::setVisible()
 {
 	Image::setVisible(true);
 	active = true;
@@ -55,7 +55,7 @@ void Grunt::setVisible()
 // typically called once per frame
 // frameTime is used to regulate the speed of movement and animation
 //=============================================================================
-void Grunt::update(float frameTime)
+void Ufo::update(float frameTime)
 {
 	VECTOR2 foo = velocity*frameTime*speed;
 	if(!isDead) {
@@ -63,9 +63,9 @@ void Grunt::update(float frameTime)
 		{
 			setPosition(D3DXVECTOR2(0,getPositionY()));
 		}*/
-		if (getPositionX() < (0- Image::getWidth()*Image::getScale()))
+		if (getPositionX() < 0)
 		{
-			setDead(true);
+			setPosition(D3DXVECTOR2(GAME_WIDTH-Image::getWidth()*Image::getScale(),getPositionY()));
 		}
 		if (getPositionY() + Image::getHeight()*Image::getScale() > GAME_HEIGHT)
 		{
@@ -90,8 +90,8 @@ void Grunt::update(float frameTime)
     Entity::update(frameTime);
 }
 
-//hacked at this code to make it avoid other grunts
-void Grunt::evade(Entity &t)
+//hacked at this code to make it avoid other Ufos
+void Ufo::evade(Entity &t)
 {
 	VECTOR2 vel = getCenterPoint() - t.getCenterPoint();
 	float length = D3DXVec2Length(&vel);
@@ -104,7 +104,7 @@ void Grunt::evade(Entity &t)
 	return;
 }
 
-void Grunt::deltaTrack()
+void Ufo::deltaTrack()
 {
 	VECTOR2 vel = D3DXVECTOR2(-1,-1);
 	VECTOR2 targetCenter = targetEntity.getCenterPoint();
@@ -125,36 +125,31 @@ void Grunt::deltaTrack()
 }
 
 
-void Grunt::vectorTrack()
+void Ufo::vectorTrack()
 {
 	VECTOR2 vel = getCenterPoint() - targetEntity.getCenterPoint();
 	VECTOR2* foo = D3DXVec2Normalize(&vel, &vel);
-	vel.x = velValue;
+	vel.x = 3;
 	setVelocity(-vel);
 }
 
-void Grunt::ai1(float time, Entity &t)
-{ 
-	targetEntity = t;
-	vectorTrack();
-	//deltaTrack();	
-	//evade();
-	//evade();
-	return;
+void Ufo::ai(float time){
+	if(timeSinceMove > 1.5)
+	{
+	//	setPosition(VECTOR2(100,100));
+		setPosition(VECTOR2(GAME_WIDTH - (rand()% 150) -40, rand()%(GAME_HEIGHT-50)+25) );
+	}
+	timeSinceMove += time;
 }
 
-void Grunt::ai2()
-{ 
-	setVelocity(VECTOR2(-velValue,0));
-	return;
-}
 
-bool Grunt::collidesWith(Entity p) {
-	//grunt box
-	float gruntL = spriteData.x;
-	float gruntR = spriteData.x+gruntNS::WIDTH*spriteData.scale;
-	float gruntT = spriteData.y;
-	float gruntB = spriteData.y+gruntNS::HEIGHT*spriteData.scale;
+
+bool Ufo::collidesWith(Entity p) {
+	//ufo box
+	float ufoL = spriteData.x;
+	float ufoR = spriteData.x+ufoNS::WIDTH*spriteData.scale;
+	float ufoT = spriteData.y;
+	float ufoB = spriteData.y+ufoNS::HEIGHT*spriteData.scale;
 
 	//player box
 	float pL = p.getX();
@@ -162,15 +157,15 @@ bool Grunt::collidesWith(Entity p) {
 	float pT = p.getY();
 	float pB = p.getY()+p.getHeight()*spriteData.scale;
 
-	return (gruntL < pR && gruntR > pL && gruntT < pB && gruntB > pT);
+	return (ufoL < pR && ufoR > pL && ufoT < pB && ufoB > pT);
 }
 
-bool Grunt::isHitBy(Entity p) {
-	//grunt box
-	float gruntL = spriteData.x;
-	float gruntR = spriteData.x+gruntNS::WIDTH*spriteData.scale;
-	float gruntT = spriteData.y;
-	float gruntB = spriteData.y+gruntNS::HEIGHT*spriteData.scale;
+bool Ufo::isHitBy(Entity p) {
+	//ufo box
+	float ufoL = spriteData.x;
+	float ufoR = spriteData.x+ufoNS::WIDTH*spriteData.scale;
+	float ufoT = spriteData.y;
+	float ufoB = spriteData.y+ufoNS::HEIGHT*spriteData.scale;
 
 	//player box
 	float pL = p.getX();
@@ -178,16 +173,15 @@ bool Grunt::isHitBy(Entity p) {
 	float pT = p.getY();
 	float pB = p.getY()+p.getHeight()*spriteData.scale;
 
-	return (gruntL < pR && gruntR > pL && gruntT < pB && gruntB > pT);
+	return (ufoL < pR && ufoR > pL && ufoT < pB && ufoB > pT);
 }
 
-void Grunt::spawn() {
+void Ufo::spawn() {
 	if(getDead())
 	{
-		setPosition(VECTOR2(GAME_WIDTH-1, rand()%(GAME_HEIGHT-gruntNS::HEIGHT-50)+25) );
-		velValue = rand()%3 + 3;
-	//	grunts[++lastGrunt].setX(GAME_WIDTH-gruntNS::WIDTH);
-	//	grunts[lastGrunt].setY(40);
+		setPosition(VECTOR2(200, 200));
+	//	ufos[++lastufo].setX(GAME_WIDTH-ufoNS::WIDTH);
+	//	ufos[lastufo].setY(40);
 		setDead(false);
 		setVisible();
 	}

@@ -1,23 +1,23 @@
-//Particle System
+//Spark System
 
-#ifndef _LASER_H 
-#define _LASER_H
+#ifndef _SPARK_H 
+#define _SPARK_H
 
 
 #define WIN32_LEAN_AND_MEAN
 
-class Laser;
+class Spark;
 
 #include "image.h"
 #include "input.h"
 #include "game.h"
 #include "collisionTypes.h"
 
-namespace particleNS
+namespace sparkNS
 {
 }
 
-class Laser : public Image
+class Spark : public Image
 {
 	// Entity properties
 private:
@@ -29,12 +29,11 @@ private:
 	float fadeValue; //1: opaque, 0: transparent
 	float scaleValue;
 	float rotationValue; //in radians
-	CollisionTypes *col;
 
 
 public:
 	// Constructor
-	Laser();
+	Spark();
 
 	////////////////////////////////////////
 	//           Get functions            //
@@ -59,7 +58,6 @@ public:
 	void  setActive(bool a)         {active = a;}
 	void setMaxTimeAlive(float t) {maxTimeAlive = t;}
 	void setRotationValue(float r) {rotationValue = r;}
-	void setCol(CollisionTypes *c) {col = c;}
 	void setVisible(bool b) {visible = b;}
 
 
@@ -70,8 +68,7 @@ public:
 	void update(float frameTime);
 	bool initialize(Graphics *g, int width, int height, int ncols,
 		TextureManager *textureM);
-	void resetParticle();
-	float getScale() {return scaleValue;}
+	void resetSpark();
 
 };
 

@@ -96,6 +96,9 @@ void Graphics::initialize(HWND hw, int w, int h, bool full)
     result = D3DXCreateSprite(device3d, &sprite);
     if (FAILED(result))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error creating Direct3D sprite"));
+	device3d->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	device3d->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	device3d->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
     // Check if the device supports 8-bit stencil buffering. 
     //if( FAILED( direct3d->CheckDeviceFormat(caps.AdapterOrdinal,
@@ -282,6 +285,10 @@ void Graphics::drawSprite(const SpriteData &spriteData, COLOR_ARGB color)
     sprite->SetTransform(&matrix);
 
     // Draw the sprite
+	sprite->Begin(D3DXSPRITE_ALPHABLEND);
+	device3d->SetRenderState(D3DRS_BLENDOP,D3DBLENDOP_ADD); //D3DBLENDOP_MAX, D3DBLENDOP_MIN, D3DBLENDOP_SUBTRACT,D3DBLENDOP_ADD
+    device3d->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+    device3d->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
     sprite->Draw(spriteData.texture,&spriteData.rect,NULL,NULL,color);
 }
 
@@ -427,6 +434,9 @@ HRESULT Graphics::reset()
     result = device3d->Reset(&d3dpp);   // attempt to reset graphics device
     // recreate query
     device3d->CreateQuery(D3DQUERYTYPE_OCCLUSION, &pOcclusionQuery);
+	device3d->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	device3d->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	device3d->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
     sprite->OnResetDevice();            // recreate sprite
     return result;
 }

@@ -48,7 +48,7 @@ void LaserManager::setVisibleNParticles(int n)
 	}
 }
 
-bool LaserManager::initialize(Graphics *g)
+bool LaserManager::initialize(Graphics *g, CollisionTypes *c)
 {
 	if (!tm.initialize(g, LASER_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing dust texture"));
@@ -60,6 +60,7 @@ bool LaserManager::initialize(Graphics *g)
 		particles[i].setVisible(false);
 		particles[i].setScale(2.0f);
 		particles[i].setRotationValue(0.0f);
+		particles[i].setCol(c);
 	}
 	return true;
 }
@@ -69,8 +70,6 @@ void LaserManager::update(float frametime)
 	for (int i = 0; i < MAX_NUMBER_PARTICLES; i++){
 		if (particles[i].getActive())
 			particles[i].update(frametime);
-		if (position.x > GAME_WIDTH-4)
-			particles[i].resetParticle();
 	}
 }
 
@@ -86,5 +85,34 @@ void LaserManager::draw()
 		float foobar = (foo-bar)/foo;
 		color = D3DCOLOR_ARGB(0xff,0xff,0xff,0xff);//fadeAmount,fadeAmount,fadeAmount);
 		particles[i].draw(color);
+	}
+}
+
+bool LaserManager::collidesWith(Entity e) {
+	for (int i = 0; i < MAX_NUMBER_PARTICLES; i++) {
+		if (particles[i].getActive()) {
+			float laserL = particles[i].getX();
+			float laserR = particles[i].getX()+particles[i].getWidth()*particles[i].getScale();
+			float laserT = particles[i].getY();
+			float laserB = particles[i].getY()+particles[i].getHeight()*particles[i].getScale();
+
+			//player box
+			float eL = e.getX();
+			float eR = e.getX()+e.getWidth()*e.getScale();
+			float eT = e.getY();
+			float eB = e.getY()+e.getHeight()*e.getScale();
+			bool collided = (laserL < eR && laserR > eL && laserT < eB && laserB > eT);
+			if (collided)  {
+				particles[i].resetParticle();
+				return collided;
+			}
+		}
+	}
+	return false;
+}
+
+void LaserManager::resetAll() {
+	for (int i = 0; i < MAX_NUMBER_PARTICLES; i++) {
+		particles[i].resetParticle();
 	}
 }

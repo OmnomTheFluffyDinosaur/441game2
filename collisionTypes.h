@@ -24,6 +24,9 @@ class CollisionTypes;
 #include "patternStep.h"
 #include "cheatsMenu.h"
 #include "genericMenu.h"
+#include "med.h"
+#include "point.h"
+#include "UFO.h"
 
 #define maxPatternSteps 4
 
@@ -34,13 +37,16 @@ class CollisionTypes : public Game
 {
 private:
     // game items
-    TextureManager playerTM, puckTM, laserTM, gruntTM, zepTM, healthTM, bgTM, splashTM;   // game texture
-    Image   playerTexture, puckTexture, gruntTexture, zepTexture, healthTexture, bgTexture, splashTexture;
+    TextureManager playerTM, puckTM, laserTM, gruntTM, zepTM, ufoTM, healthTM, bgTM, splashTM, pointsTM, medTM, livesTM, mapTM;   // game texture
+    Image   playerTexture, puckTexture, gruntTexture, zepTexture, ufoTexture, healthTexture, bgTexture, splashTexture, med, points, lives, map;
     VECTOR2 collisionVector;    // collision vector
 	Player player;
+	Ufo ufo;
 	Entity health;
 	Puck puck;
 	Grunt grunts[NUMGRUNTS];
+	medPack medPack;
+	point point;
 	Zeppelin zep;
 	int score1;
 	int score2;
@@ -61,7 +67,7 @@ private:
 	genericMenu *creditsMenu;
 	genericMenu *controlsMenu;
 	cheatsMenu *cheat;
-	TextDX  *waveFont;     
+	TextDX  *waveFont, *scoreFont;     
 	PatternStep patternSteps[maxPatternSteps];
 	int patternStepIndex;
 	int timeSinceHit;
@@ -76,6 +82,8 @@ private:
 	Image background2;
 	int scoreCount;
 	float reloadTime;
+	float shotReload;
+	float enemyReload;
 
 	struct position{
 		float xPos;
@@ -104,6 +112,8 @@ public:
     void render();      // "
     void releaseAll();
     void resetAll();
+	void createSparkEffect(VECTOR2 pos, VECTOR2 vel, int numParticles);
+
 };
 
 #endif

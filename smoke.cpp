@@ -1,13 +1,12 @@
-#include "laser.h"
-#include "collisionTypes.h"
+#include "smoke.h"
 
-Laser::Laser()
+Smoke::Smoke()
 {
 	visible = false;
 	loop = false;
 }
 
-void Laser::resetParticle()
+void Smoke::resetParticle()
 {
 	timeAlive = 0;
 	visible = false;
@@ -16,7 +15,7 @@ void Laser::resetParticle()
 	setX(0);
 	setY(0);
 }
-bool Laser::initialize(Graphics *g, int width, int height, int ncols,
+bool Smoke::initialize(Graphics *g, int width, int height, int ncols,
 						  TextureManager *textureM)
 {
 	try{
@@ -47,7 +46,7 @@ bool Laser::initialize(Graphics *g, int width, int height, int ncols,
 	return true;
 }
 
-void Laser::update(float frametime)
+void Smoke::update(float frametime)
 {
 	if (!active)
 		return;
@@ -58,17 +57,13 @@ void Laser::update(float frametime)
 		return;
 	}
 	// update physics and drawing stuff
+
 	setX(getX() + velocity.x * frametime);
 	setY(getY() + velocity.y * frametime);
-	col->createSparkEffect(VECTOR2(getX(),getY()),VECTOR2(0,1),1);
-	if (getX() > GAME_WIDTH) {
-		resetParticle();
-		return;
-	}
-	/*rotationValue += frametime;
+	rotationValue += frametime;
 	if (rotationValue> 2*2.14159) //prevent overrotation
-		rotationValue = 0;*/
-	//setRadians(rotationValue);
+		rotationValue = 0;
+	setRadians(rotationValue);
 
 
 }

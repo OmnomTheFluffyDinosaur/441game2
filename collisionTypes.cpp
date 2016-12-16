@@ -7,10 +7,17 @@
 #include "collisionTypes.h"
 #include "laserManager.h"
 #include <time.h>
+#include "sparkManager.h"
+#include "smokeManager.h"
+#include <fstream>
+#include <string>
 
 LaserManager lm;
+SparkManager sm;
+SmokeManager smokem;
 
 bool bossSpawn = 0;
+bool pickupSpawn = 0;
 
 //=============================================================================
 // Constructor
@@ -52,16 +59,18 @@ void CollisionTypes::initialize(HWND hwnd)
 	cheat = new cheatsMenu();
 	cheat->initialize(graphics, input);
 
-	creditsMenu = new genericMenu("Explosion and laser sounds by dklon from OpenGameArt.org","Background by Downdate from OpenGameArt.org \n\nMusic by Circlerun from OpenGameArt.org","");
+	creditsMenu = new genericMenu("Explosion and laser sounds by dklon from OpenGameArt.org","Background by Downdate from OpenGameArt.org \nMusic by Circlerun from OpenGameArt.org","");
 	creditsMenu->initialize(graphics, input);
 
-	controlsMenu = new genericMenu("Press Arrow Keys to Move","Press Space to Shoot","");
+	controlsMenu = new genericMenu("Press Arrow Keys to Move","Press Space and 'v' to Shoot","");
 	controlsMenu->initialize(graphics, input);
 
 	waveFont = new TextDX();
-	if(waveFont->initialize(graphics, 20, true, false, "Arial") == false)
+	if(waveFont->initialize(graphics, 40, true, false, "Arial") == false)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
-
+	scoreFont = new TextDX();
+	if(scoreFont->initialize(graphics, 20, true, false, "Arial") == false)
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing DirectX font"));
 
 	if (!bgTM.initialize(graphics,BG_IMAGE))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
@@ -69,16 +78,27 @@ void CollisionTypes::initialize(HWND hwnd)
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
     bgTexture.setScale(BG_SCALE);
 
+	//if (!mapTM.initialize(graphics,MENU_BACKGROUND))
+     //   throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
+	if (!map.initialize(graphics,0,0,0,&bgTM))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
+    map.setScale(BG_SCALE);
+
+
 	if (!splashTM.initialize(graphics,SPLASH))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
 	if (!splashTexture.initialize(graphics,0,0,0,&splashTM))
         throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
 
-
+	if (!livesTM.initialize(graphics,PLAYER_IMAGE))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space texture"));
+	if (!lives.initialize(graphics,PLAYER_WIDTH,PLAYER_HEIGHT,PLAYER_COLS,&livesTM))
+        throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing space"));
+	lives.setScale(.6);
 
 	if (!playerTM.initialize(graphics,PLAYER_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
-	if (!player.initialize(this, playerTM.getWidth(), playerTM.getHeight(), 0,&playerTM))
+	if (!player.initialize(this, PLAYER_WIDTH, PLAYER_HEIGHT, PLAYER_COLS,&playerTM))
 		throw(GameError(gameErrorNS::WARNING, "Player not initialized"));
 	player.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-2*player.getHeight()));
 	player.setCollisionType(entityNS::BOX);
@@ -87,6 +107,8 @@ void CollisionTypes::initialize(HWND hwnd)
 	player.setScale(1.0);
 	player.setHealth(100);
 	player.setLives(3);
+	player.setCurrentFrame(PLAYER_IDLE_START);
+	player.setFrameDelay(.012);
 	timeSinceHit = time(0);
 			
 
@@ -94,9 +116,9 @@ void CollisionTypes::initialize(HWND hwnd)
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing player texture"));
 	if (!health.initialize(this, HEALTH_WIDTH, HEALTH_HEIGHT, HEALTH_COLS,&healthTM))
 		throw(GameError(gameErrorNS::WARNING, "Player not initialized"));
-	health.setPosition(VECTOR2(GAME_WIDTH/2, GAME_HEIGHT-2*health.getHeight()));
+	health.setPosition(VECTOR2(player.getX(), player.getY() + 40));
 	health.setCollisionType(entityNS::BOX);
-	health.setScale(1.0);
+	health.setScale(0.5);
 	health.setCurrentFrame(HEALTH_FULL);
 
 	for(int i = 0; i < NUMGRUNTS; i++) {
@@ -116,6 +138,34 @@ void CollisionTypes::initialize(HWND hwnd)
 		grunts[i].setFrameDelay(.008);
 	}
 
+	if (!medTM.initialize(graphics,HEALTH_PICKUP))
+			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+	if (!medPack.initialize(this, 0, 0, 0,&medTM))
+		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+		medPack.setPosition(VECTOR2(400, 100));
+		medPack.setCollision(entityNS::BOX);
+		medPack.setEdge(COLLISION_BOX_PICKUP);
+		medPack.setX(medPack.getPositionX());
+		medPack.setY(medPack.getPositionY());
+		medPack.setScale(1);
+		medPack.setDead(true);
+		medPack.setInvisible();
+
+		if (!pointsTM.initialize(graphics,POINT_PICKUP))
+			throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+	if (!point.initialize(this, 0, 0, 0,&pointsTM))
+		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+		point.setPosition(VECTOR2(400, 100));
+		point.setCollision(entityNS::BOX);
+		point.setEdge(COLLISION_BOX_PICKUP);
+		point.setX(point.getPositionX());
+		point.setY(point.getPositionY());
+		point.setScale(1);
+		point.setDead(true);
+		point.setInvisible();
+
+
+
 
 	if (!zepTM.initialize(graphics,ZEP_IMAGE))
 		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
@@ -131,6 +181,24 @@ void CollisionTypes::initialize(HWND hwnd)
 	zep.setInvisible();
 	zep.setCurrentFrame(ZEP_IDLE_START);
 	zep.setFrameDelay(.01);
+
+	if (!ufoTM.initialize(graphics,UFO_IMAGE))
+		throw(GameError(gameErrorNS::FATAL_ERROR, "Error initializing puck textures"));
+	if (!ufo.initialize(this, UFO_WIDTH, UFO_HEIGHT, UFO_COLS,&ufoTM))
+		throw(GameError(gameErrorNS::WARNING, "Brick not initialized"));
+	ufo.setPosition(VECTOR2(400, 100));
+	ufo.setCollision(entityNS::BOX);
+	ufo.setEdge(COLLISION_BOX_PUCK);
+	ufo.setX(ufo.getPositionX());
+	ufo.setY(ufo.getPositionY());
+	ufo.setScale(0.25);
+	ufo.setDead(true);
+	ufo.setInvisible();
+	ufo.setCurrentFrame(UFO_START);
+	ufo.setFrameDelay(.01);
+	ufo.setFrames(UFO_START, UFO_END);
+	ufo.setHealth(100);
+
 
 	//patternsteps
 	/*patternStepIndex = 0;
@@ -165,8 +233,12 @@ void CollisionTypes::initialize(HWND hwnd)
 	Vel1.xVel = -60;
 	Vel2.yVel = -60;*/
 
-	lm.initialize(graphics);
+	lm.initialize(graphics, this);
+	sm.initialize(graphics);
+	smokem.initialize(graphics);
 	reloadTime = 0;
+	shotReload = 0;
+	enemyReload = 0;
 
 	return;
 }
@@ -181,6 +253,20 @@ void createParticleEffect(VECTOR2 pos, VECTOR2 vel, int numParticles){
 	lm.setVelocity(vel);
 	lm.setVisibleNParticles(numParticles);
 
+}
+
+void CollisionTypes::createSparkEffect(VECTOR2 pos, VECTOR2 vel, int numParticles){
+
+	sm.setPosition(pos);
+	sm.setVelocity(vel);
+	sm.setVisibleNSparks(numParticles);
+
+}
+
+void createSmokeEffect(VECTOR2 pos, VECTOR2 vel, int numParticles) {
+	smokem.setPosition(pos);
+	smokem.setVelocity(vel);
+	smokem.setVisibleNParticles(numParticles);
 }
 
 void CollisionTypes::gameStateUpdate()
@@ -256,7 +342,7 @@ void CollisionTypes::gameStateUpdate()
 		timeInState = 0;
 	}
 
-	if (gameStates== wave1 && timeInState > 30)
+	if (gameStates== wave1 && timeInState > 40)	/////////////////////////////////////////////////////////fix state time
 	{
 		gameStates = wave2;
 		timeInState = 0;
@@ -273,39 +359,55 @@ void CollisionTypes::gameStateUpdate()
 	}
 	if(gameStates == wave1 && player.getHealth() <= 0)
 	{
-		timeInState = 0;
-		score1 = 0;
-		for(int i = 0; i < NUMGRUNTS; i++)
-		{
-			grunts[i].setDead(true);
-			grunts[i].setInvisible();
+		player.setFrames(PLAYER_EXPLODE_START, PLAYER_EXPLODE_END);
+		if(player.getCurrentFrame() == PLAYER_EXPLODE_END) {
+			player.setCurrentFrame(PLAYER_IDLE_START);
+			player.setFrames(PLAYER_IDLE_START, PLAYER_IDLE_END);
+			player.setX(240);
+			player.setY(100);
+			timeInState = 0;
+			score1 = 0;
+			for(int i = 0; i < NUMGRUNTS; i++)
+			{
+				grunts[i].setDead(true);
+				grunts[i].setInvisible();
+			}
+			zep.setDead(true);
+			zep.setInvisible();
+			player.setHealth(100);
+			if(!noDeath)
+				player.setLives(player.getLives()-1);
+			bossSpawn = 0;
+			pickupSpawn = 0;
 		}
-		zep.setDead(true);
-		zep.setInvisible();
-		player.setHealth(100);
-		if(!noDeath)
-			player.setLives(player.getLives()-1);
-		bossSpawn = 0;
 	}
 	if(gameStates == wave2 && player.getHealth() <= 0)
 	{
-		timeInState = 0;
-		score2 = 0;
-		for(int i = 0; i < NUMGRUNTS; i++)
-		{
-			grunts[i].setDead(true);
-			grunts[i].setInvisible();
+		player.setFrames(PLAYER_EXPLODE_START, PLAYER_EXPLODE_END);
+		if(player.getCurrentFrame() == PLAYER_EXPLODE_END) {
+			player.setCurrentFrame(PLAYER_IDLE_START);
+			player.setFrames(PLAYER_IDLE_START, PLAYER_IDLE_END);
+			player.setX(240);
+			player.setY(100);
+			timeInState = 0;
+			score2 = 0;
+			for(int i = 0; i < NUMGRUNTS; i++)
+			{
+				grunts[i].setDead(true);
+				grunts[i].setInvisible();
+			}
+			zep.setDead(true);
+			zep.setInvisible();
+			player.setHealth(100);
+			if(!noDeath)
+				player.setLives(player.getLives()-1);
+			bossSpawn = 0;
+			pickupSpawn = 0;
 		}
-		zep.setDead(true);
-		zep.setInvisible();
-		player.setHealth(100);
-		if(!noDeath)
-			player.setLives(player.getLives()-1);
-		bossSpawn = 0;
 	}
 
 
-	if (gameStates==end && timeInState > 4)
+	if (gameStates==end && timeInState > 10)
 	{
 		PostQuitMessage(0);
 		timeInState = 0;
@@ -333,7 +435,10 @@ void CollisionTypes::gameStateUpdate()
 void CollisionTypes::update()
 {
 	reloadTime += frameTime;
+	shotReload += frameTime;
+	enemyReload += frameTime;
 	VECTOR2 foo,bar;
+	VECTOR2 smokeXY,smokeV;
 	if (input->isKeyDown(VK_ESCAPE)) {
 		exitGame();
 	}
@@ -352,6 +457,7 @@ void CollisionTypes::update()
 		score1=0;
 		score2=0;
 		scoreCount = 0;
+		lm.resetAll();
 	}
 
 	/*
@@ -389,40 +495,90 @@ void CollisionTypes::update()
 	case wave1:
 		{
 		//spawn grunts
-		if(timeSinceSpawn > 3)
+		if(timeInState < 37 && timeSinceSpawn > 3)
 		{
-			grunts[++lastGrunt].spawn();	
-			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
-			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
-			grunts[++lastGrunt].spawn();	
-			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
-			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
-			timeSinceSpawn = 0;
-			if(timeInState > 15) {
+			for(int i = 0; i < 3; i++){
 				grunts[++lastGrunt].spawn();	
 				grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
 				grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
+				if(lastGrunt >= NUMGRUNTS)
+					lastGrunt = 1;
 			}
-			if(lastGrunt >= NUMGRUNTS-3)
-				lastGrunt = 1;
+			timeSinceSpawn = 0;
+		}
+		if(!bossSpawn && timeInState > 5) {
+		//	ufo.spawn();
+		//	ufo.setFrames(UFO_START, UFO_END);
+		//	ufo.setDead(false);
+		//	ufo.setVisible();
+		//	bossSpawn = 1;
+		}
+		if(timeInState > 15 && !pickupSpawn) {
+			if(rand()%2 == 0) {
+				medPack.spawn();
+				medPack.setDead(false);
+			}
+			else {
+				point.spawn();
+				point.setDead(false);
+			}
+			pickupSpawn = true;
 		}
 		if(input->isKeyDown(VK_LEFT))
 			player.left();
 		if(input->isKeyDown(VK_RIGHT))
 			player.right();
-		if(input->isKeyDown(VK_UP))
+		if(input->isKeyDown(VK_UP)) {
 			player.up();
-		if(input->isKeyDown(VK_DOWN))
+			if (player.getDegrees() > -9) {
+				player.setDegrees(player.getDegrees()-0.5f);
+			}
+		}
+		else if(input->isKeyDown(VK_DOWN)){
 			player.down();
-		if (reloadTime >= 0.2f) {
+			if (player.getDegrees() < 9) {
+				player.setDegrees(player.getDegrees()+0.5f);
+			}
+		}
+		else {
+			if (player.getDegrees() ==0)
+				break;
+			else if (player.getDegrees() < 0)
+				player.setDegrees(player.getDegrees()+0.5f);
+			else if (player.getDegrees() > 0)
+				player.setDegrees(player.getDegrees()-0.5f);
+		}
+
+		//SHOOTING
+		if (reloadTime >= 0.6f) {
 			if (input->isKeyDown(VK_SPACE)) {
-				foo = VECTOR2(player.getCenterX()+10, player.getCenterY());
+				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
 				bar = VECTOR2(500,0);
 				createParticleEffect(foo, bar, 1);
 				reloadTime = 0;
 			}
 		}
+		if (shotReload >= 1.3f) {
+			if (input->isKeyDown(0x56)) {
+				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
+				bar = VECTOR2(400,0);
+				createParticleEffect(foo, bar, 1);
+				bar = VECTOR2(400,-200);
+				createParticleEffect(foo, bar, 1);
+				bar = VECTOR2(400,200);
+				createParticleEffect(foo, bar, 1);
+				shotReload = 0;
+			}
+		}
+		smokeXY = VECTOR2(player.getCenterX()-30, player.getCenterY()-5);
+		smokeV = VECTOR2(-50,-5);
+		if (player.getHealth() <=60) {
+			createSmokeEffect(smokeXY,smokeV,20);
+		}
+
 		lm.update(frameTime);
+		sm.update(frameTime);
+		smokem.update(frameTime);
 		//Math didn't work right
 		if(player.getHealth() == 100)
 			health.setCurrentFrame(HEALTH_FULL);
@@ -434,12 +590,21 @@ void CollisionTypes::update()
 			health.setCurrentFrame(HEALTH_40);
 		if(player.getHealth() == 20)
 			health.setCurrentFrame(HEALTH_20);
+		if(player.getHealth() == 0)
+			health.setCurrentFrame(HEALTH_00);
+		health.setX(player.getX()+7); 
+		health.setY(player.getY()+20);
 		player.update(frameTime);
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
 		health.update(frameTime);
-		//zep.update(frameTime);
+		medPack.update(frameTime);
+		point.update(frameTime);
+		ufo.update(frameTime);
+		lives.update(frameTime);
+		
+		//SCROLLING BACKGROUND
 		// move space along X
 		bgTexture.setX(bgTexture.getX() - (frameTime * player.getVelocity().x*0.3f) - 0.5);
 		// move space along Y
@@ -465,7 +630,6 @@ void CollisionTypes::update()
 
 		VECTOR2 v = D3DXVECTOR2(0,0);
 		player.setVelocity(v);
-
 		break;
 		}
 	case wave2: 
@@ -473,21 +637,25 @@ void CollisionTypes::update()
 		//spawn grunts
 		if(timeSinceSpawn > 1.8 && !bossSpawn)
 		{
-			//lastGrunt++;
-			grunts[++lastGrunt].spawn();	
-			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
-			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
-			grunts[++lastGrunt].spawn();	
-			grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
-			grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
-			timeSinceSpawn = 0;
-			if(timeInState > 15) {
+			for(int i = 0; i < 3; i++){
 				grunts[++lastGrunt].spawn();	
 				grunts[lastGrunt].setCurrentFrame(GRUNT_IDLE_START);
 				grunts[lastGrunt].setFrames(GRUNT_IDLE_START, GRUNT_IDLE_END);
+				if(lastGrunt >= NUMGRUNTS)
+					lastGrunt = 1;
 			}
-			if(lastGrunt >= NUMGRUNTS-3)
-				lastGrunt = 1;
+			timeSinceSpawn = 0;
+		}
+		if(timeInState > 15 && !pickupSpawn) {
+			if(rand()%2 == 0) {
+				medPack.spawn();
+				medPack.setDead(false);
+			}
+			else {
+				point.spawn();
+				point.setDead(false);
+			}
+			pickupSpawn = true;
 		}
 		if(timeInState > 25 && !bossSpawn)
 		{
@@ -501,10 +669,61 @@ void CollisionTypes::update()
 			player.left();
 		if(input->isKeyDown(VK_RIGHT))
 			player.right();
-		if(input->isKeyDown(VK_UP))
+		if(input->isKeyDown(VK_UP)) {
 			player.up();
-		if(input->isKeyDown(VK_DOWN))
+			player.setDegrees(-7);
+		}
+		else if(input->isKeyDown(VK_DOWN)){
 			player.down();
+			player.setDegrees(7);
+		}
+		else
+			player.setDegrees(0);
+		if (reloadTime >= 0.6f) {
+			if (input->isKeyDown(VK_SPACE)) {
+				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
+				bar = VECTOR2(500,0);
+				createParticleEffect(foo, bar, 1);
+				reloadTime = 0;
+			}
+		}
+		if (shotReload >= 1.3f) {
+			if (input->isKeyDown(0x56)) {
+				foo = VECTOR2(player.getCenterX()+35, player.getCenterY());
+				bar = VECTOR2(400,0);
+				createParticleEffect(foo, bar, 1);
+				bar = VECTOR2(400,-200);
+				createParticleEffect(foo, bar, 1);
+				bar = VECTOR2(400,200);
+				createParticleEffect(foo, bar, 1);
+				shotReload = 0;
+			}
+		}
+
+		//
+		for(int i = 0; i < NUMGRUNTS; i++)
+		{
+			if(!grunts[i].getDead() && enemyReload >= 0.38f)
+			{
+				if(rand()%3 == 0) {
+					foo = VECTOR2(grunts[i].getCenterX()-35, grunts[i].getCenterY());
+					bar = VECTOR2(-500,0);
+					createParticleEffect(foo, bar, 1);
+					enemyReload = 0;
+				}
+			}
+		}
+
+		//
+		smokeXY = VECTOR2(player.getCenterX()-30, player.getCenterY()-5);
+		smokeV = VECTOR2(-50,-5);
+		if (player.getHealth() <=60) {
+			createSmokeEffect(smokeXY,smokeV,20);
+		}
+		
+		lm.update(frameTime);
+		sm.update(frameTime);
+		smokem.update(frameTime);
 		if(player.getHealth() == 100)
 			health.setCurrentFrame(HEALTH_FULL);
 		if(player.getHealth() == 80)
@@ -515,12 +734,20 @@ void CollisionTypes::update()
 			health.setCurrentFrame(HEALTH_40);
 		if(player.getHealth() == 20)
 			health.setCurrentFrame(HEALTH_20);
+		if(player.getHealth() == 0)
+			health.setCurrentFrame(HEALTH_00);
 		player.update(frameTime);
 		for(int i = 0; i < NUMGRUNTS; i++) {
 			grunts[i].update(frameTime);
 		}
 		zep.update(frameTime);
+		health.setX(player.getX()+7); 
+		health.setY(player.getY()+20);
 		health.update(frameTime);
+		medPack.update(frameTime);
+		point.update(frameTime);
+		lives.update(frameTime);
+
 		// move space along X
 		bgTexture.setX(bgTexture.getX() - frameTime * player.getVelocity().x*0.1f);
 		// move space along Y
@@ -568,14 +795,29 @@ void CollisionTypes::update()
 void CollisionTypes::ai()
 {
 	for(int i = 0; i < NUMGRUNTS; i++) {
-		grunts[i].ai(frameTime, player);
-		for(int j = 0; j < NUMGRUNTS; j++)
-		{
-			if(j != i)
-				grunts[i].evade(grunts[j]);
+		switch(gameStates) {
+			case wave1:
+				grunts[i].ai1(frameTime, player);
+			/*	for(int j = 0; j < NUMGRUNTS; j++)
+					{
+						if(j != i)
+							grunts[i].evade(grunts[j]);
+					}*/
+				break;
+			case wave2:
+				grunts[i].ai2();
+				/*for(int j = 0; j < NUMGRUNTS; j++)
+					{
+						if(j != i)
+							grunts[i].evade(grunts[j]);
+					}*/
+				break;
 		}
 	}
+	ufo.ai(frameTime);
 	zep.ai(frameTime, player);
+	medPack.ai();
+	point.ai();
 	/*if (patternStepIndex == maxPatternSteps)
 	return;
 	if (patternSteps[patternStepIndex].isFinished())
@@ -588,6 +830,8 @@ void CollisionTypes::ai()
 //=============================================================================
 void CollisionTypes::collisions()
 {
+	VECTOR2 foo;
+	VECTOR2 bar;
 	for(int i = 0; i < NUMGRUNTS; i++) {
 		if(grunts[i].collidesWith(player) && !grunts[i].getDead()){
 			grunts[i].setCollides(true);
@@ -605,32 +849,109 @@ void CollisionTypes::collisions()
 		else
 			grunts[i].setCollides(false);
 
+
 		/*if(grunts[i].getVelocity() == D3DXVECTOR2(0,0) && timeSinceSpawn > 1.5) 
 		{
 			grunts[i].setDead(true);
 			grunts[i].setInvisible();
 		}*/
 
-		/*if(grunts[i].isHitBy(laser) && !grunts[i].getDead() && !laser.getDead()){
-			grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
-			grunts[i].setDead(true);
-			laser.setDead(true);
-			laser.setVisible(false);
-			audio->playCue(BOOM9);
-			switch(gameStates) {
-			case wave1:
-				score1 += grunts[i].getScore();
-				break;
-			case wave2:
-				score2+= grunts[i].getScore();
-				break;
+		if (!grunts[i].getDead()) {
+			if(lm.collidesWith(grunts[i])  ){
+				grunts[i].setFrames(GRUNT_EXPLODE_START, GRUNT_EXPLODE_END);
+				grunts[i].setDead(true);
+				foo = VECTOR2(grunts[i].getCenterX()-grunts[i].getWidth()/2, grunts[i].getCenterY());
+				bar = VECTOR2(1,1);
+				createSparkEffect(foo, bar, 100);
+				audio->playCue(BOOM9);
+				switch(gameStates) {
+				case wave1:
+					score1 += grunts[i].getScore();
+					break;
+				case wave2:
+					score2+= grunts[i].getScore()*1.5;
+					break;
+				}
 			}
-			//grunts[i].setDead(true);
 		}
 		if(grunts[i].getCurrentFrame() == GRUNT_EXPLODE_END)
 			grunts[i].setInvisible();
-		*/
+		if (grunts[i].getCurrentFrame() == GRUNT_EXPLODE_START) {
+			grunts[i].setScale(2.5f);
+			grunts[i].setPositionY(grunts[i].getPositionY()-18);
+			grunts[i].setPositionX(grunts[i].getPositionX()-10);
+		}
+		if (grunts[i].getCurrentFrame() == GRUNT_IDLE_START)
+			grunts[i].setScale(1.0f);
 	}
+
+	if(medPack.collidesWith(player) && !medPack.getDead()){
+		medPack.setCollides(true);
+		player.setHealth(player.getHealth()+20);
+		medPack.setDead(true);
+		medPack.setInvisible();
+	}
+	if(point.collidesWith(player) && !point.getDead()){
+		point.setCollides(true);
+		switch(gameStates) {
+			case wave1:
+				score1 += 500;
+				break;
+			case wave2:
+				score2+= 500;
+				break;
+		}
+		point.setDead(true);
+		point.setInvisible();
+	}
+	else
+		point.setCollides(false);
+
+		if(point.collidesWith(player) && !point.getDead()){
+		point.setCollides(true);
+		player.setHealth(player.getHealth()+20);
+		point.setDead(true);
+		point.setInvisible();
+	}
+	else
+		point.setCollides(false);
+	
+		if(lm.collidesWith(player))
+		{
+			player.setHealth(player.getHealth()-20);
+
+		}
+		//add this guy in
+if(ufo.collidesWith(player) && !ufo.getDead()){
+			ufo.setCollides(true);
+			player.setHealth(player.getHealth()-20);
+			player.setX(240);
+			player.setY(100);
+		}
+		else
+			ufo.setCollides(false);
+
+		if (!ufo.getDead()) {
+			if(lm.collidesWith(ufo)) {
+				ufo.setHealth(ufo.getHealth() - 20);
+				if(ufo.getHealth() <= 0) {
+					ufo.setDead(true);
+					ufo.setInvisible();
+					audio->playCue(BOOM4);
+				
+					switch(gameStates) {
+					case wave1:					//Not necessary at moment, since the ufo only spawns in wave 1
+						score1 += ufo.getScore();
+						break;
+				//	case wave2:
+				//		score2+= ufo.getScore();
+				//		break;
+					}
+			
+				}
+			}
+		}
+
 
 	if(zep.collidesWith(player) && !zep.getDead()){
 			zep.setCollides(true);
@@ -641,26 +962,27 @@ void CollisionTypes::collisions()
 		else
 			zep.setCollides(false);
 
-		/*if(zep.isHitBy(laser) && !zep.getDead() && !laser.getDead()) {
-			zep.setHealth(zep.getHealth() - 10);
-			laser.setDead(true);
-			laser.setVisible(false);
-			if(zep.getHealth() <= 0) {
-				zep.setDead(true);
-				audio->playCue(BOOM4);
-				zep.setFrames(ZEP_EXPLODE_START, ZEP_EXPLODE_END);
+		if (!zep.getDead()) {
+			if(lm.collidesWith(zep)) {
+				zep.setHealth(zep.getHealth() - 4);
+				if(zep.getHealth() <= 0) {
+					zep.setDead(true);
+					audio->playCue(BOOM4);
+					zep.setFrames(ZEP_EXPLODE_START, ZEP_EXPLODE_END);
 				
-				switch(gameStates) {
-			//	case wave1:					//Not necessary at moment, since the zep only spawns in wave 2
-			//		score1 += zep.getScore();
-			//		break;
-				case wave2:
-					score2+= zep.getScore();
-					break;
-				}
+					switch(gameStates) {
+				//	case wave1:					//Not necessary at moment, since the zep only spawns in wave 2
+				//		score1 += zep.getScore();
+				//		break;
+					case wave2:
+						score2+= zep.getScore();
+						break;
+					}
 			
+				}
 			}
-		}*/
+		}
+
 		if(zep.getCurrentFrame() == ZEP_EXPLODE_END)
 			zep.setInvisible();
 }
@@ -675,21 +997,28 @@ void CollisionTypes::render()
 	float x = bgTexture.getX();
     float y = bgTexture.getY();
 	graphics->spriteBegin(); // begin drawing sprites
+	std::ifstream inHiScore("highscore.txt");
+	std::string str; 
+	int hiScore;
 	switch (gameStates)
 	{
 	case splash:
 		splashTexture.draw();
 		break;
 	case intro:
+		map.draw();
 		menu->displayMenu();
 		break;
 	case cheats:
+		map.draw();
 		cheat->displayMenu();
 		break;
 	case credits:
+		map.draw();
 		creditsMenu->displayMenu();
 		break;
 	case controls:
+		map.draw();
 		controlsMenu->displayMenu();
 		break;
 	case wave1:
@@ -708,17 +1037,28 @@ void CollisionTypes::render()
 		bgTexture.draw();
 		bgTexture.setY(y);
 		health.draw();
-		waveFont->print(std::to_string(scoreCount), 50, 50);
+		for(int i = 0; i < 3; i++)
+		{
+			lives.setX(70 + i*40);
+			lives.setY(20);
+			if(player.getLives() > i)
+				lives.draw();
+		}
+		scoreFont->print("Lives: \nScore: " + std::to_string(scoreCount), 20, 20);
 		if(timeInState < 3)
-			waveFont->print("Wave 1 \n" + std::to_string(player.getLives()) + " Live(s) Remaining",310,100);
+			waveFont->print("Wave 1",300,100);
 		if(difftime(time(0), timeSinceHit) < .2)
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
 			player.draw();
-		lm.draw();
+		medPack.draw();
+		point.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
-		
+		ufo.draw();
+		lm.draw();
+		sm.draw();
+		smokem.draw();
 		break;
 	case wave2:
 
@@ -735,28 +1075,49 @@ void CollisionTypes::render()
 		bgTexture.draw();
 		bgTexture.setY(y);
 		health.draw();
-		waveFont->print(std::to_string(scoreCount), 50, 50);
+		for(int i = 0; i < 3; i++)
+		{
+			lives.setX(70 + i*40);
+			lives.setY(20);
+			if(player.getLives() > i)
+				lives.draw();
+		}
+		scoreFont->print("Lives: \nScore: " + std::to_string(scoreCount), 20, 20);
 		if(timeInState < 3)
-			waveFont->print("Wave 2 \n" + std::to_string(player.getLives()) + " Live(s) Remaining",310,100);
+			waveFont->print("Wave 2",300,100);
 		if(difftime(time(0), timeSinceHit) < .2)
 			player.draw(D3DCOLOR_RGBA(255,0,0,255));
 		else 
 			player.draw();
-		lm.draw();
+		medPack.draw();
+		point.draw();
 		for(int i = 0; i < NUMGRUNTS; i++)
 			grunts[i].draw();
+		lm.draw();
+		sm.draw();
+		smokem.draw();
 		if(zep.getVisible())
 			zep.draw();
 		break;
 		//draw stuff
 	case end:
-		//gameOver.draw();
-		waveFont->print("Congratulations \n\nYour score is: " + std::to_string(score1 + score2),300,100);
+		map.draw();
+		std::getline(inHiScore, str);
+		hiScore = atoi(str.c_str());
+		if ((score1 + score2) > atoi(str.c_str())) {
+			hiScore = (score1 + score2);
+			inHiScore.close();
+			std::ofstream outHiScore("highscore.txt", std::ios::out | std::ios::trunc);
+			outHiScore << (score1 + score2);
+			outHiScore.close();
+		}
+
+		waveFont->print("Congratulations \n\nYour score is: " + std::to_string(score1 + score2) + "\n\n\n High score: " + std::to_string(hiScore),190,100);
 		break;
 	
 	case gameEnd:
-		waveFont->print("Game Over \n\nYour score is: " + std::to_string(score1 + score2),300,100);
-		gameOver.draw();
+		map.draw();
+		waveFont->print("Game Over \n\nYour score is: " + std::to_string(score1 + score2),190,100);
 		break;
 	}
 	/*switch (gameStates)
@@ -785,6 +1146,15 @@ void CollisionTypes::releaseAll()
 	gruntTM.onLostDevice();
 	playerTM.onLostDevice();
 	bgTM.onLostDevice();
+	laserTM.onLostDevice();
+	ufoTM.onLostDevice();
+	splashTM.onLostDevice();
+	pointsTM.onLostDevice();
+	medTM.onLostDevice();
+	livesTM.onLostDevice();
+	mapTM.onLostDevice();
+	splashScreenTM.onLostDevice();
+	gameOverTM.onLostDevice();
 	Game::releaseAll();
 	return;
 }
@@ -801,6 +1171,15 @@ void CollisionTypes::resetAll()
 	gruntTM.onResetDevice();
 	playerTM.onResetDevice();
 	bgTM.onResetDevice();
+	laserTM.onResetDevice();
+	ufoTM.onResetDevice();
+	splashTM.onResetDevice();
+	pointsTM.onResetDevice();
+	medTM.onResetDevice();
+	livesTM.onResetDevice();
+	mapTM.onResetDevice();
+	splashScreenTM.onResetDevice();
+	gameOverTM.onResetDevice();
 	Game::resetAll();
 	return;
 }

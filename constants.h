@@ -75,7 +75,7 @@ inline void safeOnResetDevice(T& ptr)
 
 // window
 const char CLASS_NAME[] = "Collisions";
-const char GAME_TITLE[] = "UniPong";
+const char GAME_TITLE[] = "Neon Sky";
 const bool FULLSCREEN = false;              // windowed or fullscreen
 const UINT GAME_WIDTH =  640;               // width of game in pixels
 const UINT GAME_HEIGHT = 480;               // height of game in pixels
@@ -89,21 +89,41 @@ const float MAX_FRAME_TIME = 1.0f/MIN_FRAME_RATE; // maximum time used in calcul
 const RECT  COLLISION_RECTANGLE = {-30,-16,30,16}; 
 const RECT  COLLISION_BOX_PLAYER = {-45,-10,45,10};
 const RECT COLLISION_BOX_PUCK = {-32, -32, 32, 32};
+const RECT COLLISION_BOX_PICKUP = {-14,-14,14,14};
 const float   COLLISION_RADIUS = 29;
 const float BG_SCALE = 1.5f;                 // scale factor of space image
 const int   BG_WIDTH = (int)(512 * BG_SCALE);  // width of scaled space image
 const int   BG_HEIGHT = (int)(512 * BG_SCALE); // height of scaled space image
+const int MAX_NUM_SPARKS = 10000;
+const int MAX_SPARK_LIFETIME = 1.0f;
+const int MAX_NUM_SMOKES = 10000;
+const int MAX_SMOKE_LIFETIME = 1.0f;
 
 // graphic images
 const char PUCK_IMAGE[] = "pictures\\PS4_new.png";  // game textures
 const char PLAYER_IMAGE[] = "pictures\\biplane.png";      // menu texture
 const char LASER_IMAGE[] = "pictures\\laser.png";
-const char GRUNT_IMAGE[] = "pictures\\grunt.png";
+const char GRUNT_IMAGE[] = "pictures\\gruntBlue.png";
 const char ZEP_IMAGE[] = "pictures\\Zeppelin.png";
 const char HEALTH_IMAGE[] = "pictures\\health.png";
+const char MENU_BACKGROUND[] = "pictures\\map.jpg";
 const char BACKGROUND_IMAGE[] = "pictures\\sky2.jpg";
 const char BG_IMAGE[] = "pictures\\sky3.jpg";
 const char SPLASH[] = "pictures\\Splash.png";
+const char HEALTH_PICKUP[] = "pictures\\medPack.png";
+const char POINT_PICKUP[] = "pictures\\point.png";
+const char UFO_IMAGE[] = "pictures\\ufo.png";
+const char SPARK_IMAGE[]   = "pictures\\sparks_effect.png";//sparks.jpg";
+const char SMOKE_IMAGE[] = "pictures\\blackSmoke00.png";
+
+
+const int  PLAYER_COLS = 8;
+const int  PLAYER_WIDTH = 64;
+const int  PLAYER_HEIGHT = 32;
+const int  PLAYER_IDLE_START = 0;
+const int  PLAYER_IDLE_END = 0;
+const int  PLAYER_EXPLODE_START = 8;
+const int  PLAYER_EXPLODE_END = 71;
 
 const int  GRUNT_COLS = 8;
 const int  GRUNT_WIDTH = 64;
@@ -130,6 +150,12 @@ const int HEALTH_60 = 2;
 const int HEALTH_40 = 3;
 const int HEALTH_20 = 4;
 const int HEALTH_00 = 5;
+
+const int UFO_COLS = 4;
+const int UFO_WIDTH = 256;
+const int UFO_HEIGHT = 256;
+const int UFO_START = 0;
+const int UFO_END = 11;
 
 // key mappings
 // In this game simple constants are used for key mappings. If variables were used
@@ -168,7 +194,7 @@ enum PATTERN_STEP_ACTION {NONE, UP, DOWN, LEFT, RIGHT, TRACK, EVADE, BRTL};
 
 const int NUMGRUNTS = 24;
 
-const float MAX_PARTICLE_LIFETIME = 30.0f;
+const float MAX_PARTICLE_LIFETIME = 60.0f;
 const int MAX_NUMBER_PARTICLES = 500;
 
 #endif
