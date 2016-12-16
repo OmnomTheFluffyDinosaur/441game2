@@ -1117,7 +1117,7 @@ void CollisionTypes::render()
 	
 	case gameEnd:
 		map.draw();
-		waveFont->print("Game Over \n\nYour score is: " + std::to_string(score1 + score2) + "\n\n\n High score: " + std::to_string(hiScore),190,100);
+		waveFont->print("Game Over \n\nYour score is: " + std::to_string(score1 + score2),190,100);
 		break;
 	}
 	/*switch (gameStates)
